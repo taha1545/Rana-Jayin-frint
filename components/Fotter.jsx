@@ -19,10 +19,7 @@ export default function Footer() {
     return (
         <footer className="bg-secondary dark:bg-gray-900">
             <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
-                {/* Top Section - Brand & Newsletter */}
-
-
-                {/* Middle Section - Navigation & Contacts */}
+                {/*  Navigation & Contacts */}
                 <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-4 mb-8">
                     {/* Pages */}
                     <div>

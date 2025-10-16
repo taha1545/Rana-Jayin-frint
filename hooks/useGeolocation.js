@@ -10,7 +10,7 @@ export const useGeolocation = (opts = {}) => {
             maximumAge: 0,
             ...opts,
         }),
-        [] // ✅ only build once — no re-renders
+        [] 
     );
 
     const [location, setLocation] = useState(null);
@@ -18,7 +18,7 @@ export const useGeolocation = (opts = {}) => {
     const [loading, setLoading] = useState(true);
     const watchIdRef = useRef(null);
 
-    // Stable handlers (no external dependencies)
+    // 
     const successHandler = useCallback((position) => {
         setLocation({
             latitude: position.coords.latitude,
@@ -53,7 +53,7 @@ export const useGeolocation = (opts = {}) => {
         setLoading(false);
     }, []);
 
-    // Watch position once
+    //
     useEffect(() => {
         if (!('geolocation' in navigator)) {
             setError('Geolocation not supported by your browser');
@@ -75,10 +75,10 @@ export const useGeolocation = (opts = {}) => {
                 watchIdRef.current = null;
             }
         };
-        // ✅ Empty dependency array → run once
+        
     }, []);
 
-    // Manual refetch
+    // 
     const refetch = useCallback(() => {
         if (!('geolocation' in navigator)) {
             setError('Geolocation not supported by your browser');
