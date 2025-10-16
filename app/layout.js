@@ -1,0 +1,38 @@
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { I18nProvider } from "@/contexts/I18nContext";
+import { AuthProvider } from "@/contexts/AuthContext";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata = {
+  title: "Rana Jayeen - Roadside Assistance",
+  description: "Professional roadside assistance service available anytime, anywhere. Get help with towing, repairs, battery charging, and emergency services.",
+};
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <ThemeProvider>
+          <I18nProvider>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </I18nProvider>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}

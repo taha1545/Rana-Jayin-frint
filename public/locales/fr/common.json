@@ -1,0 +1,215 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "services": "Services",
+    "map": "Carte",
+    "contact": "Contact",
+    "login": "Connexion",
+    "freeTrial": "Essai Gratuit"
+  },
+  "hero": {
+    "title": "Assistance Routière",
+    "subtitle": "À tout moment, où que vous soyez",
+    "description": "Avec Rana Jayeen, l'assistance routière est toujours à portée de main. Besoin d'un remorquage, d'une réparation rapide sur place, d'une recharge de batterie ou d'une aide d'urgence ? Notre plateforme vous connecte instantanément au prestataire de confiance le plus proche. Rapide, fiable et disponible à tout moment pour vous remettre sur la route en toute confiance.",
+    "requestHelp": "Demander de l'Aide",
+    "browseServices": "Parcourir Tous les Services"
+  },
+  "whyChooseUs": {
+    "title": "POURQUOI NOUS CHOISIR",
+    "subtitle": "Les gens nous choisissent parce que nous servons le meilleur pour tous"
+  },
+  "emergencyServices": {
+    "title": "Services d'Urgence et d'Aide",
+    "ambulance": {
+      "title": "Ambulance",
+      "description": "Appelez pour les urgences médicales urgentes et les premiers secours."
+    },
+    "gendarmerie": {
+      "title": "Gendarmerie",
+      "description": "Signaler des incidents et demander une assistance sur le terrain"
+    },
+    "civilProtection": {
+      "title": "Protection Civile",
+      "description": "Obtenez une aide immédiate pour les incendies, les sauvetages et la gestion des catastrophes"
+    },
+    "police": {
+      "title": "Police",
+      "description": "Contactez la police pour l'application de la loi et la sécurité."
+    }
+  },
+  "discover": {
+    "title": "Découvrez notre application",
+    "heading": "Prêt à Commencer ?",
+    "description": "Risus Habitant Leo Egestas Mauris Diam Eget Morbi Tempus Vulputate.",
+    "getOnPlayStore": "OBTENEZ-LE SUR Google Play",
+    "downloadOnAppStore": "Télécharger sur l'App Store"
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "phone": "+213 6 99 54 23 92",
+    "email": "ranajayeen@gmail.com",
+    "form": {
+      "fullName": "Nom complet",
+      "email": "Adresse e-mail",
+      "message": "Votre Message",
+      "send": "Envoyer"
+    }
+  },
+  "faq": {
+    "title": "Questions Fréquemment Posées",
+    "description": "Trouvez des réponses aux questions les plus courantes sur nos services.",
+    "questions": {
+      "services": {
+        "question": "Quels services Rana Jayeen offre-t-il ?",
+        "answer": "Nous fournissons une assistance routière d'urgence, y compris le remorquage, les réparations rapides sur place, la charge de batterie, la livraison de carburant, et plus encore. Notre plateforme vous connecte instantanément au prestataire de services de confiance le plus proche."
+      },
+      "requestHelp": {
+        "question": "Comment puis-je demander de l'aide d'urgence ?",
+        "answer": "Vous pouvez demander de l'aide directement via notre site web ou application mobile. Activez simplement l'accès à la localisation et sélectionnez le type de service dont vous avez besoin. Notre système vous connectera automatiquement au prestataire de services disponible le plus proche."
+      },
+      "availability": {
+        "question": "Rana Jayeen est-il disponible 24h/24 ?",
+        "answer": "Oui, nous opérons 24 heures sur 24, 7 jours sur 7, 365 jours par an pour vous assurer de ne jamais être bloqué sur la route."
+      },
+      "becomeProvider": {
+        "question": "Comment puis-je devenir prestataire de services ?",
+        "answer": "Inscrivez-vous simplement sur notre plateforme et complétez le processus de vérification des partenaires. Nous vérifierons vos références, assurance et antécédents. Une fois approuvé, vous recevrez des demandes de service dans votre région."
+      },
+      "pricing": {
+        "question": "Combien coûtent vos services ?",
+        "answer": "Nos prix sont compétitifs et transparents. Les coûts varient selon le type de service nécessaire et la localisation. Vous verrez le prix exact avant de confirmer votre demande."
+      },
+      "responseTime": {
+        "question": "À quelle vitesse pouvez-vous répondre aux demandes ?",
+        "answer": "Notre temps de réponse moyen est de 15 à 30 minutes selon votre localisation et les conditions de circulation. Nous privilégions les situations d'urgence et travaillons pour vous apporter de l'aide le plus rapidement possible."
+      }
+    }
+  },
+  "footer": {
+    "newsletter": {
+      "placeholder": "Entrez votre e-mail pour recevoir les dernières nouvelles...",
+      "subscribe": "S'abonner"
+    },
+    "pages": "Pages",
+    "topServices": "Services Principaux",
+    "helpSupport": "Aide et Support",
+    "contacts": "Contacts",
+    "downloadApp": "Télécharger sur l'App Store",
+    "getOnPlay": "OBTENEZ-LE SUR Google Play",
+    "joinUs": "Rejoignez-nous",
+    "copyright": "Wassim@gmail.com 2026. Tous droits réservés.",
+    "languages": {
+      "english": "Anglais",
+      "french": "Français"
+    }
+  },
+  "about": {
+    "subtitle": "Pourquoi Nous Choisir",
+    "title": "Assistance Routière Fiable Quand Vous En Avez Le Plus Besoin",
+    "description": "Nous fournissons une assistance routière rapide, fiable et professionnelle dans toute la région. Du remorquage à la livraison de carburant, nos experts certifiés sont toujours prêts à vous aider.",
+    "features": {
+      "speed": {
+        "name": "Réponse Rapide",
+        "description": "Obtenez de l'aide en quelques minutes, pas en heures. Notre réseau de professionnels garantit des temps de réponse rapides dans toute la région."
+      },
+      "safety": {
+        "name": "Professionnels Vérifiés",
+        "description": "Tous nos prestataires de services sont vérifiés, licenciés et assurés pour votre tranquillité d'esprit."
+      },
+      "coverage": {
+        "name": "Couverture 24/7",
+        "description": "Disponible 24 heures sur 24, 365 jours par an. L'aide est toujours à un appel ou un clic."
+      },
+      "team": {
+        "name": "Équipe d'Experts",
+        "description": "Nos techniciens certifiés ont des années d'expérience dans la gestion de tous types d'urgences véhiculaires."
+      }
+    }
+  },
+  "services": {
+    "title": "Nos Services",
+    "description": "Nous offrons une assistance routière rapide, fiable et professionnelle dans toute la région. Du remorquage à la livraison de carburant, nos experts certifiés sont toujours prêts à vous aider.",
+    "showMore": "Voir Plus",
+    "showLess": "Voir Moins",
+    "list": {
+      "onSiteRepair": {
+        "title": "Réparation sur Site",
+        "description": "Réparations mécaniques et électriques rapides effectuées là où vous êtes, pour que vous puissiez reprendre la route rapidement."
+      },
+      "towingService": {
+        "title": "Service de Remorquage",
+        "description": "Remorquage fiable pour voitures, motos et camions — disponible à tout moment, n'importe où."
+      },
+      "batteryBoost": {
+        "title": "Recharge de Batterie",
+        "description": "Batterie à plat ? Nous donnerons à votre véhicule le boost dont il a besoin pour redémarrer."
+      },
+      "emergencySupport": {
+        "title": "Support d'Urgence 24/7",
+        "description": "Assistance 24h/24 de professionnels vérifiés à un appel ou un clic."
+      },
+      "fuelDelivery": {
+        "title": "Livraison de Carburant",
+        "description": "Plus d'essence ? Nous livrerons du carburant à votre emplacement rapidement."
+      },
+      "safetyCheck": {
+        "title": "Vérification de Sécurité Routière",
+        "description": "Notre équipe s'assure que votre véhicule est sûr et prêt pour la route avant de continuer votre voyage."
+      },
+      "accidentAssistance": {
+        "title": "Assistance Accident",
+        "description": "Obtenez une aide et des conseils immédiats en cas d'accident ou de panne de véhicule."
+      },
+      "quickResponse": {
+        "title": "Réponse Rapide",
+        "description": "Nous privilégions la vitesse et la précision — l'aide arrive le plus rapidement possible."
+      }
+    }
+  },
+  "auth": {
+    "login": "Connexion",
+    "signup": "S'inscrire",
+    "createAccount": "Créer un compte",
+    "fullName": "Nom Complet",
+    "phone": "Numéro de téléphone",
+    "email": "E-mail",
+    "password": "Mot de Passe",
+    "confirmPassword": "Confirmer le Mot de Passe",
+    "next": "Suivant",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "dontHaveAccount": "Vous n'avez pas de compte ?",
+    "signIn": "Se connecter",
+    "role": {
+      "client": "Client",
+      "member": "Prestataire de Services"
+    },
+    "storeName": "Nom du magasin",
+    "location": "Zone de service (Ville, Région)",
+    "storeImages": "Images du magasin",
+    "certificate": "Certificat (image ou PDF)"
+  },
+  "map": {
+    "title": "Carte des Services",
+    "subtitle": "Trouvez les services et prestataires à proximité",
+    "searchPlaceholder": "Rechercher des services ou prestataires...",
+    "allServices": "Tous les Services",
+    "tireRepair": "Réparation de Pneus",
+    "batteryBoost": "Recharge de Batterie",
+    "towing": "Remorquage",
+    "fuelDelivery": "Livraison de Carburant",
+    "emergency": "Urgence",
+    "availableNow": "Disponible Maintenant",
+    "services": "Services",
+    "providers": "Prestataires",
+    "availableServices": "Services Disponibles",
+    "status": "Statut",
+    "rating": "Note",
+    "provider": "Prestataire",
+    "completedJobs": "Travaux Terminés",
+    "callProvider": "Appeler le Prestataire",
+    "requestService": "Demander un Service",
+    "loadingMap": "Chargement de la carte...",
+    "nearby": "À Proximité",
+    "call": "Appeler"
+  }
+}

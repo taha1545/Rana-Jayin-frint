@@ -1,0 +1,230 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "map": "Map",
+    "contact": "Contact",
+    "login": "Login",
+    "freeTrial": "Free Trial"
+  },
+  "hero": {
+    "title": "Roadside Assistance",
+    "subtitle": "Anytime, Anywhere",
+    "description": "With Rana Jayen, roadside assistance is always within reach. Whether you need towing, quick on-site repairs, battery charging, or emergency help, our platform connects you instantly with the nearest trusted service provider. Fast, reliable, and available anytime, anywhere, so you can get back on the road with confidence.",
+    "requestHelp": "Request Help",
+    "browseServices": "Browse All Services"
+  },
+  "whyChooseUs": {
+    "title": "WHY CHOOSE US",
+    "subtitle": "People choose us because we serve the best for everyone"
+  },
+  "emergencyServices": {
+    "title": "Emergency Services & Help",
+    "ambulance": {
+      "title": "Ambulance",
+      "description": "Call for urgent medical emergencies and first aid."
+    },
+    "gendarmerie": {
+      "title": "Gendarmerie",
+      "description": "Report incidents and request field assistance"
+    },
+    "civilProtection": {
+      "title": "Civil Protection",
+      "description": "Get immediate help for fire, rescue, and disaster response"
+    },
+    "police": {
+      "title": "Police",
+      "description": "Contact the police for law enforcement and security."
+    }
+  },
+  "discover": {
+    "title": "Discover our app",
+    "heading": "Ready To Get Started?",
+    "description": "Risus Habitant Leo Egestas Mauris Diam Eget Morbi Tempus Vulputate.",
+    "getOnPlayStore": "GET IT ON Google Play",
+    "downloadOnAppStore": "Download on the App Store"
+  },
+  "contact": {
+    "title": "Get in touch",
+    "phone": "+213 6 99 54 23 92",
+    "email": "ranajayeen@gmail.com",
+    "form": {
+      "fullName": "Full name",
+      "email": "Email Address",
+      "message": "Your Message",
+      "send": "Send"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "description": "Find answers to the most common questions about our services.",
+    "questions": {
+      "services": {
+        "question": "What services does Rana Jayeen offer?",
+        "answer": "We provide emergency roadside assistance, including towing, quick on-site repairs, battery charging, fuel delivery, and more. Our platform connects you instantly with the nearest trusted service provider."
+      },
+      "requestHelp": {
+        "question": "How can I request emergency help?",
+        "answer": "You can request help directly through our website or mobile app. Just enable location access and select the type of service you need. Our system will automatically connect you with the nearest available service provider."
+      },
+      "availability": {
+        "question": "Is Rana Jayeen available 24/7?",
+        "answer": "Yes, we operate around the clock — 24 hours a day, 7 days a week, 365 days a year — to ensure you're never stranded on the road."
+      },
+      "becomeProvider": {
+        "question": "How do I become a service provider?",
+        "answer": "Simply sign up on our platform and complete the partner verification process. We'll verify your credentials, insurance, and background. Once approved, you'll receive service requests in your area."
+      },
+      "pricing": {
+        "question": "How much do your services cost?",
+        "answer": "Our pricing is competitive and transparent. Costs vary based on the type of service needed and location. You'll see the exact price before confirming your request."
+      },
+      "responseTime": {
+        "question": "How quickly can you respond to requests?",
+        "answer": "Our average response time is 15-30 minutes depending on your location and traffic conditions. We prioritize emergency situations and work to get help to you as quickly as possible."
+      }
+    }
+  },
+  "footer": {
+    "newsletter": {
+      "placeholder": "Enter your email to get the latest news...",
+      "subscribe": "Subscribe"
+    },
+    "pages": "Pages",
+    "topServices": "Top Services",
+    "helpSupport": "Help & Support",
+    "contacts": "Contacts",
+    "downloadApp": "Download on the App Store",
+    "getOnPlay": "GET IT ON Google Play",
+    "joinUs": "Join Us",
+    "copyright": "Wassim@gmail.com 2026. All rights reserved.",
+    "languages": {
+      "english": "English",
+      "french": "French"
+    }
+  },
+  "about": {
+    "subtitle": "Why Choose Us",
+    "title": "Reliable Roadside Assistance When You Need It Most",
+    "description": "We provide fast, reliable, and professional roadside assistance across the region. From towing to fuel delivery, our certified experts are always ready to help.",
+    "features": {
+      "speed": {
+        "name": "Fast Response",
+        "description": "Get help within minutes, not hours. Our network of professionals ensures quick response times across the region."
+      },
+      "safety": {
+        "name": "Verified Professionals",
+        "description": "All our service providers are background-checked, licensed, and insured for your peace of mind."
+      },
+      "coverage": {
+        "name": "24/7 Coverage",
+        "description": "Available around the clock, 365 days a year. Help is always just a call or tap away."
+      },
+      "team": {
+        "name": "Expert Team",
+        "description": "Our certified technicians have years of experience handling all types of vehicle emergencies."
+      }
+    }
+  },
+  "services": {
+    "title": "Our Services",
+    "description": "We provide fast, reliable, and professional roadside assistance across the region. From towing to fuel delivery, our certified experts are always ready to help.",
+    "showMore": "Show More",
+    "showLess": "Show Less",
+    "list": {
+      "onSiteRepair": {
+        "title": "On-Site Repair",
+        "description": "Quick mechanical and electrical repairs done right where you are, so you can get back on the road fast."
+      },
+      "towingService": {
+        "title": "Towing Service",
+        "description": "Reliable towing for cars, bikes, and trucks — available anytime, anywhere."
+      },
+      "batteryBoost": {
+        "title": "Battery Boost",
+        "description": "Dead battery? We'll give your vehicle the boost it needs to get started again."
+      },
+      "emergencySupport": {
+        "title": "24/7 Emergency Support",
+        "description": "Round-the-clock assistance from verified professionals just a call or tap away."
+      },
+      "fuelDelivery": {
+        "title": "Fuel Delivery",
+        "description": "Ran out of gas? We'll deliver fuel to your location quickly."
+      },
+      "safetyCheck": {
+        "title": "Roadside Safety Check",
+        "description": "Our team ensures your vehicle is safe and road-ready before continuing your trip."
+      },
+      "accidentAssistance": {
+        "title": "Accident Assistance",
+        "description": "Get immediate help and guidance in case of an accident or vehicle breakdown."
+      },
+      "quickResponse": {
+        "title": "Quick Response",
+        "description": "We prioritize speed and accuracy — help arrives as soon as possible."
+      }
+    }
+  },
+  "auth": {
+    "login": "Login",
+    "signup": "Sign up",
+    "createAccount": "Create an account",
+    "fullName": "Full Name",
+    "phone": "Phone Number",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "next": "Next",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "signIn": "Sign in",
+    "role": {
+      "client": "Client",
+      "member": "Service Provider"
+    },
+    "storeName": "Store Name",
+    "location": "Service Area (City, Region)",
+    "storeImages": "Store images",
+    "certificate": "Certificate (image or PDF)"
+  },
+  "map": {
+    "title": "Service Map",
+    "subtitle": "Find nearby services and service providers",
+    "searchPlaceholder": "Search services or providers...",
+    "allServices": "All Services",
+    "tireRepair": "Tire Repair",
+    "batteryBoost": "Battery Boost",
+    "towing": "Towing",
+    "fuelDelivery": "Fuel Delivery",
+    "emergency": "Emergency",
+    "availableNow": "Available Now",
+    "services": "Services",
+    "providers": "Providers",
+    "availableServices": "Available Services",
+    "status": "Status",
+    "rating": "Rating",
+    "provider": "Provider",
+    "completedJobs": "Completed Jobs",
+    "callProvider": "Call Provider",
+    "requestService": "Request Service",
+    "loadingMap": "Loading map...",
+    "nearby": "Nearby",
+    "call": "Call"
+  },
+  "dashboard": {
+    "title": "Member Dashboard",
+    "status": "Your Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "totalServices": "Total Services Completed",
+    "subscriptionEnd": "Subscription Ends",
+    "placeholder": "Other Statistic",
+    "newRequest": "New Service Request!",
+    "newRequestMsg": "You have a new service request from a nearby client.",
+    "settings": "Account Settings",
+    "settingsDesc": "Update your profile information and account preferences.",
+    "editProfile": "Edit Profile",
+    "changePassword": "Change Password"
+  }
+}
