@@ -73,3 +73,44 @@ export const getNearestServices = (services, userLocation, maxRadiusKm = 25, lim
         .sort((a, b) => a.distanceKm - b.distanceKm)
         .slice(0, limit);
 };
+
+// New flexible helpers (do not change existing behavior above)
+export const attachDistance = (services, userLocation) => {
+    if (!userLocation) return services;
+    return services.map((service) => {
+        if (!Array.isArray(service.location)) return service;
+        const [lat, lng] = service.location;
+        return {
+            ...service,
+            distanceKm: calculateDistance(
+                userLocation.latitude,
+                userLocation.longitude,
+                lat,
+                lng
+            ),
+        };
+    });
+};
+
+export const filterByStatus = (services, status) => {
+    if (!status) return services;
+    return services.filter((s) => s.status === status);
+};
+
+export const filterByType = (services, type) => {
+    if (!type) return services;
+    return services.filter((s) => s.type === type);
+};
+
+export const filterByRadius = (services, maxRadiusKm = 25) => {
+    if (!maxRadiusKm) return services;
+    return services.filter((s) => typeof s.distanceKm === 'number' && s.distanceKm <= maxRadiusKm);
+};
+
+export const sortByDistance = (services) => {
+    return [...services].sort((a, b) => {
+        const da = typeof a.distanceKm === 'number' ? a.distanceKm : Number.POSITIVE_INFINITY;
+        const db = typeof b.distanceKm === 'number' ? b.distanceKm : Number.POSITIVE_INFINITY;
+        return da - db;
+    });
+};

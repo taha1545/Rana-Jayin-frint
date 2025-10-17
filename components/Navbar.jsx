@@ -25,17 +25,17 @@ export default function Navbar() {
   const isMember = isAuthenticated && user?.role === 'member';
 
   return (
-    <nav className="bg-background text-foreground fixed w-full z-50 top-0 left-0 border-b border-border transition-colors duration-300">
+    <nav className="bg-background text-foreground fixed w-full z-50 top-0 left-0 border-b border-border transition-colors duration-300 rtl:text-center">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-3">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center justify-center space-x-3 rtl:space-x-reverse h-full w-[20%]">
+        <Link href="/" className="flex items-center justify-center space-x-3 rtl:space-x-reverse h-full lg:w-[20%] w-32">
           <img src="/logo.svg" className="h-full w-full" alt="rana jayin Logo" />
         </Link>
 
         {/* Menu  */}
         {!isMember && (
-          <div className="hidden md:flex items-center space-x-10 rtl:space-x-reverse mt-2 ">
+          <div className="hidden md:flex items-center space-x-10 rtl:space-x-8 mt-2  ">
             {[
               { href: '/', label: t('nav.home') },
               { href: '/contact', label: t('nav.contact') },
@@ -54,9 +54,9 @@ export default function Navbar() {
         )}
 
         {/* Theme + Language + Auth */}
-        <div className="flex items-center space-x-3 md:space-x-4 rtl:space-x-reverse">
+        <div className="flex items-center space-x-3 md:space-x-4 rtl:space-x-5">
           <div className="hidden md:flex items-center space-x-3 px-4">
-            <LanguageToggle  />
+            <LanguageToggle />
             <ThemeToggle />
           </div>
 
@@ -66,32 +66,32 @@ export default function Navbar() {
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center space-x-2 text-secondary-foreground hover:text-primary transition-colors duration-200"
+                  className="flex items-center space-x-2 rtl:space-x-reverse text-secondary-foreground hover:text-primary transition-colors duration-200"
                 >
                   <User className="w-5 h-5" />
-                  <span>{user?.name || 'User'}</span>
+                  <span>{user?.name || t('common.user')}</span>
                   <ChevronDown className="w-4 h-4" />
                 </button>
 
                 {isUserMenuOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-card text-card-foreground rounded-lg shadow-lg border border-border py-2 z-50">
+                  <div className="absolute right-0 rtl:right-auto rtl:left-0 top-full mt-2 w-48 bg-card text-card-foreground rounded-lg shadow-lg border border-border py-2 z-50">
                     {/* */}
                     {isMember && (
                       <Link
-                        href="/member/dashboard"
+                        href="/membre/dashbord"
                         className="block px-4 py-2 text-sm hover:bg-muted transition-colors duration-200"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
-                        Dashboard
+                        {t('dashboard.dashboard')}
                       </Link>
                     )}
                     {/* */}
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm flex items-center space-x-2 hover:bg-muted text-destructive transition-colors duration-200"
+                      className="w-full text-left px-4 py-2 text-sm flex items-center space-x-2 rtl:space-x-reverse hover:bg-muted text-destructive transition-colors duration-200"
                     >
                       <LogOut className="w-4 h-4" />
-                      <span>Logout</span>
+                      <span>{t('auth.logout')}</span>
                     </button>
                   </div>
                 )}
@@ -128,8 +128,8 @@ export default function Navbar() {
             {!isMember && (
               <>
                 <div className="flex items-center justify-between mb-4 pb-4 border-b border-border">
-                  <span className="text-sm text-muted-foreground">Settings:</span>
-                  <div className="flex items-center space-x-2">
+                  <span className="text-sm text-muted-foreground">{t('common.settings')}:</span>
+                  <div className="flex items-center space-x-2 rtl:space-x-reverse">
                     <LanguageToggle />
                     <ThemeToggle />
                   </div>
@@ -159,18 +159,18 @@ export default function Navbar() {
                 <>
                   {isMember && (
                     <Link
-                      href="/member/dashboard"
+                      href="/membre/dashbord"
                       className="block py-2 px-3 text-center border border-border rounded-lg hover:bg-muted transition"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      Dashboard
+                      {t('dashboard.dashboard')}
                     </Link>
                   )}
                   <button
                     onClick={handleLogout}
                     className="block py-2 px-3 text-center bg-destructive text-white rounded-lg hover:bg-red-700 transition"
                   >
-                    Logout
+                    {t('auth.logout')}
                   </button>
                 </>
               ) : (

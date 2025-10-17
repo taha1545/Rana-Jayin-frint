@@ -12,19 +12,26 @@ export function I18nProvider({ children }) {
     setMounted(true);
     //
     const savedLocale = localStorage.getItem('locale');
-    if (savedLocale && ['en', 'fr'].includes(savedLocale)) {
+    if (savedLocale && ['en', 'fr', 'ar'].includes(savedLocale)) {
       setLocale(savedLocale);
     }
   }, []);
 
+  useEffect(() => {
+    const dir = locale === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.setAttribute('dir', dir);
+    document.documentElement.setAttribute('lang', locale);
+  }, [locale]);
+
   const changeLocale = (newLocale) => {
-    if (!['en', 'fr'].includes(newLocale)) return;
+    if (!['en', 'fr', 'ar'].includes(newLocale)) return;
     
     setLocale(newLocale);
     localStorage.setItem('locale', newLocale);
     
     // 
-    document.documentElement.setAttribute('dir', 'ltr');
+    const dir = newLocale === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.setAttribute('dir', dir);
     document.documentElement.setAttribute('lang', newLocale);
   };
 

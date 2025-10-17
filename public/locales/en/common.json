@@ -1,11 +1,45 @@
 {
+  "errors": {
+    "global": {
+      "title": "Something went wrong!",
+      "message": "We're experiencing technical difficulties. Please try again later.",
+      "contactSupport": "If the problem persists, please contact support."
+    },
+    "page": {
+      "title": "Something went wrong!",
+      "defaultMessage": "An unexpected error occurred. Please try again later.",
+      "retry": "Please try again or contact support if the problem continues."
+    },
+    "notFound": {
+      "title": "Page Not Found",
+      "message": "The page you're looking for doesn't exist or has been moved.",
+      "suggestions": "Here are some helpful links:"
+    },
+    "actions": {
+      "tryAgain": "Try again",
+      "goHome": "Go back home",
+      "browseServices": "Browse our services",
+      "contactSupport": "Contact Support"
+    },
+    "statusCodes": {
+      "400": "Bad Request",
+      "401": "Unauthorized",
+      "403": "Forbidden",
+      "404": "Not Found",
+      "500": "Internal Server Error",
+      "502": "Bad Gateway",
+      "503": "Service Unavailable",
+      "504": "Gateway Timeout"
+    }
+  },
   "nav": {
     "home": "Home",
     "services": "Services",
     "map": "Map",
     "contact": "Contact",
     "login": "Login",
-    "freeTrial": "Free Trial"
+    "freeTrial": "Free Trial",
+    "about": "About"
   },
   "hero": {
     "title": "Roadside Assistance",
@@ -46,7 +80,8 @@
   },
   "contact": {
     "title": "Get in touch",
-    "phone": "+213 6 99 54 23 92",
+    "description": "Get in touch with us for any questions or assistance you might need.",
+    "phone": "+213 6 73 44 27 89",
     "email": "ranajayeen@gmail.com",
     "form": {
       "fullName": "Full name",
@@ -97,10 +132,11 @@
     "downloadApp": "Download on the App Store",
     "getOnPlay": "GET IT ON Google Play",
     "joinUs": "Join Us",
-    "copyright": "Wassim@gmail.com 2026. All rights reserved.",
+    "copyright": "RanaJayin@gmail.com 2026. All rights reserved.",
     "languages": {
       "english": "English",
-      "french": "French"
+      "french": "French",
+      "arabic": "Arabic"
     }
   },
   "about": {
@@ -179,6 +215,24 @@
     "alreadyHaveAccount": "Already have an account?",
     "dontHaveAccount": "Don't have an account?",
     "signIn": "Sign in",
+    "logout": "Logout",
+    "signInSubtitle": "Sign in to your account",
+    "createAccountSubtitle": "Create your account to get started",
+    "iAm": "I am a:",
+    "signingIn": "Signing in...",
+    "passwordStrength": {
+      "weak": "Weak",
+      "medium": "Medium",
+      "strong": "Strong"
+    },
+    "selectLocation": "Select your store location",
+    "pickOnMap": "Pick on Map",
+    "mapClickInstruction": "Click on the map to select your store location.",
+    "confirmLocation": "Confirm Location",
+    "errors": {
+      "invalidCredentials": "Invalid phone or password",
+      "generic": "An error occurred. Please try again."
+    },
     "role": {
       "client": "Client",
       "member": "Service Provider"
@@ -215,7 +269,22 @@
   "dashboard": {
     "title": "Member Dashboard",
     "status": "Your Status",
+    "viewMap": "View Map",
+    "manageInfo": "Manage Your Store information",
     "active": "Active",
+    "dashboard": "Dashboard",
+    "overview": "Overview",
+    "profile": "Profile",
+    "statistics": "Statistics",
+    "viewProfile": "View Profile",
+    "manageProfile": "Manage your profile information and settings.",
+    "earnings": "Earnings",
+    "earningsDesc": "Total earnings from completed services.",
+    "rating": "Rating",
+    "ratingDesc": "Average rating from clients.",
+    "clients": "Clients",
+    "clientsDesc": "Total number of unique clients served.",
+    "requests": "Service Requests",
     "inactive": "Inactive",
     "totalServices": "Total Services Completed",
     "subscriptionEnd": "Subscription Ends",
@@ -225,6 +294,40 @@
     "settings": "Account Settings",
     "settingsDesc": "Update your profile information and account preferences.",
     "editProfile": "Edit Profile",
-    "changePassword": "Change Password"
+    "changePassword": "Change Password",
+    "otherStat": "Average Rating",
+    "latestRequests": "Latest service requests",
+    "viewAllRequests": "View all requests",
+    "noRequests": "No service requests yet."
+  },
+  "pagination": {
+    "prev": "Previous",
+    "next": "Next"
+  },
+  "form": {
+    "name": "Name",
+    "namePlaceholder": "Enter your name",
+    "storeName": "Store Name",
+    "storePlaceholder": "Enter store name",
+    "phone": "Phone",
+    "email": "Email",
+    "password": "Password",
+    "storeImages": "Store Images",
+    "noImages": "No images uploaded yet.",
+    "missingInfo": "Please fill out all required fields.",
+    "saved": "Profile updated successfully!"
+  },
+  "actions": {
+    "save": "Save Changes",
+    "cancel": "Cancel",
+    "editProfile": "Edit Profile",
+    "upload": "Upload"
+  },
+  "common": {
+    "user": "User",
+    "settings": "Settings",
+    "back": "Back",
+    "backToHome": "Back to Home",
+    "loading": "Loading..."
   }
 }

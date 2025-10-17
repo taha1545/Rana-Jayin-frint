@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -13,6 +14,7 @@ import { Eye, EyeOff, Lock, User, Car, Phone, MapPin } from 'lucide-react';
 import LanguageToggle from '@/components/ui/LanguageToggle';
 
 export default function SignupPage() {
+  //
   const { t } = useTranslation();
   const { signup } = useAuth();
   const router = useRouter();
@@ -66,19 +68,17 @@ export default function SignupPage() {
   const validateForm = () => {
     if (memberStep === 1) {
       if (formData.password !== formData.confirmPassword) {
-        setError('Passwords do not match');
+        setError(t('auth.errors.passwordsMismatch'));
         return false;
       }
       if (passwordStrength < 3) {
-        setError(
-          'Password is too weak. Please use at least 8 characters with uppercase, lowercase, and numbers.'
-        );
+        setError(t('auth.errors.weakPassword'));
         return false;
       }
     }
 
     if (formData.role === 'member' && memberStep === 2 && !formData.location) {
-      setError('Please select your store location on the map.');
+      setError(t('auth.errors.pickLocation'));
       return false;
     }
 
@@ -111,13 +111,13 @@ export default function SignupPage() {
       const result = await signup(signupData);
 
       if (result.success) {
-        if (formData.role === 'client') router.push('/client/dashboard');
-        else router.push('/member/dashboard');
+        if (formData.role === 'client') router.push('/');
+        else router.push('/membre/dashbord');
       } else {
-        setError('An error occurred during signup. Please try again.');
+        setError(t('auth.errors.generic'));
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
+      setError(t('auth.errors.generic'));
     } finally {
       setLoading(false);
     }
@@ -130,15 +130,15 @@ export default function SignupPage() {
   };
 
   const getPasswordStrengthText = () => {
-    if (passwordStrength <= 2) return 'Weak';
-    if (passwordStrength <= 3) return 'Medium';
-    return 'Strong';
+    if (passwordStrength <= 2) return t('auth.passwordStrength.weak');
+    if (passwordStrength <= 3) return t('auth.passwordStrength.medium');
+    return t('auth.passwordStrength.strong');
   };
 
   return (
     <>
       <div className="relative min-h-screen bg-background flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
-        <div className="absolute top-4 right-4">
+        <div className="absolute top-4 ltr:right-4 rtl:left-4 ">
           <LanguageToggle />
         </div>
         <div className="max-w-md w-full space-y-4">
@@ -151,13 +151,13 @@ export default function SignupPage() {
               {t('auth.createAccount')}
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              Create your account to get started
+              {t('auth.createAccountSubtitle')}
             </p>
           </div>
 
           {/* Role Selection */}
           <div className="bg-card rounded-lg p-2 shadow-sm border border-border">
-            <p className="text-sm font-medium text-muted-foreground mb-3">I am a:</p>
+            <p className="text-sm font-medium text-muted-foreground mb-3">{t('auth.iAm')}</p>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
@@ -203,7 +203,7 @@ export default function SignupPage() {
                 {memberStep === 1 && (
                   <>
                     <div className="relative">
-                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                      <User className="absolute left-3 rtl:left-auto rtl:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                       <Input
                         name="fullName"
                         type="text"
@@ -212,39 +212,38 @@ export default function SignupPage() {
                         placeholder={
                           formData.role === 'member' ? t('auth.storeName') : t('auth.fullName')
                         }
-                        className="pl-10"
+                        className="pl-10 rtl:pl-3 rtl:pr-10"
                         required
                       />
                     </div>
 
                     <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                      <Phone className="absolute left-3 rtl:left-auto rtl:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                       <Input
                         name="phone"
                         type="tel"
                         value={formData.phone}
                         onChange={handleInputChange}
                         placeholder={t('auth.phone')}
-                        className="pl-10"
+                        className="pl-10 rtl:pl-3 rtl:pr-10 rtl:text-end"
                         required
                       />
                     </div>
 
                     <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                       <Input
                         name="password"
                         type={showPassword ? 'text' : 'password'}
                         value={formData.password}
                         onChange={handleInputChange}
                         placeholder={t('auth.password')}
-                        className="pl-10 pr-10"
+                        className="pl-10 pr-10 rtl:pl-3 rtl:pr-10"
                         required
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-secondary-foreground"
+                        className="absolute  left-3 rtl:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-secondary-foreground"
                       >
                         {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                       </button>
@@ -267,20 +266,19 @@ export default function SignupPage() {
                     )}
 
                     <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                       <Input
                         name="confirmPassword"
                         type={showConfirmPassword ? 'text' : 'password'}
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
                         placeholder={t('auth.confirmPassword')}
-                        className="pl-10 pr-10"
+                        className="pl-10 pr-10 rtl:pl-3 rtl:pr-10"
                         required
                       />
                       <button
                         type="button"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-secondary-foreground"
+                        className="absolute left-3 rtl:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-secondary-foreground"
                       >
                         {showConfirmPassword ? (
                           <EyeOff className="w-5 h-5" />
@@ -291,7 +289,7 @@ export default function SignupPage() {
                     </div>
 
                     <Button type="submit" disabled={loading} className="w-full h-11">
-                      {loading ? 'Creating account...' : t('auth.next')}
+                      {loading ? t('auth.creatingAccount') : t('auth.next')}
                     </Button>
                   </>
                 )}
@@ -305,7 +303,7 @@ export default function SignupPage() {
                       </label>
                       <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                         <div className="relative flex-1">
-                          <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                          <MapPin className="absolute left-3 rtl:left-auto rtl:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                           <Input
                             name="location"
                             type="text"
@@ -318,7 +316,7 @@ export default function SignupPage() {
                             }
                             readOnly
                             placeholder={t('auth.selectLocation')}
-                            className="pl-10"
+                            className="pl-10 rtl:pl-3 rtl:pr-10"
                             required
                           />
                         </div>
@@ -328,7 +326,7 @@ export default function SignupPage() {
                           onClick={() => setIsMapOpen(true)}
                           className="whitespace-nowrap"
                         >
-                          Pick on Map
+                          {t('auth.pickOnMap')}
                         </Button>
                       </div>
                     </div>
@@ -374,7 +372,7 @@ export default function SignupPage() {
 
                     <div className="flex justify-between pt-4">
                       <Button type="button" variant="outline" onClick={() => setMemberStep(1)}>
-                        Back
+                        {t('common.back')}
                       </Button>
                       <Button type="submit">{t('auth.signup')}</Button>
                     </div>
@@ -401,7 +399,7 @@ export default function SignupPage() {
               href="/"
               className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200"
             >
-              ← Back to Home
+              {t('common.backToHome')}
             </Link>
           </div>
         </div>
@@ -425,68 +423,15 @@ export default function SignupPage() {
 }
 
 function MapPickerModal({ onClose, onSelect }) {
-  const mapContainerRef = useRef(null);
-  const mapRef = useRef(null);
-  const markerRef = useRef(null);
   const [tempCoords, setTempCoords] = useState(null);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const init = async () => {
-      const L = (await import('leaflet')).default;
-      await import('leaflet/dist/leaflet.css');
-
-      if (mapRef.current || !mapContainerRef.current) return;
-
-      const map = L.map(mapContainerRef.current).setView([36.7538, 3.0588], 6);
-      mapRef.current = map;
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-      }).addTo(map);
-
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            map.setView([pos.coords.latitude, pos.coords.longitude], 12);
-          },
-          () => { }
-        );
-      }
-
-      map.on('click', (e) => {
-        const { lat, lng } = e.latlng;
-        if (markerRef.current) markerRef.current.setLatLng([lat, lng]);
-        else markerRef.current = L.marker([lat, lng]).addTo(map);
-        if (isMounted) setTempCoords({ lat, lng });
-      });
-    };
-
-    init();
-
-    return () => {
-      isMounted = false;
-      if (mapRef.current) {
-        mapRef.current.off();
-        mapRef.current.remove();
-        mapRef.current = null;
-      }
-      markerRef.current = null;
-    };
-  }, []);
+  const PickMap = dynamic(() => import('@/components/map/MapComponent'), { ssr: false });
+  const { t } = useTranslation();
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
       <div className="bg-card border border-border rounded-xl w-full max-w-3xl h-[70vh] p-4 relative">
         <button
           onClick={() => {
-            if (mapRef.current) {
-              mapRef.current.off();
-              mapRef.current.remove();
-              mapRef.current = null;
-            }
-            markerRef.current = null;
             onClose();
           }}
           className="absolute top-3 right-3 text-muted-foreground hover:text-secondary-foreground"
@@ -494,11 +439,17 @@ function MapPickerModal({ onClose, onSelect }) {
           ✕
         </button>
 
-        <div ref={mapContainerRef} className="w-full h-[85%] rounded-lg overflow-hidden" />
+        <div className="w-full h-[85%] rounded-lg overflow-hidden">
+          <PickMap
+            pickMode
+            pickedLocation={tempCoords}
+            onPickLocation={(coords) => setTempCoords(coords)}
+          />
+        </div>
 
         <div className="flex justify-between items-center mt-3">
           <p className="text-sm text-muted-foreground">
-            Click on the map to select your store location.
+            {t('auth.mapClickInstruction')}
           </p>
           <Button
             type="button"
@@ -507,7 +458,7 @@ function MapPickerModal({ onClose, onSelect }) {
               if (tempCoords) onSelect(tempCoords);
             }}
           >
-            Confirm Location
+            {t('auth.confirmLocation')}
           </Button>
         </div>
       </div>

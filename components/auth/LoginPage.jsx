@@ -16,7 +16,7 @@ export default function LoginPage() {
   const { t } = useTranslation();
   const { login } = useAuth();
   const router = useRouter();
-
+  //
   const [formData, setFormData] = useState({
     phone: '',
     password: '',
@@ -51,17 +51,17 @@ export default function LoginPage() {
       const result = await login(formData.phone, formData.password, formData.role);
 
       if (result.success) {
-        // Redirect based on role
+        //
         if (formData.role === 'client') {
           router.push('/');
         } else {
-          router.push('/member/dashboard');
+          router.push('/membre/dashbord');
         }
       } else {
-        setError('Invalid email or password');
+        setError(t('auth.errors.invalidCredentials'));
       }
     } catch (error) {
-      setError('An error occurred. Please try again.');
+      setError(t('auth.errors.generic'));
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ export default function LoginPage() {
 
   return (
     <div className="relative min-h-screen bg-background flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 ltr:right-4 rtl:left-4 ">
         <LanguageToggle />
       </div>
       <div className="max-w-md w-full space-y-4">
@@ -82,22 +82,22 @@ export default function LoginPage() {
             {t('auth.login')}
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            {t('auth.signIn')} to your account
+            {t('auth.signInSubtitle')}
           </p>
         </div>
 
         {/* Role Selection */}
         <div className="bg-card rounded-lg p-4 shadow-sm border border-border">
           <p className="text-sm font-medium text-muted-foreground mb-2">
-            I am a:
+            {t('auth.iAm')}
           </p>
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
               onClick={() => handleRoleChange('client')}
               className={`p-3 rounded-lg border-2 transition-colors duration-200 ${formData.role === 'client'
-                  ? 'border-primary bg-primary/10 text-primary'
-                  : 'border-border hover:bg-muted'
+                ? 'border-primary bg-primary/10 text-primary'
+                : 'border-border hover:bg-muted'
                 }`}
             >
               <User className="w-5 h-5 mx-auto mb-1" />
@@ -107,8 +107,8 @@ export default function LoginPage() {
               type="button"
               onClick={() => handleRoleChange('member')}
               className={`p-3 rounded-lg border-2 transition-colors duration-200 ${formData.role === 'member'
-                  ? 'border-primary bg-primary/10 text-primary'
-                  : 'border-border hover:bg-muted'
+                ? 'border-primary bg-primary/10 text-primary'
+                : 'border-border hover:bg-muted'
                 }`}
             >
               <Car className="w-5 h-5 mx-auto mb-1" />
@@ -133,33 +133,32 @@ export default function LoginPage() {
               )}
 
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                <Phone className="absolute  left-3  rtl:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <Input
                   name="phone"
                   type="tel"
                   value={formData.phone}
                   onChange={handleInputChange}
                   placeholder={t('auth.phone')}
-                  className="pl-10"
+                  className="pl-10 rtl:pl-3 rtl:pr-10 text-start  "
                   required
                 />
               </div>
 
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <Input
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={handleInputChange}
                   placeholder={t('auth.password')}
-                  className="pl-10 pr-10"
+                  className="pl-10 pr-10 rtl:pl-3 rtl:pr-10  rtl:text-end "
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-secondary-foreground"
+                  className="absolute left-3 rtl:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-secondary-foreground"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -173,7 +172,7 @@ export default function LoginPage() {
                 {loading ? (
                   <div className="flex items-center justify-center">
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-foreground mr-2"></div>
-                    Signing in...
+                    {t('auth.signingIn')}
                   </div>
                 ) : (
                   t('auth.login')
@@ -201,7 +200,7 @@ export default function LoginPage() {
             href="/"
             className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200"
           >
-            ← Back to Home
+            {t('common.backToHome')}
           </Link>
         </div>
       </div>

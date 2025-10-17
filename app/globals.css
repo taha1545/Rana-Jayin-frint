@@ -129,6 +129,11 @@
   --sidebar-ring: #0394A1;
 }
 
+.ltr {
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

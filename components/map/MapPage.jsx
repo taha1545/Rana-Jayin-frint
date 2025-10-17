@@ -1,13 +1,15 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { useGeolocation } from '@/hooks/useGeolocation';
-import { getNearestServices, getServiceIcon, formatDistance } from '@/utils/mapHelpers';
-import { Search, MapPin, Users, Car, Phone, Star, Navigation, AlertCircle } from 'lucide-react';
+import { attachDistance, filterByRadius, filterByStatus, filterByType, sortByDistance, formatDistance } from '@/utils/mapHelpers';
+import { MapPin, Users, Car, Phone, Star, Navigation, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import MapFilters from '@/components/map/MapFilters';
+import ServiceList from '@/components/map/ServiceList';
+import SelectedServiceCard from '@/components/map/SelectedServiceCard';
 
 //
 const MapComponent = dynamic(() => import('./MapComponent'), {
@@ -111,45 +113,69 @@ const SAMPLE_MEMBERS = [
 ];
 // main
 export default function MapPage() {
-  //
+  // sidebar state
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('all');
+  const [filterType, setFilterType] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('available');
+  const [radiusKm, setRadiusKm] = useState(25);
   const [selectedService, setSelectedService] = useState(null);
-  // 
+
+  // geolocation
   const { location: userPosition, error: locationError, loading: locationLoading, refetch: refetchLocation } = useGeolocation();
-  // 
+
+  // apply filters + distance
   const filteredServices = useMemo(() => {
-    let filtered = SAMPLE_SERVICES.filter(service => {
-      const matchesSearch =
-        service.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        service.storeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        service.member.name.toLowerCase().includes(searchQuery.toLowerCase());
-      //
-      const matchesFilter =
-        selectedFilter === 'all' ||
-        service.type === selectedFilter ||
-        service.status === selectedFilter;
-      //
-      return matchesSearch && matchesFilter;
-    });
-    // 
-    if (userPosition) {
-      filtered = getNearestServices(filtered, userPosition, 25, 10);
+    let list = [...SAMPLE_SERVICES];
+
+    // basic text search
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter((s) =>
+        s.title.toLowerCase().includes(q) ||
+        s.storeName.toLowerCase().includes(q) ||
+        (s.member?.name || '').toLowerCase().includes(q)
+      );
     }
-    return filtered;
-  }, [searchQuery, selectedFilter, userPosition]);
-  // 
+
+    // type filter
+    if (filterType !== 'all') {
+      list = filterByType(list, filterType);
+    }
+
+    // status filter (default available)
+    if (filterStatus !== 'all') {
+      list = filterByStatus(list, filterStatus);
+    }
+
+    // distance enrichment + nearest within radius
+    if (userPosition) {
+      list = attachDistance(list, userPosition);
+      list = filterByRadius(list, radiusKm);
+      list = sortByDistance(list);
+    }
+
+    return list;
+  }, [searchQuery, filterType, filterStatus, radiusKm, userPosition]);
+
   const handleServiceSelect = (service) => {
     setSelectedService(service);
   };
-  // 
+
   const handleCall = (phoneNumber) => {
     window.open(`tel:${phoneNumber}`, '_self');
   };
-  // 
-  const handleWhatsApp = (service) => {
-    const message = `Hello, I'm interested in your ${service.title} service.`;
+
+  const handleOrder = (service) => {
+    const message = `Hello, I'd like to order your ${service.title} service from ${service.storeName}.`;
     window.open(`https://wa.me/${service.phone.replace('+', '')}?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  const handleDirections = (service) => {
+    if (!service?.location) return;
+    const [lat, lng] = service.location;
+    const origin = userPosition ? `&origin=${userPosition.latitude},${userPosition.longitude}` : '';
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}${origin}`;
+    window.open(url, '_blank');
   };
   //
   return (
@@ -162,28 +188,26 @@ export default function MapPage() {
             members={SAMPLE_MEMBERS}
             userPosition={userPosition}
             onMarkerClick={handleServiceSelect}
+            focusTarget={selectedService ? { type: 'service', id: selectedService.id, location: selectedService.location } : null}
           />
         </div>
 
         {/* Sidebar Section */}
         <aside className="w-full md:w-96 bg-background border-l border-border overflow-y-auto">
           <div className="p-4 space-y-4">
-            {/* Filter Menu */}
-            <div className="flex items-center justify-between mb-5">
-              <h3 className="text-lg font-semibold text-secondary-foreground">Filters</h3>
-              <select
-                className="border border-border rounded-md text-sm p-2 bg-background text-foreground focus:ring-2 focus:ring-primary"
-                value={selectedFilter}
-                onChange={(e) => setSelectedFilter(e.target.value)}
-              >
-                <option value="all">All Services</option>
-                <option value="tire-repair">Tire Repair</option>
-                <option value="battery-boost">Battery Boost</option>
-                <option value="towing">Towing</option>
-                <option value="available">Available</option>
-                <option value="busy">Busy</option>
-              </select>
-            </div>
+            {/* Filters */}
+            <h3 className="text-lg font-semibold text-secondary-foreground">Filters</h3>
+            <MapFilters
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              filterType={filterType}
+              setFilterType={setFilterType}
+              filterStatus={filterStatus}
+              setFilterStatus={setFilterStatus}
+              radiusKm={radiusKm}
+              setRadiusKm={setRadiusKm}
+            />
+
             {/* Location Status */}
             <Card className={locationError ? "border-red-200 bg-red-50 dark:bg-red-900/20" : ""}>
               <CardContent className="p-4">
@@ -262,161 +286,25 @@ export default function MapPage() {
               <h3 className="text-lg font-semibold text-secondary-foreground mb-3">
                 {userPosition ? 'Nearest Services' : 'Available Services'}
               </h3>
-
-              {filteredServices.length === 0 ? (
-                <Card>
-                  <CardContent className="p-6 text-center">
-                    <p className="text-muted-foreground">No services found matching your criteria.</p>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="space-y-3">
-                  {filteredServices.map((service) => (
-                    <Card
-                      key={service.id}
-                      className={`cursor-pointer transition-all duration-200 hover:shadow-md ${selectedService?.id === service.id ? 'ring-2 ring-primary' : ''
-                        }`}
-                      onClick={() => handleServiceSelect(service)}
-                    >
-                      <CardContent className="p-4">
-                        <div className="flex space-x-3">
-                          <img
-                            src={service.storeImage || '/images/default-store.jpg'}
-                            alt={service.storeName}
-                            className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
-                          />
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between mb-2">
-                              <div className="min-w-0">
-                                <h4 className="font-medium text-secondary-foreground truncate">
-                                  {service.storeName}
-                                </h4>
-                                <p className="text-sm text-muted-foreground truncate">
-                                  {service.title}
-                                </p>
-                              </div>
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ml-2 ${service.status === 'available'
-                                ? 'text-green-600 bg-green-50 dark:bg-green-900/20'
-                                : 'text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20'
-                                }`}>
-                                {service.status}
-                              </span>
-                            </div>
-
-                            <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400 mb-2">
-                              <div className="flex items-center space-x-1">
-                                <Star className="w-4 h-4 text-yellow-500" />
-                                <span>{service.rating}</span>
-                                <span>({service.reviewCount})</span>
-                              </div>
-                              <div className="flex items-center space-x-1">
-                                <MapPin className="w-4 h-4" />
-                                <span>{service.distanceKm ? formatDistance(service.distanceKm) : 'Nearby'}</span>
-                              </div>
-                            </div>
-
-                            <div className="flex items-center justify-between">
-                              <p className="text-sm text-muted-foreground truncate">
-                                By: {service.member.name}
-                              </p>
-                              <Button
-                                size="sm"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleCall(service.phone);
-                                }}
-                              >
-                                <Phone className="w-3 h-3 mr-1" />
-                                Call
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
+              <ServiceList
+                services={filteredServices}
+                selectedServiceId={selectedService?.id}
+                onSelect={handleServiceSelect}
+                onCall={handleCall}
+                onWhatsApp={handleOrder}
+                onDirections={handleDirections}
+              />
             </section>
 
             {/* Selected Service Details */}
             {selectedService && (
-              <Card className="border-primary sticky bottom-4">
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-3">
-                    <img
-                      src={selectedService.storeImage || '/images/default-store.jpg'}
-                      alt={selectedService.storeName}
-                      className="w-12 h-12 rounded-lg object-cover"
-                    />
-                    <div className="min-w-0">
-                      <div className="truncate">{selectedService.storeName}</div>
-                      <div className="text-sm font-normal text-muted-foreground truncate">
-                        {selectedService.title}
-                      </div>
-                    </div>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="font-medium text-muted-foreground">Status</span>
-                      <p className={`font-medium ${selectedService.status === 'available' ? 'text-green-600' : 'text-yellow-600'
-                        }`}>
-                        {selectedService.status.charAt(0).toUpperCase() + selectedService.status.slice(1)}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="font-medium text-muted-foreground">Rating</span>
-                      <p className="flex items-center space-x-1">
-                        <Star className="w-4 h-4 text-yellow-500" />
-                        <span>{selectedService.rating} ({selectedService.reviewCount})</span>
-                      </p>
-                    </div>
-                    <div>
-                      <span className="font-medium text-muted-foreground">Provider</span>
-                      <p>{selectedService.member.name}</p>
-                    </div>
-                    <div>
-                      <span className="font-medium text-muted-foreground">Completed Jobs</span>
-                      <p>{selectedService.member.completedJobs}</p>
-                    </div>
-                    {selectedService.distanceKm && (
-                      <div className="col-span-2">
-                        <span className="font-medium text-muted-foreground">Distance</span>
-                        <p>{formatDistance(selectedService.distanceKm)}</p>
-                      </div>
-                    )}
-                    <div className="col-span-2">
-                      <span className="font-medium text-muted-foreground">Phone</span>
-                      <p className="font-mono">{selectedService.phone}</p>
-                    </div>
-                    {selectedService.description && (
-                      <div className="col-span-2">
-                        <span className="font-medium text-muted-foreground">Description</span>
-                        <p className="text-sm">{selectedService.description}</p>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="pt-4 border-t border-border space-y-2">
-                    <Button
-                      className="w-full"
-                      onClick={() => handleCall(selectedService.phone)}
-                    >
-                      <Phone className="w-4 h-4 mr-2" />
-                      Call Now
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => handleWhatsApp(selectedService)}
-                    >
-                      💬 WhatsApp
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+              <SelectedServiceCard
+                service={selectedService}
+                onCall={() => handleCall(selectedService.phone)}
+                onOrder={() => handleOrder(selectedService)}
+                onDirections={() => handleDirections(selectedService)}
+                onClose={() => setSelectedService(null)}
+              />
             )}
           </div>
         </aside>

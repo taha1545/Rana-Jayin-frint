@@ -5,9 +5,10 @@ import { ChevronDown } from "lucide-react";
 import { useTranslation } from '@/hooks/useTranslation';
 
 export default function FAQ() {
+    //
     const [openIndex, setOpenIndex] = useState(null);
     const { t } = useTranslation();
-
+    //
     const faqs = [
         {
             key: "services",
@@ -28,13 +29,13 @@ export default function FAQ() {
             key: "responseTime",
         },
     ];
-
+    //
     const toggleFAQ = (index) => {
         setOpenIndex(openIndex === index ? null : index);
     };
-
+    //
     return (
-        <section className="bg-background py-16 px-6">
+        <section className="bg-background py-16 px-6 mb-16">
             <div className="max-w-4xl mx-auto">
                 {/* Title Section */}
                 <div className="text-center mb-10">
@@ -57,14 +58,14 @@ export default function FAQ() {
                                 className="flex justify-between items-center w-full p-5 text-left hover:bg-muted rounded-2xl transition-colors duration-200"
                                 onClick={() => toggleFAQ(index)}
                             >
-                                <span className="font-medium text-secondary-foreground text-lg">
+                                <span className="text-start font-medium text-secondary-foreground text-lg   ">
                                     {t(`faq.questions.${faq.key}.question`)}
                                 </span>
                                 <motion.div
                                     animate={{ rotate: openIndex === index ? 180 : 0 }}
                                     transition={{ duration: 0.3 }}
                                 >
-                                    <ChevronDown className="w-6 h-6 text-muted-foreground" />
+                                    <ChevronDown className="w-6 h-6  m-2 text-muted-foreground" />
                                 </motion.div>
                             </button>
 

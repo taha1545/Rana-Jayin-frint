@@ -20,7 +20,7 @@ export default function ProtectedRoute({ children, requiredRole = null }) {
         if (user?.role === 'client') {
           router.push('/');
         } else if (user?.role === 'member') {
-          router.push('/member/dashboard');
+          router.push('/membre/dashbord');
         } else {
           router.push('/');
         }

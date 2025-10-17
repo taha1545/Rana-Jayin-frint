@@ -30,7 +30,7 @@ export default function About() {
   ];
 
   return (
-    <section className="bg-background text-foreground dark:bg-background dark:text-foreground py-24 sm:py-32 transition-colors duration-300">
+    <section className="bg-background text-foreground dark:bg-background dark:text-foreground py-16 sm:py-30 transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Title Section */}
         <div className="mx-auto max-w-2xl text-center">
@@ -49,9 +49,9 @@ export default function About() {
         <div className="mx-auto mt-12 max-w-2xl lg:mt-24 lg:max-w-4xl">
           <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-12 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
             {features.map((feature) => (
-              <div key={feature.name} className="relative pl-16">
+              <div key={feature.name} className="relative pl-16 rtl:pl-0 rtl:pr-16">
                 <dt className="text-base font-semibold text-secondary-foreground dark:text-white">
-                  <div className="absolute top-0 left-0 flex size-10 items-center justify-center rounded-lg bg-primary shadow-md">
+                  <div className="absolute top-0 left-0 rtl:left-auto rtl:right-0 flex size-10 items-center justify-center rounded-lg bg-primary shadow-md">
                     <feature.icon aria-hidden="true" className="size-6 text-primary-foreground" />
                   </div>
                   {feature.name}

@@ -17,11 +17,16 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Rana Jayeen - Roadside Assistance",
   description: "Professional roadside assistance service available anytime, anywhere. Get help with towing, repairs, battery charging, and emergency services.",
+  icons: {
+    icon: '/logo.svg',
+    shortcut: '/logo.svg',
+    apple: '/logo.svg',
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
