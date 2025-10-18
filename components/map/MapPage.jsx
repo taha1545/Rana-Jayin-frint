@@ -90,89 +90,44 @@ const SAMPLE_SERVICES = [
     priceRange: '$$$'
   }
 ];
-const SAMPLE_MEMBERS = [
-  {
-    id: 1,
-    name: 'Ali Ahmed',
-    status: 'online',
-    rating: 4.9,
-    completedJobs: 124,
-    location: [36.7525, 3.0419],
-    avatar: '/images/ali-ahmed.jpg',
-    services: ['tire-repair', 'battery-boost']
-  },
-  {
-    id: 2,
-    name: 'Karim Ben',
-    status: 'online',
-    rating: 4.7,
-    completedJobs: 89,
-    location: [36.7645, 3.0527],
-    avatar: '/images/karim-ben.jpg',
-    services: ['battery-boost', 'towing']
-  }
-];
-// main
+// 
 export default function MapPage() {
+  //
   const { t } = useTranslation();
-  
-  // sidebar state
-  const [searchQuery, setSearchQuery] = useState('');
+  // 
   const [filterType, setFilterType] = useState('all');
-  const [filterStatus, setFilterStatus] = useState('available');
-  const [radiusKm, setRadiusKm] = useState(25);
   const [selectedService, setSelectedService] = useState(null);
-
-  // geolocation
+  //
   const { location: userPosition, error: locationError, loading: locationLoading, refetch: refetchLocation } = useGeolocation();
-
-  // apply filters + distance
+  // 
   const filteredServices = useMemo(() => {
     let list = [...SAMPLE_SERVICES];
-
-    // basic text search
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      list = list.filter((s) =>
-        s.title.toLowerCase().includes(q) ||
-        s.storeName.toLowerCase().includes(q) ||
-        (s.member?.name || '').toLowerCase().includes(q)
-      );
-    }
-
-    // type filter
+    // 
     if (filterType !== 'all') {
       list = filterByType(list, filterType);
     }
-
-    // status filter (default available)
-    if (filterStatus !== 'all') {
-      list = filterByStatus(list, filterStatus);
-    }
-
-    // distance enrichment + nearest within radius
+    // 
+    list = filterByStatus(list, 'available');
+    // 
     if (userPosition) {
       list = attachDistance(list, userPosition);
-      list = filterByRadius(list, radiusKm);
       list = sortByDistance(list);
     }
-
     return list;
-  }, [searchQuery, filterType, filterStatus, radiusKm, userPosition]);
-
+  }, [filterType, userPosition]);
+  //
   const handleServiceSelect = (service) => {
     setSelectedService(service);
   };
-
+  //
   const handleCall = (phoneNumber) => {
     window.open(`tel:${phoneNumber}`, '_self');
   };
-
+  //
   const handleOrder = (service) => {
-    const message = `Hello, I'd like to order your ${service.title} service from ${service.storeName}.`;
-    window.open(`https://wa.me/${service.phone.replace('+', '')}?text=${encodeURIComponent(message)}`, '_blank');
+    return;
   };
-
+  //
   const handleDirections = (service) => {
     if (!service?.location) return;
     const [lat, lng] = service.location;
@@ -180,138 +135,116 @@ export default function MapPage() {
     const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}${origin}`;
     window.open(url, '_blank');
   };
-  //
+
   return (
-    <div className="min-h-screen m-3 bg-background">
-      {/* Main Content */}
-      <div className="flex h-[calc(100vh-120px)]">
-        <div className="flex-1 relative">
+    <div className="min-h-screen bg-background">
+      <div className="flex flex-row h-screen">
+        {/* Map Section - Always on left */}
+        <div className="relative flex-1 h-full">
           <MapComponent
             services={filteredServices}
-            members={SAMPLE_MEMBERS}
             userPosition={userPosition}
             onMarkerClick={handleServiceSelect}
             focusTarget={selectedService ? { type: 'service', id: selectedService.id, location: selectedService.location } : null}
           />
         </div>
+        {/* Sidebar Section - Always on right */}
+        <aside className="w-full sm:w-[380px] md:w-[420px] lg:w-[480px] xl:w-[520px] bg-background border-l border-border overflow-y-auto flex flex-col">
+          <div className="p-4 lg:p-6 space-y-4 lg:space-y-6 flex-1 flex flex-col">
 
-        {/* Sidebar Section */}
-        <aside className="w-full md:w-96 bg-background border-l border-border overflow-y-auto">
-          <div className="p-4 space-y-4">
-            {/* Filters */}
-            <h3 className="text-lg font-semibold text-secondary-foreground">{t('map.filters')}</h3>
-            <MapFilters
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              filterType={filterType}
-              setFilterType={setFilterType}
-              filterStatus={filterStatus}
-              setFilterStatus={setFilterStatus}
-              radiusKm={radiusKm}
-              setRadiusKm={setRadiusKm}
-            />
+            {/* Filters Section */}
+            <div>
+              <h3 className="text-xl font-bold text-secondary-foreground mb-3">
+                {t('map.title') || 'Find Services'}
+              </h3>
+              <MapFilters
+                filterType={filterType}
+                setFilterType={setFilterType}
+              />
+            </div>
 
-            {/* Location Status */}
-            <Card className={locationError ? "border-red-200 bg-red-50 dark:bg-red-900/20" : ""}>
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-3">
-                  {locationLoading ? (
-                    <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary"></div>
-                      <span className="text-sm">{t('map.gettingYourLocation')}</span>
-                    </>
-                  ) : locationError ? (
-                    <>
-                      <AlertCircle className="w-5 h-5 text-red-500" />
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-red-800 dark:text-red-200">
-                          {t('map.locationAccessRequired')}
-                        </p>
-                        <p className="text-xs text-red-600 dark:text-red-300 mt-1">
-                          {locationError}
-                        </p>
+            {/* Location  */}
+            {(locationLoading || locationError || userPosition) && (
+              <Card className={locationError ? "border-red-200 bg-red-50 dark:bg-red-900/20" : "border-green-200 bg-green-50 dark:bg-green-900/20"}>
+                <CardContent className="p-3">
+                  <div className="flex items-center space-x-2">
+                    {locationLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                        <span className="text-sm">{t('map.gettingYourLocation') || 'Getting location...'}</span>
+                      </>
+                    ) : locationError ? (
+                      <>
+                        <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-red-800 dark:text-red-200 truncate">
+                            {t('map.locationAccessRequired') || 'Location access required'}
+                          </p>
+                        </div>
                         <Button
                           size="sm"
-                          className="mt-2 bg-red-600 hover:bg-red-700 text-white"
+                          className="bg-red-600 hover:bg-red-700 text-white flex-shrink-0"
                           onClick={refetchLocation}
                         >
-                          <Navigation className="w-3 h-3 mr-1" />
-                          {t('map.enableLocation')}
+                          <Navigation className="w-3 h-3" />
                         </Button>
-                      </div>
-                    </>
-                  ) : userPosition ? (
-                    <>
-                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                      <div className="flex-1">
+                      </>
+                    ) : userPosition ? (
+                      <>
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse flex-shrink-0"></div>
                         <p className="text-sm font-medium text-green-800 dark:text-green-200">
-                          {t('map.locationActive')}
+                          {t('map.locationActive') || 'Location active'}
                         </p>
-                        <p className="text-xs text-green-600 dark:text-green-300">
-                          {t('map.showingNearestServices')}
-                        </p>
-                      </div>
-                    </>
-                  ) : null}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Statistics */}
-            <div className="grid grid-cols-2 gap-4">
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex items-center space-x-2">
-                    <Car className="w-5 h-5 text-primary" />
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">{t('map.services')}</p>
-                      <p className="text-xl font-bold text-secondary-foreground">{filteredServices.length}</p>
-                    </div>
+                      </>
+                    ) : null}
                   </div>
                 </CardContent>
               </Card>
+            )}
 
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex items-center space-x-2">
-                    <Users className="w-5 h-5 text-primary" />
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">{t('map.providers')}</p>
-                      <p className="text-xl font-bold text-secondary-foreground">{SAMPLE_MEMBERS.length}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            {/* Services  */}
+            <div className="flex items-center justify-between px-1">
+              <h3 className="text-lg font-semibold text-secondary-foreground">
+                {userPosition ? t('map.nearestServices') || 'Nearest Services' : t('map.availableServices') || 'Available Services'}
+              </h3>
+              <span className="text-sm font-medium text-muted-foreground bg-muted px-3 py-1 rounded-full">
+                {filteredServices.length} {filteredServices.length === 1 ? 'service' : 'services'}
+              </span>
             </div>
 
             {/* Services List */}
-            <section>
-              <h3 className="text-lg font-semibold text-secondary-foreground mb-3">
-                {userPosition ? t('map.nearestServices') : t('map.availableServices')}
-              </h3>
+            <div className="flex-1 overflow-y-auto -mx-4 px-4 lg:-mx-6 lg:px-6">
               <ServiceList
                 services={filteredServices}
                 selectedServiceId={selectedService?.id}
                 onSelect={handleServiceSelect}
-                onCall={handleCall}
-                onWhatsApp={handleOrder}
-                onDirections={handleDirections}
               />
-            </section>
-
-            {/* Selected Service Details */}
-            {selectedService && (
-              <SelectedServiceCard
-                service={selectedService}
-                onCall={() => handleCall(selectedService.phone)}
-                onOrder={() => handleOrder(selectedService)}
-                onDirections={() => handleDirections(selectedService)}
-                onClose={() => setSelectedService(null)}
-              />
-            )}
+            </div>
           </div>
         </aside>
       </div>
+
+      {/* Selected Service Card - Fixed overlay on all devices */}
+      {selectedService && (
+        <>
+          {/* Overlay backdrop */}
+          <div
+            className="fixed inset-0 bg-black/50 z-40"
+            onClick={() => setSelectedService(null)}
+          />
+
+          {/* Selected Service Card - Centered on all screens */}
+          <div className="fixed inset-x-4 sm:right-6 sm:left-auto top-6 bottom-6 sm:w-[400px] md:w-[450px] lg:w-[480px] xl:w-[520px] z-50">
+            <SelectedServiceCard
+              service={selectedService}
+              onCall={() => handleCall(selectedService.phone)}
+              onOrder={() => handleOrder(selectedService)}
+              onDirections={() => handleDirections(selectedService)}
+              onClose={() => setSelectedService(null)}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }

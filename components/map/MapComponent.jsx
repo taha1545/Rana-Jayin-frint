@@ -1,15 +1,14 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { createServiceIcon, createMemberIcon } from './MapIcons';
-import { getStatusColor, getMemberStatusColor, formatDistance } from '@/utils/mapHelpers';
+import { createServiceIcon } from './MapIcons';
+import { getStatusColor, formatDistance } from '@/utils/mapHelpers';
 
 const MapComponent = ({
   services = [],
-  members = [],
   onMarkerClick = () => { },
   userPosition = null,
-  focusTarget = null, // { type: 'service'|'member', id, location?: [lat, lng] }
+  focusTarget = null, // { type: 'service', id, location?: [lat, lng] }
   pickMode = false,
   pickedLocation = null, // [lat, lng] | {lat, lng}
   onPickLocation = () => {},
@@ -21,7 +20,7 @@ const MapComponent = ({
   const userMarkerRef = useRef(null);
   const userInteractedRef = useRef(false);
   const hasCenteredOnUserRef = useRef(false);
-  const markerIndexRef = useRef(new Map()); // key => marker
+  const markerIndexRef = useRef(new Map()); 
   const pickMarkerRef = useRef(null);
 
   // Initialize map
@@ -173,7 +172,6 @@ const MapComponent = ({
       onPickLocation({ lat, lng });
     };
     map.on('click', handler);
-    // Set cursor style
     map.getContainer().style.cursor = pickMode ? 'crosshair' : '';
     return () => {
       map.off('click', handler);
@@ -181,7 +179,7 @@ const MapComponent = ({
     };
   }, [pickMode, onPickLocation]);
 
-  // If parent provides a pickedLocation, reflect it
+  // 
   useEffect(() => {
     if (!pickMode || !pickedLocation || !mapInstanceRef.current || !LRef.current) return;
     const map = mapInstanceRef.current;
@@ -194,13 +192,12 @@ const MapComponent = ({
     }
   }, [pickedLocation, pickMode]);
 
-  // Handle services and members
+  // 
   useEffect(() => {
     if (!mapInstanceRef.current || !LRef.current) return;
 
     const L = LRef.current;
     const safeServices = Array.isArray(services) ? services : [];
-    const safeMembers = Array.isArray(members) ? members : [];
 
     if (markersGroupRef.current) {
       markersGroupRef.current.clearLayers();
@@ -250,14 +247,6 @@ const MapComponent = ({
               📞 Call
             </button>
             <button 
-              onclick="window.open('https://wa.me/${service.phone.replace(
-          '+',
-          ''
-        )}?text=Hello, I need ${service.title} service','_blank')"
-              style="background:#25D366; color:white; border:none; padding:6px 10px; border-radius:5px; cursor:pointer; font-size:12px; flex:1;">
-              💬 WhatsApp
-            </button>
-            <button 
               onclick="window.open('${directionsUrl}', '_blank')" 
               style="background:#2563EB; color:white; border:none; padding:6px 10px; border-radius:5px; cursor:pointer; font-size:12px; flex:1;">
               🧭 Directions
@@ -273,45 +262,7 @@ const MapComponent = ({
       }
     });
 
-    // Add member markers
-    safeMembers.forEach((member) => {
-      if (!member.location) return;
-
-      const icon = createMemberIcon(member.status, L);
-      const marker = L.marker(member.location, { icon }).addTo(
-        markersGroupRef.current
-      );
-
-      const popupContent = `
-        <div style="min-width: 240px; padding: 4px;">
-          <div style="display: flex; align-items: center; margin-bottom: 8px;">
-            <img src="${member.avatar || '/images/default-avatar.jpg'}" 
-                 alt="${member.name}" 
-                 style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
-            <div>
-              <strong>${member.name}</strong><br>
-              <span style="color: #666; font-size: 13px;">Service Provider</span>
-            </div>
-          </div>
-
-          <div style="font-size: 13px; color: #444;">
-            <strong>Status:</strong> 
-            <span style="color: ${getMemberStatusColor(member.status)};">
-              ${member.status}
-            </span><br>
-            <strong>Services:</strong> ${member.services?.join(', ') || 'N/A'}
-          </div>
-        </div>
-      `;
-
-      marker.bindPopup(popupContent);
-      marker.on('click', () => onMarkerClick(member));
-      if (member.id !== undefined && member.id !== null) {
-        markerIndexRef.current.set(`m_${member.id}`, marker);
-      }
-    });
-
-    // Fit bounds if there are markers
+    // 
     const layers = markersGroupRef.current?.getLayers?.() || [];
     if ((layers.length > 0 || userMarkerRef.current) && !userInteractedRef.current) {
       try {
@@ -326,15 +277,15 @@ const MapComponent = ({
         console.warn('Could not fit map bounds:', error);
       }
     }
-  }, [services, members, onMarkerClick, userPosition]);
+  }, [services, onMarkerClick, userPosition]);
 
-  // Focus externally requested target
+  //
   useEffect(() => {
     if (!mapInstanceRef.current || !LRef.current || !focusTarget) return;
     const { type, id, location } = focusTarget;
     let marker = null;
     if (type && id !== undefined && id !== null) {
-      const key = `${type === 'member' ? 'm' : 's'}_${id}`;
+      const key = `s_${id}`;
       marker = markerIndexRef.current.get(key) || null;
     }
     let targetLatLng = marker?.getLatLng?.() || null;
