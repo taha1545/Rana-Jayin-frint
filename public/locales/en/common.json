@@ -245,7 +245,7 @@
   "map": {
     "title": "Service Map",
     "subtitle": "Find nearby services and service providers",
-    "searchPlaceholder": "Search services or providers...",
+    "searchPlaceholder": "Search services, stores, providers...",
     "allServices": "All Services",
     "tireRepair": "Tire Repair",
     "batteryBoost": "Battery Boost",
@@ -264,7 +264,19 @@
     "requestService": "Request Service",
     "loadingMap": "Loading map...",
     "nearby": "Nearby",
-    "call": "Call"
+    "call": "Call",
+    "filters": "Filters",
+    "allTypes": "All Types",
+    "available": "Available",
+    "busy": "Busy",
+    "allStatus": "All Status",
+    "radiusKm": "Radius (km)",
+    "locationActive": "Location Active",
+    "showingNearestServices": "Showing nearest services",
+    "locationAccessRequired": "Location Access Required",
+    "enableLocation": "Enable Location",
+    "gettingYourLocation": "Getting your location...",
+    "nearestServices": "Nearest Services"
   },
   "dashboard": {
     "title": "Member Dashboard",
@@ -277,7 +289,7 @@
     "profile": "Profile",
     "statistics": "Statistics",
     "viewProfile": "View Profile",
-    "manageProfile": "Manage your profile information and settings.",
+    "manageProfile": "Manage your profile information and account settings.",
     "earnings": "Earnings",
     "earningsDesc": "Total earnings from completed services.",
     "rating": "Rating",
@@ -298,11 +310,18 @@
     "otherStat": "Average Rating",
     "latestRequests": "Latest service requests",
     "viewAllRequests": "View all requests",
-    "noRequests": "No service requests yet."
+    "noRequests": "No service requests yet.",
+    "client": "Client",
+    "phone": "Phone",
+    "action": "Action",
+    "clientLocation": "{{name}}'s Location",
+    "offline": "Offline",
+    "unknown": "Unknown"
   },
   "pagination": {
     "prev": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "pageOf": "Page {{page}} of {{total}}"
   },
   "form": {
     "name": "Name",

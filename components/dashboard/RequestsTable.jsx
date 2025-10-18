@@ -42,11 +42,11 @@ export default function RequestsTable({ mockRequests, t, page, setPage, handleSh
                             </TableCaption>
 
                             <TableHeader>
-                                <TableRow className="bg-muted/30 text-sm">
-                                    <TableHead className="w-[30%] font-semibold">Client</TableHead>
-                                    <TableHead className="w-[25%] font-semibold">Phone</TableHead>
-                                    <TableHead className="w-[20%] font-semibold">Status</TableHead>
-                                    <TableHead className="w-[25%] font-semibold text-center">Action</TableHead>
+                                <TableRow className="bg-muted/30 text-sm ">
+                                    <TableHead className="w-[30%] font-semibold">{t('dashboard.client')}</TableHead>
+                                    <TableHead className="w-[25%] font-semibold">{t('dashboard.phone')}</TableHead>
+                                    <TableHead className="w-[20%] font-semibold">{t('dashboard.status', { defaultValue: 'Status' })}</TableHead>
+                                    <TableHead className="w-[25%] font-semibold text-center">{t('dashboard.action')}</TableHead>
                                 </TableRow>
                             </TableHeader>
 
@@ -117,7 +117,7 @@ export default function RequestsTable({ mockRequests, t, page, setPage, handleSh
                     {/* Pagination */}
                     <div className="flex items-center justify-between mt-6">
                         <p className="text-sm text-muted-foreground">
-                            Page {page} of {totalPages}
+                            {t('pagination.pageOf', { page, total: totalPages })}
                         </p>
                         <div className="flex gap-2">
                             <Button

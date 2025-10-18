@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import MapFilters from '@/components/map/MapFilters';
 import ServiceList from '@/components/map/ServiceList';
 import SelectedServiceCard from '@/components/map/SelectedServiceCard';
+import { useTranslation } from '@/hooks/useTranslation';
 
 //
 const MapComponent = dynamic(() => import('./MapComponent'), {
@@ -113,6 +114,8 @@ const SAMPLE_MEMBERS = [
 ];
 // main
 export default function MapPage() {
+  const { t } = useTranslation();
+  
   // sidebar state
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState('all');
@@ -196,7 +199,7 @@ export default function MapPage() {
         <aside className="w-full md:w-96 bg-background border-l border-border overflow-y-auto">
           <div className="p-4 space-y-4">
             {/* Filters */}
-            <h3 className="text-lg font-semibold text-secondary-foreground">Filters</h3>
+            <h3 className="text-lg font-semibold text-secondary-foreground">{t('map.filters')}</h3>
             <MapFilters
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -215,14 +218,14 @@ export default function MapPage() {
                   {locationLoading ? (
                     <>
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary"></div>
-                      <span className="text-sm">Getting your location...</span>
+                      <span className="text-sm">{t('map.gettingYourLocation')}</span>
                     </>
                   ) : locationError ? (
                     <>
                       <AlertCircle className="w-5 h-5 text-red-500" />
                       <div className="flex-1">
                         <p className="text-sm font-medium text-red-800 dark:text-red-200">
-                          Location Access Required
+                          {t('map.locationAccessRequired')}
                         </p>
                         <p className="text-xs text-red-600 dark:text-red-300 mt-1">
                           {locationError}
@@ -233,7 +236,7 @@ export default function MapPage() {
                           onClick={refetchLocation}
                         >
                           <Navigation className="w-3 h-3 mr-1" />
-                          Enable Location
+                          {t('map.enableLocation')}
                         </Button>
                       </div>
                     </>
@@ -242,10 +245,10 @@ export default function MapPage() {
                       <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                       <div className="flex-1">
                         <p className="text-sm font-medium text-green-800 dark:text-green-200">
-                          Location Active
+                          {t('map.locationActive')}
                         </p>
                         <p className="text-xs text-green-600 dark:text-green-300">
-                          Showing nearest services
+                          {t('map.showingNearestServices')}
                         </p>
                       </div>
                     </>
@@ -261,7 +264,7 @@ export default function MapPage() {
                   <div className="flex items-center space-x-2">
                     <Car className="w-5 h-5 text-primary" />
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Services</p>
+                      <p className="text-sm font-medium text-muted-foreground">{t('map.services')}</p>
                       <p className="text-xl font-bold text-secondary-foreground">{filteredServices.length}</p>
                     </div>
                   </div>
@@ -273,7 +276,7 @@ export default function MapPage() {
                   <div className="flex items-center space-x-2">
                     <Users className="w-5 h-5 text-primary" />
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Providers</p>
+                      <p className="text-sm font-medium text-muted-foreground">{t('map.providers')}</p>
                       <p className="text-xl font-bold text-secondary-foreground">{SAMPLE_MEMBERS.length}</p>
                     </div>
                   </div>
@@ -284,7 +287,7 @@ export default function MapPage() {
             {/* Services List */}
             <section>
               <h3 className="text-lg font-semibold text-secondary-foreground mb-3">
-                {userPosition ? 'Nearest Services' : 'Available Services'}
+                {userPosition ? t('map.nearestServices') : t('map.availableServices')}
               </h3>
               <ServiceList
                 services={filteredServices}

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function MapFilters({
   searchQuery,
@@ -12,6 +13,8 @@ export default function MapFilters({
   radiusKm,
   setRadiusKm,
 }) {
+  const { t } = useTranslation();
+  
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
@@ -19,7 +22,7 @@ export default function MapFilters({
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search services, stores, providers..."
+          placeholder={t('map.searchPlaceholder')}
           className="w-full border border-border rounded-md text-sm p-2 bg-background text-foreground focus:ring-2 focus:ring-primary"
         />
       </div>
@@ -30,12 +33,12 @@ export default function MapFilters({
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
         >
-          <option value="all">All Types</option>
-          <option value="tire-repair">Tire Repair</option>
-          <option value="battery-boost">Battery Boost</option>
-          <option value="towing">Towing</option>
-          <option value="fuel-delivery">Fuel Delivery</option>
-          <option value="emergency">Emergency</option>
+          <option value="all">{t('map.allTypes')}</option>
+          <option value="tire-repair">{t('map.tireRepair')}</option>
+          <option value="battery-boost">{t('map.batteryBoost')}</option>
+          <option value="towing">{t('map.towing')}</option>
+          <option value="fuel-delivery">{t('map.fuelDelivery')}</option>
+          <option value="emergency">{t('map.emergency')}</option>
         </select>
 
         <select
@@ -43,14 +46,14 @@ export default function MapFilters({
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
         >
-          <option value="available">Available</option>
-          <option value="busy">Busy</option>
-          <option value="all">All Status</option>
+          <option value="available">{t('map.available')}</option>
+          <option value="busy">{t('map.busy')}</option>
+          <option value="all">{t('map.allStatus')}</option>
         </select>
       </div>
 
       <div>
-        <label className="text-sm font-medium text-secondary-foreground">Radius (km)</label>
+        <label className="text-sm font-medium text-secondary-foreground">{t('map.radiusKm')}</label>
         <input
           type="number"
           min={1}

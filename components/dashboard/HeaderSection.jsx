@@ -27,10 +27,13 @@ export default function HeaderSection({ profile, isActive, handleStatusToggle, t
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        <Label className="text-sm">{t('dashboard.status', { defaultValue: 'Status' })}</Label>
+      <div className="flex items-center gap-3" dir="ltr">
+        <Label className="text-sm">
+          {t('dashboard.status', { defaultValue: 'Status' })}
+        </Label>
         <Switch checked={isActive} onCheckedChange={handleStatusToggle} />
       </div>
+
     </motion.section>
   );
 }

@@ -88,9 +88,9 @@ export default function Navbar() {
                     {/* */}
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm flex items-center space-x-2 rtl:space-x-reverse hover:bg-muted text-destructive transition-colors duration-200"
+                      className="w-full text-left px-4 py-2 text-sm flex items-center space-x-2 rtl:space-x-2 hover:bg-muted text-destructive transition-colors duration-200"
                     >
-                      <LogOut className="w-4 h-4" />
+                      <LogOut className="w-4 h-4 " />
                       <span>{t('auth.logout')}</span>
                     </button>
                   </div>

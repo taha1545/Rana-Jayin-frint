@@ -38,7 +38,11 @@ export default function CurrentUserCard({ user, t }) {
                     }
                     className="px-3 py-1 text-xs rounded-md"
                 >
-                    {user.status || 'Unknown'}
+                    {user.status === 'Active'
+                        ? t('dashboard.active')
+                        : user.status === 'Offline'
+                            ? t('dashboard.offline')
+                            : t('dashboard.unknown')}
                 </Badge>
             </CardHeader>
 

@@ -9,6 +9,7 @@ import SettingsSection from './SettingsSection';
 import CurrentUserCard from './CurrentUserCard';
 import MapDialog from './MapDialog';
 import { Activity, Calendar, Settings, Star } from 'lucide-react';
+import EmergencyServices from '../Home/EmergencyServices';
 
 export default function MemberDashboard() {
   //
@@ -57,12 +58,13 @@ export default function MemberDashboard() {
   //
   return (
     <main className="pt-12 lg:pt-24 pb-16 px-4 md:px-8 lg:px-16 bg-background text-foreground min-h-screen space-y-12">
-      <HeaderSection {...{ profile, isActive, handleStatusToggle, t }} />
+      <HeaderSection {...{ profile, isActive, handleStatusToggle, t }} /> 
       <CurrentUserCard user={currentUser} t={t} />
       <StatsSection stats={stats} />
       <RequestsTable {...{ mockRequests, t, page, setPage, handleShowMap }} />
       <SettingsSection {...{ profile, editing, setEditing, handleSaveProfile, handleImageUpload, setProfile, t }} />
       <MapDialog {...{ showMap, setShowMap, selectedClient }} />
+      <EmergencyServices/>
     </main>
   );
 }
