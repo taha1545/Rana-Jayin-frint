@@ -2,8 +2,10 @@
 
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function StatsSection({ stats }) {
+      const { t } = useTranslation();
     return (
         <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {stats.map((item, i) => (
@@ -12,7 +14,7 @@ export default function StatsSection({ stats }) {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-base">
                                 {item.icon}
-                                {item.title}
+                                {t(item.title)}
                             </CardTitle>
                         </CardHeader>
                         <CardContent>

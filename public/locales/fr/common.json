@@ -1,35 +1,41 @@
 {
   "errors": {
     "global": {
-      "title": "Une erreur est survenue !",
-      "message": "Nous rencontrons des problèmes techniques. Veuillez réessayer plus tard.",
-      "contactSupport": "Si le problème persiste, contactez le support."
+      "title": "Quelque chose s'est mal passé !",
+      "message": "Nous rencontrons des difficultés techniques. Veuillez réessayer plus tard.",
+      "contactSupport": "Si le problème persiste, veuillez contacter le support."
     },
+    "memberInfoFailed": "Échec du chargement des informations du membre",
+    "storeInfoFailed": "Échec du chargement des informations du magasin",
+    "dashboardLoadFailed": "Échec du chargement des données du tableau de bord",
+    "statusUpdateFailed": "Échec de la mise à jour du statut",
+    "somethingWentWrong": "Quelque chose s'est mal passé",
+    "tryAgainOrContact": "Veuillez réessayer ou contacter le support",
     "page": {
-      "title": "Une erreur est survenue !",
-      "defaultMessage": "Une erreur inattendue s'est produite. Réessayez plus tard.",
-      "retry": "Réessayez ou contactez le support si le problème continue."
+      "title": "Quelque chose s'est mal passé !",
+      "defaultMessage": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard.",
+      "retry": "Veuillez réessayer ou contacter le support si le problème persiste."
     },
     "notFound": {
       "title": "Page non trouvée",
-      "message": "La page recherchée n'existe pas ou a été déplacée.",
+      "message": "La page que vous recherchez n'existe pas ou a été déplacée.",
       "suggestions": "Voici quelques liens utiles :"
     },
     "actions": {
       "tryAgain": "Réessayer",
-      "goHome": "Accueil",
-      "browseServices": "Parcourir les services",
+      "goHome": "Retour à l'accueil",
+      "browseServices": "Parcourir nos services",
       "contactSupport": "Contacter le support"
     },
     "statusCodes": {
       "400": "Requête incorrecte",
       "401": "Non autorisé",
       "403": "Interdit",
-      "404": "Introuvable",
-      "500": "Erreur serveur",
+      "404": "Non trouvé",
+      "500": "Erreur interne du serveur",
       "502": "Mauvaise passerelle",
       "503": "Service indisponible",
-      "504": "Temps de passerelle dépassé"
+      "504": "Délai de passerelle dépassé"
     }
   },
   "nav": {
@@ -42,192 +48,98 @@
     "about": "À propos"
   },
   "hero": {
-    "title": "Assistance routière",
-    "subtitle": "À tout moment, n'importe où",
-    "description": "Avec Rana Jayen, l'assistance routière est toujours disponible. Remorquage, réparations rapides, recharge de batterie ou aide d'urgence, nous vous connectons instantanément au prestataire le plus proche et fiable.",
-    "requestHelp": "Demander de l'aide",
-    "browseServices": "Voir tous les services"
+    "title": "Assistance Routière",
+    "subtitle": "À Tout Moment, N'importe Où",
+    "description": "Avec Rana Jayen, l'assistance routière est toujours à portée de main. Que vous ayez besoin de remorquage, de réparations rapides sur place, de charge de batterie ou d'aide d'urgence, notre plateforme vous connecte instantanément avec le prestataire de services de confiance le plus proche. Rapide, fiable et disponible à tout moment, n'importe où, pour que vous puissiez reprendre la route en toute confiance.",
+    "requestHelp": "Demander de l'Aide",
+    "browseServices": "Parcourir Tous les Services"
   },
   "whyChooseUs": {
     "title": "POURQUOI NOUS CHOISIR",
-    "subtitle": "Les gens nous choisissent car nous offrons le meilleur"
+    "subtitle": "Les gens nous choisissent parce que nous servons le meilleur pour tous"
   },
   "emergencyServices": {
-    "title": "Services d'urgence & aide",
+    "title": "Services d'Urgence & Aide",
     "ambulance": {
       "title": "Ambulance",
-      "description": "Pour urgences médicales et premiers secours."
+      "description": "Appelez pour les urgences médicales et les premiers secours."
     },
     "gendarmerie": {
       "title": "Gendarmerie",
-      "description": "Signalez incidents et demandez assistance sur le terrain."
+      "description": "Signaler des incidents et demander une assistance sur le terrain"
     },
     "civilProtection": {
-      "title": "Protection civile",
-      "description": "Aide immédiate pour incendies, secours et catastrophes."
+      "title": "Protection Civile",
+      "description": "Obtenez une aide immédiate pour les incendies, le sauvetage et l'intervention en cas de catastrophe"
     },
     "police": {
       "title": "Police",
-      "description": "Contactez la police pour la sécurité et la loi."
+      "description": "Contactez la police pour l'application de la loi et la sécurité."
     }
   },
   "discover": {
-    "title": "Découvrez notre app",
-    "heading": "Prêt à commencer ?",
-    "description": "Découvrez les fonctionnalités de Rana Jayen — trouvez prestataires proches, demandez de l'aide, suivez les réponses et gérez l'historique des services.",
-    "getOnPlayStore": "DISPONIBLE SUR Google Play",
-    "downloadOnAppStore": "Télécharger sur App Store"
+    "title": "Découvrez notre application",
+    "heading": "Prêt à Commencer ?",
+    "description": "Découvrez les fonctionnalités de l'application Rana Jayen - trouvez des prestataires à proximité, demandez de l'aide instantanément, suivez les réponses et gérez votre historique de services facilement.",
+    "getOnPlayStore": "DISPO SUR Google Play",
+    "downloadOnAppStore": "Télécharger sur l'App Store"
   },
   "contact": {
-    "title": "Contactez-nous",
-    "description": "Pour toute question ou assistance, contactez-nous.",
+    "title": "Nous contacter",
+    "description": "Contactez-nous pour toute question ou assistance dont vous pourriez avoir besoin.",
     "phone": "+213 6 73 44 27 89",
     "email": "ranajayeen@gmail.com",
     "form": {
       "fullName": "Nom complet",
       "email": "Adresse e-mail",
       "message": "Votre message",
-      "send": "Envoyer"
+      "send": "Envoyer",
+      "sending": "Envoi en cours...",
+      "success": "Votre message a été envoyé avec succès !",
+      "error": "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer plus tard."
     }
   },
   "faq": {
-    "title": "FAQ",
-    "description": "Trouvez les réponses aux questions fréquentes sur nos services.",
+    "title": "Questions Fréquemment Posées",
+    "description": "Trouvez des réponses aux questions les plus courantes sur nos services.",
     "questions": {
       "services": {
-        "question": "Quels services propose Rana Jayeen ?",
-        "answer": "Assistance routière d'urgence : remorquage, réparations sur place, recharge de batterie, livraison de carburant. Connexion instantanée au prestataire le plus proche."
+        "question": "Quels services Rana Jayen propose-t-il ?",
+        "answer": "Nous fournissons une assistance routière d'urgence, y compris le remorquage, les réparations rapides sur place, la charge de batterie, la livraison de carburant, et plus encore. Notre plateforme vous connecte instantanément avec le prestataire de services de confiance le plus proche."
       },
       "requestHelp": {
-        "question": "Comment demander de l'aide d'urgence ?",
-        "answer": "Demandez via notre site ou app. Activez la localisation et sélectionnez le service. Le prestataire le plus proche sera automatiquement connecté."
+        "question": "Comment puis-je demander de l'aide d'urgence ?",
+        "answer": "Vous pouvez demander de l'aide directement via notre site web ou notre application mobile. Il suffit d'activer l'accès à la localisation et de sélectionner le type de service dont vous avez besoin. Notre système vous connectera automatiquement avec le prestataire de services disponible le plus proche."
       },
       "availability": {
-        "question": "Disponible 24h/24 et 7j/7 ?",
-        "answer": "Oui, nous opérons 24/7, 365 jours/an — jamais bloqué sur la route."
+        "question": "Rana Jayen est-il disponible 24h/24 ?",
+        "answer": "Oui, nous fonctionnons 24 heures sur 24, 7 jours sur 7, 365 jours par an - pour vous assurer de ne jamais être bloqué sur la route."
       },
       "becomeProvider": {
-        "question": "Comment devenir prestataire ?",
-        "answer": "Inscrivez-vous et complétez la vérification partenaire. Après approbation, vous recevrez les demandes dans votre zone."
+        "question": "Comment devenir prestataire de services ?",
+        "answer": "Inscrivez-vous simplement sur notre plateforme et complétez le processus de vérification partenaire. Nous vérifierons vos informations d'identification, votre assurance et vos antécédents. Une fois approuvé, vous recevrez des demandes de service dans votre zone."
       },
       "pricing": {
-        "question": "Prix des services ?",
-        "answer": "Tarifs compétitifs et transparents, variables selon type de service et localisation. Prix exact avant confirmation."
+        "question": "Combien coûtent vos services ?",
+        "answer": "Nos prix sont compétitifs et transparents. Les coûts varient en fonction du type de service nécessaire et de l'emplacement. Vous verrez le prix exact avant de confirmer votre demande."
       },
       "responseTime": {
-        "question": "Délai de réponse ?",
-        "answer": "En moyenne 15-30 minutes selon localisation et circulation. Priorité aux urgences."
+        "question": "À quelle rapidité pouvez-vous répondre aux demandes ?",
+        "answer": "Notre temps de réponse moyen est de 15 à 30 minutes selon votre emplacement et les conditions de circulation. Nous donnons la priorité aux situations d'urgence et travaillons pour vous apporter de l'aide le plus rapidement possible."
       }
     }
-  },
-  "about": {
-    "subtitle": "Pourquoi nous choisir",
-    "title": "Assistance routière fiable quand vous en avez besoin",
-    "description": "Nous offrons une assistance routière rapide, fiable et professionnelle dans toute la région. Du remorquage à la livraison de carburant, nos experts certifiés sont toujours prêts à aider.",
-    "features": {
-      "speed": {
-        "name": "Réponse rapide",
-        "description": "Obtenez de l'aide en quelques minutes, pas en heures. Notre réseau de professionnels assure des temps de réponse rapides dans toute la région."
-      },
-      "safety": {
-        "name": "Professionnels certifiés",
-        "description": "Tous nos prestataires sont vérifiés, licenciés et assurés pour votre tranquillité d'esprit."
-      },
-      "coverage": {
-        "name": "Couverture 24/7",
-        "description": "Disponibles 24h/24 et 7j/7 toute l'année. L'aide est à un clic."
-      },
-      "team": {
-        "name": "Équipe expérimentée",
-        "description": "Nos techniciens certifiés ont des années d'expérience dans la gestion des urgences routières."
-      }
-    }
-  },
-  "services": {
-    "title": "Nos services",
-    "description": "Nous offrons une assistance routière rapide, fiable et professionnelle dans toute la région. Du remorquage à la livraison de carburant, nos experts certifiés sont là pour vous.",
-    "list": {
-      "onSiteRepair": {
-        "title": "Réparation sur place",
-        "description": "Réparations mécaniques et électriques rapides à votre emplacement."
-      },
-      "towingService": {
-        "title": "Service de remorquage",
-        "description": "Remorquage fiable de voitures, motos et camions — à toute heure."
-      },
-      "batteryBoost": {
-        "title": "Démarrage de batterie",
-        "description": "Batterie à plat ? Nous redémarrons votre véhicule."
-      },
-      "emergencySupport": {
-        "title": "Assistance d'urgence 24/7",
-        "description": "Aide disponible 24h/24 par des professionnels fiables."
-      },
-      "fuelDelivery": {
-        "title": "Livraison de carburant",
-        "description": "En panne de carburant ? Nous livrons rapidement à votre position."
-      },
-      "safetyCheck": {
-        "title": "Contrôle de sécurité routière",
-        "description": "Nous nous assurons que votre véhicule est sûr et prêt à rouler."
-      },
-      "accidentAssistance": {
-        "title": "Assistance en cas d'accident",
-        "description": "Aide immédiate et conseils en cas d'accident ou de panne."
-      },
-      "quickResponse": {
-        "title": "Réponse rapide",
-        "description": "Nous privilégions la rapidité et la précision pour une aide au plus vite."
-      }
-    }
-  },
-  "map": {
-    "title": "Carte des services",
-    "subtitle": "Trouvez des services et des prestataires à proximité",
-    "searchPlaceholder": "Rechercher des services ou des prestataires...",
-    "allServices": "Tous les services",
-    "tireRepair": "Réparation de pneus",
-    "batteryBoost": "Démarrage de batterie",
-    "towing": "Remorquage",
-    "fuelDelivery": "Livraison de carburant",
-    "emergency": "Urgence",
-    "availableNow": "Disponible maintenant",
-    "services": "Services",
-    "providers": "Prestataires",
-    "availableServices": "Services disponibles",
-    "status": "Statut",
-    "rating": "Évaluation",
-    "provider": "Prestataire",
-    "completedJobs": "Travaux terminés",
-    "callProvider": "Appeler le prestataire",
-    "requestService": "Demander un service",
-    "loadingMap": "Chargement de la carte...",
-    "nearby": "À proximité",
-    "call": "Appeler",
-    "filters": "Filtres",
-    "allTypes": "Tous les types",
-    "available": "Disponible",
-    "busy": "Occupé",
-    "allStatus": "Tous les statuts",
-    "radiusKm": "Rayon (km)",
-    "locationActive": "Localisation active",
-    "showingNearestServices": "Affichage des services les plus proches",
-    "locationAccessRequired": "Accès à la localisation requis",
-    "enableLocation": "Activer la localisation",
-    "gettingYourLocation": "Obtention de votre position...",
-    "nearestServices": "Services les plus proches"
   },
   "footer": {
     "newsletter": {
-      "placeholder": "Entrez votre e-mail pour recevoir les nouveautés...",
+      "placeholder": "Entrez votre email pour recevoir les dernières nouvelles...",
       "subscribe": "S'abonner"
     },
     "pages": "Pages",
-    "topServices": "Services principaux",
+    "topServices": "Services Principaux",
     "helpSupport": "Aide & Support",
     "contacts": "Contacts",
-    "downloadApp": "Télécharger sur App Store",
-    "getOnPlay": "DISPONIBLE SUR Google Play",
+    "downloadApp": "Télécharger sur l'App Store",
+    "getOnPlay": "DISPO SUR Google Play",
     "joinUs": "Rejoignez-nous",
     "copyright": "RanaJayin@gmail.com 2026. Tous droits réservés.",
     "languages": {
@@ -236,87 +148,234 @@
       "arabic": "Arabe"
     }
   },
+  "about": {
+    "subtitle": "Pourquoi Nous Choisir",
+    "title": "Assistance Routière Fiable Quand Vous En Avez le Plus Besoin",
+    "description": "Nous fournissons une assistance routière rapide, fiable et professionnelle dans toute la région. Du remorquage à la livraison de carburant, nos experts certifiés sont toujours prêts à aider.",
+    "features": {
+      "speed": {
+        "name": "Réponse Rapide",
+        "description": "Obtenez de l'aide en quelques minutes, pas en heures. Notre réseau de professionnels garantit des temps de réponse rapides dans toute la région."
+      },
+      "safety": {
+        "name": "Professionnels Vérifiés",
+        "description": "Tous nos prestataires de services sont vérifiés, licenciés et assurés pour votre tranquillité d'esprit."
+      },
+      "coverage": {
+        "name": "Couverture 24h/24",
+        "description": "Disponible 24 heures sur 24, 365 jours par an. L'aide est toujours à un appel ou une pression près."
+      },
+      "team": {
+        "name": "Équipe d'Experts",
+        "description": "Nos techniciens certifiés ont des années d'expérience dans la gestion de tous types d'urgences véhiculaires."
+      }
+    }
+  },
+  "services": {
+    "title": "Nos Services",
+    "description": "Nous fournissons une assistance routière rapide, fiable et professionnelle dans toute la région. Du remorquage à la livraison de carburant, nos experts certifiés sont toujours prêts à aider.",
+    "showMore": "Afficher Plus",
+    "showLess": "Afficher Moins",
+    "onSiteRepair": "Réparation sur Place",
+    "towingService": "Service de Remorquage",
+    "batteryBoost": "Charge de Batterie",
+    "emergencySupport": "Support d'Urgence",
+    "fuelDelivery": "Livraison de Carburant",
+    "safetyCheck": "Vérification de Sécurité",
+    "accidentAssistance": "Assistance Accident",
+    "quickResponse": "Réponse Rapide",
+    "list": {
+      "onSiteRepair": {
+        "title": "Réparation sur Place",
+        "description": "Réparations mécaniques et électriques rapides effectuées là où vous êtes, pour que vous puissiez reprendre la route rapidement."
+      },
+      "towingService": {
+        "title": "Service de Remorquage",
+        "description": "Remorquage fiable pour voitures, motos et camions - disponible à tout moment, n'importe où."
+      },
+      "batteryBoost": {
+        "title": "Charge de Batterie",
+        "description": "Batterie à plat ? Nous donnerons à votre véhicule la charge dont il a besoin pour redémarrer."
+      },
+      "emergencySupport": {
+        "title": "Support d'Urgence 24h/24",
+        "description": "Assistance 24h/24 de la part de professionnels vérifiés à un appel ou une pression près."
+      },
+      "fuelDelivery": {
+        "title": "Livraison de Carburant",
+        "description": "En panne d'essence ? Nous livrerons du carburant à votre emplacement rapidement."
+      },
+      "safetyCheck": {
+        "title": "Vérification de Sécurité Routière",
+        "description": "Notre équipe s'assure que votre véhicule est sûr et prêt à reprendre la route avant de continuer votre voyage."
+      },
+      "accidentAssistance": {
+        "title": "Assistance Accident",
+        "description": "Obtenez une aide immédiate et des conseils en cas d'accident ou de panne de véhicule."
+      },
+      "quickResponse": {
+        "title": "Réponse Rapide",
+        "description": "Nous donnons la priorité à la vitesse et à la précision - l'aide arrive dès que possible."
+      }
+    }
+  },
   "auth": {
+    "termsText": "J'ai lu et j'accepte les",
+    "viewTerms": "Conditions Générales",
+    "agreeAndContinue": "Accepter et Continuer",
+    "ServiceType": "type de service",
     "login": "Connexion",
-    "signup": "Inscription",
+    "signup": "S'inscrire",
     "createAccount": "Créer un compte",
-    "fullName": "Nom complet",
-    "phone": "Numéro de téléphone",
+    "fullName": "Nom Complet",
+    "phone": "Numéro de Téléphone",
     "email": "E-mail",
-    "password": "Mot de passe",
-    "confirmPassword": "Confirmer le mot de passe",
+    "password": "Mot de Passe",
+    "confirmPassword": "Confirmer le Mot de Passe",
     "next": "Suivant",
     "alreadyHaveAccount": "Vous avez déjà un compte ?",
     "dontHaveAccount": "Vous n'avez pas de compte ?",
-    "signIn": "Se connecter",
-    "logout": "Se déconnecter",
+    "signIn": "Se Connecter",
+    "logout": "Déconnexion",
     "signInSubtitle": "Connectez-vous à votre compte",
     "createAccountSubtitle": "Créez votre compte pour commencer",
-    "iAm": "Je suis :",
+    "iAm": "Je suis un :",
     "signingIn": "Connexion en cours...",
-    "creatingAccount": "Création du compte...",
     "passwordStrength": {
       "weak": "Faible",
       "medium": "Moyen",
       "strong": "Fort"
     },
-    "selectLocation": "Sélectionnez l'emplacement de votre boutique",
-    "pickOnMap": "Choisir sur la carte",
-    "mapClickInstruction": "Cliquez sur la carte pour sélectionner l'emplacement de votre boutique.",
-    "confirmLocation": "Confirmer l'emplacement",
+    "mustAgreeTerms": "Vous devez accepter les conditions générales pour continuer",
+    "selectLocation": "Sélectionnez l'emplacement de votre magasin",
+    "pickOnMap": "Choisir sur la Carte",
+    "mapClickInstruction": "Cliquez sur la carte pour sélectionner l'emplacement de votre magasin.",
+    "confirmLocation": "Confirmer l'Emplacement",
     "errors": {
-      "invalidCredentials": "Téléphone ou mot de passe incorrect",
+      "invalidCredentials": "Téléphone ou mot de passe invalide",
       "generic": "Une erreur s'est produite. Veuillez réessayer.",
       "passwordsMismatch": "Les mots de passe ne correspondent pas",
-      "weakPassword": "Mot de passe trop faible. Utilisez au moins 8 caractères avec majuscules, minuscules et chiffres.",
-      "pickLocation": "Veuillez sélectionner l'emplacement de votre boutique sur la carte."
+      "weakPassword": "Le mot de passe est trop faible",
+      "selectServiceType": "Veuillez sélectionner un type de service"
     },
     "role": {
       "client": "Client",
-      "member": "Prestataire de service"
+      "member": "Prestataire de Services"
     },
-    "storeName": "Nom de la boutique",
-    "location": "Zone de service (Ville, Région)",
+    "storeName": "Nom du Magasin",
+    "location": "Zone de Service (Ville, Région)",
     "storeImages": "Images du magasin",
-    "certificate": "Certificat (image ou PDF)"
+    "certificate": "Certificat (image ou PDF)",
+    "selectFile": "Sélectionner un fichier",
+    "selectMultipleFiles": "Sélectionner plusieurs fichiers",
+    "filesSelected": "fichiers sélectionnés",
+    "serviceTypes": {
+      "ServiceType": "type de service",
+      "onSiteRepair": "Réparation sur Place",
+      "towingService": "Service de Remorquage",
+      "batteryBoost": "Charge de Batterie",
+      "emergencySupport": "Support d'Urgence",
+      "fuelDelivery": "Livraison de Carburant",
+      "safetyCheck": "Vérification de Sécurité",
+      "accidentAssistance": "Assistance Accident",
+      "quickResponse": "Réponse Rapide"
+    },
+    "serviceType": "Type de Service",
+    "selectServiceType": "Sélectionner le type de service"
+  },
+  "map": {
+    "title": "Carte des Services",
+    "subtitle": "Trouvez les services et prestataires à proximité",
+    "searchPlaceholder": "Rechercher services, magasins, prestataires...",
+    "allServices": "Tous les Services",
+    "tireRepair": "Réparation de Pneus",
+    "batteryBoost": "Charge de Batterie",
+    "towing": "Remorquage",
+    "fuelDelivery": "Livraison de Carburant",
+    "emergency": "Urgence",
+    "availableNow": "Disponible Maintenant",
+    "services": "Services",
+    "providers": "Prestataires",
+    "availableServices": "Services Disponibles",
+    "status": "Statut",
+    "rating": "Note",
+    "provider": "Prestataire",
+    "completedJobs": "Travaux Terminés",
+    "callProvider": "Appeler le Prestataire",
+    "requestService": "Demander un Service",
+    "loadingMap": "Chargement de la carte...",
+    "nearby": "À Proximité",
+    "call": "Appeler",
+    "filters": "Filtres",
+    "allTypes": "Tous les Types",
+    "available": "Disponible",
+    "busy": "Occupé",
+    "allStatus": "Tous les Statuts",
+    "radiusKm": "Rayon (km)",
+    "locationActive": "Localisation Active",
+    "showingNearestServices": "Affichage des services les plus proches",
+    "locationAccessRequired": "Accès à la Localisation Requis",
+    "enableLocation": "Activer la Localisation",
+    "gettingYourLocation": "Obtention de votre localisation...",
+    "nearestServices": "Services les Plus Proches",
+    "all": "Tous les Services",
+    "onSiteRepair": "Réparation sur Place",
+    "towingService": "Service de Remorquage",
+    "emergencySupport": "Support d'Urgence",
+    "safetyCheck": "Vérification de Sécurité",
+    "accidentAssistance": "Assistance Accident",
+    "quickResponse": "Réponse Rapide"
   },
   "dashboard": {
-    "title": "Tableau de bord du membre",
-    "status": "Votre statut",
-    "viewMap": "Voir sur la carte",
-    "manageInfo": "Gérez les informations de votre boutique",
+    "status": "Votre Statut",
+    "viewMap": "Voir la Carte",
+    "manageInfo": "Gérer les informations de votre magasin",
     "active": "Actif",
-    "dashboard": "Tableau de bord",
+    "dashboard": "Tableau de Bord",
     "overview": "Aperçu",
     "profile": "Profil",
     "statistics": "Statistiques",
-    "viewProfile": "Voir le profil",
-    "manageProfile": "Gérer les informations du profil et les paramètres.",
-    "earnings": "Gains",
-    "earningsDesc": "Total des gains des services terminés.",
-    "rating": "Évaluation",
+    "viewProfile": "Voir le Profil",
+    "manageProfile": "Gérez vos informations de profil et paramètres de compte.",
+    "earnings": "Revenus",
+    "earningsDesc": "Revenus totaux des services terminés.",
+    "rating": "Note",
     "ratingDesc": "Note moyenne des clients.",
     "clients": "Clients",
-    "clientsDesc": "Nombre total de clients uniques.",
-    "requests": "Demandes de service",
+    "clientsDesc": "Nombre total de clients uniques servis.",
+    "requests": "Demandes de Service",
     "inactive": "Inactif",
-    "totalServices": "Nombre total de services effectués",
-    "subscriptionEnd": "Fin de l'abonnement",
-    "placeholder": "Autre statistique",
-    "newRequest": "Nouvelle demande de service !",
-    "newRequestMsg": "Vous avez une nouvelle demande de service d'un client proche.",
-    "settings": "Paramètres du compte",
-    "settingsDesc": "Mettez à jour les informations de votre profil et vos préférences.",
-    "editProfile": "Modifier le profil",
-    "changePassword": "Changer le mot de passe",
-    "otherStat": "Note moyenne",
+    "storeImages": "Images du Magasin",
+    "storeAndMemberInfo": "Informations sur le Magasin et le Membre",
+    "storeInfo": "Informations sur le Magasin",
+    "memberInfo": "Informations sur le Membre",
+    "loading": "Chargement de votre tableau de bord...",
+    "title": "Tableau de Bord du Membre",
+    "totalServices": "Total des Services",
+    "subscriptionEnd": "Date de Fin d'Abonnement",
+    "averageRating": "Note Moyenne",
+    "loadingDashboard": "Chargement de votre tableau de bord...",
+    "statsTitle": "Aperçu des Analyses",
+    "statsDesc": "Vos mesures et statistiques de performance",
+    "analyticsTitle": "Aperçu des Analyses",
+    "analyticsDesc": "Vos mesures et statistiques de performance",
+    "completedServices": "Services Terminés",
+    "subscription": "Abonnement",
+    "placeholder": "Autre Statistique",
+    "newRequest": "Nouvelle Demande de Service !",
+    "newRequestMsg": "Vous avez une nouvelle demande de service d'un client à proximité.",
+    "settings": "Paramètres du Compte",
+    "settingsDesc": "Mettez à jour vos informations de profil et préférences de compte.",
+    "editProfile": "Modifier le Profil",
+    "changePassword": "Changer le Mot de Passe",
+    "otherStat": "Note Moyenne",
     "latestRequests": "Dernières demandes de service",
     "viewAllRequests": "Voir toutes les demandes",
-    "noRequests": "Aucune demande pour le moment.",
+    "noRequests": "Aucune demande de service pour le moment.",
     "client": "Client",
     "phone": "Téléphone",
     "action": "Action",
-    "clientLocation": "Emplacement de {{name}}",
+    "clientLocation": "Localisation de {{name}}",
     "offline": "Hors ligne",
     "unknown": "Inconnu"
   },
@@ -328,27 +387,87 @@
   "form": {
     "name": "Nom",
     "namePlaceholder": "Entrez votre nom",
-    "storeName": "Nom de la boutique",
-    "storePlaceholder": "Entrez le nom de la boutique",
+    "storeName": "Nom du Magasin",
+    "storePlaceholder": "Entrez le nom du magasin",
     "phone": "Téléphone",
     "email": "E-mail",
-    "password": "Mot de passe",
-    "storeImages": "Images du magasin",
+    "password": "Mot de Passe",
+    "storeImages": "Images du Magasin",
     "noImages": "Aucune image téléchargée pour le moment.",
     "missingInfo": "Veuillez remplir tous les champs obligatoires.",
-    "saved": "Profil mis à jour avec succès !"
+    "saved": "Profil mis à jour avec succès !",
+    "priceRange": "Tranche de Prix",
+    "isActive": "Statut Actif",
+    "description": "Description du Magasin",
+    "type": "Type de Service",
+    "update": "Mettre à jour"
   },
   "actions": {
-    "save": "Enregistrer les modifications",
+    "save": "Enregistrer les Modifications",
     "cancel": "Annuler",
-    "editProfile": "Modifier le profil",
-    "upload": "Téléverser"
+    "editProfile": "Modifier le Profil",
+    "upload": "Télécharger",
+    "tryAgain": "Réessayer",
+    "goHome": "Retour à l'Accueil",
+    "contactSupport": "Contacter le Support",
+    "toggleStatus": "Basculer le Statut",
+    "viewMap": "Voir la Carte",
+    "edit": "Modifier",
+    "update": "Mettre à jour"
   },
   "common": {
     "user": "Utilisateur",
     "settings": "Paramètres",
     "back": "Retour",
-    "backToHome": "Retour à l'accueil",
-    "loading": "Chargement..."
-  }
+    "backToHome": "Retour à l'Accueil",
+    "loading": "Chargement...",
+    "loadingDashboard": "Chargement de votre tableau de bord..."
+  },
+  "report": {
+    "sectionTitle": "Signaler un Problème",
+    "sectionSubtitle": "Aidez-nous à améliorer les rues en soumettant un rapport avec image et description.",
+    "title": "Signaler un problème de voirie",
+    "subtitle": "Téléchargez une image et une courte description pour signaler un problème.",
+    "description": "Description",
+    "descriptionPlaceholder": "Où se trouve le problème ? Qu'est-ce qui ne va pas ?",
+    "addImage": "Ajouter une image",
+    "clickToUpload": "Cliquez pour télécharger une image",
+    "supported": "PNG, JPG, WEBP - jusqu'à 10 Mo",
+    "removeImage": "Supprimer l'image",
+    "submit": "Soumettre",
+    "submitting": "Soumission en cours...",
+    "submitted": "Rapport soumis avec succès.",
+    "errors": {
+      "format": "Seuls les formats JPG, PNG, WEBP sont autorisés.",
+      "size": "L'image dépasse 10 Mo.",
+      "fillAll": "Veuillez fournir une image et une description."
+    }
+  },
+  "pleaseWait": "Veuillez patienter",
+  "checkingSession": "Vérification de votre session",
+  "loginRequired": "Connexion requise",
+  "loginBeforeOrdering": "Veuillez vous connecter avant de commander",
+  "sessionExpired": "Session expirée",
+  "loginAgain": "Veuillez vous reconnecter",
+  "success": "Succès",
+  "requestCreated": "Demande créée avec succès",
+  "failed": "Échec",
+  "requestFailed": "Impossible de créer la demande. Veuillez réessayer",
+  "error": "Erreur",
+  "requestError": "Une erreur s'est produite lors de la création de votre demande",
+  "unknownStore": "Magasin inconnu",
+  "service": "Service",
+  "reviews": "Avis",
+  "available": "Disponible",
+  "busy": "Occupé",
+  "provider": "Prestataire",
+  "phone": "Téléphone",
+  "priceRange": "Tranche de Prix",
+  "distance": "Distance",
+  "by": "par",
+  "anonymous": "Anonyme",
+  "ordering": "Commande en cours...",
+  "orderNow": "Commander Maintenant",
+  "getDirections": "Obtenir l'Itinéraire",
+  "callNow": "Appeler Maintenant"
 }

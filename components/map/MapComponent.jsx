@@ -8,10 +8,10 @@ const MapComponent = ({
   services = [],
   onMarkerClick = () => { },
   userPosition = null,
-  focusTarget = null, // { type: 'service', id, location?: [lat, lng] }
+  focusTarget = null,
   pickMode = false,
-  pickedLocation = null, // [lat, lng] | {lat, lng}
-  onPickLocation = () => {},
+  pickedLocation = null,
+  onPickLocation = () => { },
 }) => {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
@@ -20,10 +20,10 @@ const MapComponent = ({
   const userMarkerRef = useRef(null);
   const userInteractedRef = useRef(false);
   const hasCenteredOnUserRef = useRef(false);
-  const markerIndexRef = useRef(new Map()); 
+  const markerIndexRef = useRef(new Map());
   const pickMarkerRef = useRef(null);
 
-  // Initialize map
+  // 
   useEffect(() => {
     let mounted = true;
 

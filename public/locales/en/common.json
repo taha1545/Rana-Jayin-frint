@@ -5,6 +5,12 @@
       "message": "We're experiencing technical difficulties. Please try again later.",
       "contactSupport": "If the problem persists, please contact support."
     },
+    "memberInfoFailed": "Failed to load member information",
+    "storeInfoFailed": "Failed to load store information",
+    "dashboardLoadFailed": "Failed to load dashboard data",
+    "statusUpdateFailed": "Failed to update status",
+    "somethingWentWrong": "Something went wrong",
+    "tryAgainOrContact": "Please try again or contact support",
     "page": {
       "title": "Something went wrong!",
       "defaultMessage": "An unexpected error occurred. Please try again later.",
@@ -87,7 +93,10 @@
       "fullName": "Full name",
       "email": "Email Address",
       "message": "Your Message",
-      "send": "Send"
+      "send": "Send",
+      "sending": "Sending...",
+      "success": "Your message has been sent successfully!",
+      "error": "An error occurred while sending your message. Please try again later."
     }
   },
   "faq": {
@@ -167,6 +176,14 @@
     "description": "We provide fast, reliable, and professional roadside assistance across the region. From towing to fuel delivery, our certified experts are always ready to help.",
     "showMore": "Show More",
     "showLess": "Show Less",
+    "onSiteRepair": "On-Site Repair",
+    "towingService": "Towing Service",
+    "batteryBoost": "Battery Boost",
+    "emergencySupport": "Emergency Support",
+    "fuelDelivery": "Fuel Delivery",
+    "safetyCheck": "Safety Check",
+    "accidentAssistance": "Accident Assistance",
+    "quickResponse": "Quick Response",
     "list": {
       "onSiteRepair": {
         "title": "On-Site Repair",
@@ -203,6 +220,10 @@
     }
   },
   "auth": {
+    "termsText": "I have read and agree to the",
+    "viewTerms": "Terms and Conditions",
+    "agreeAndContinue": "Agree and Continue",
+    "ServiceType": "service type",
     "login": "Login",
     "signup": "Sign up",
     "createAccount": "Create an account",
@@ -225,13 +246,17 @@
       "medium": "Medium",
       "strong": "Strong"
     },
+    "mustAgreeTerms": "You must agree to the terms and conditions to proceed",
     "selectLocation": "Select your store location",
     "pickOnMap": "Pick on Map",
     "mapClickInstruction": "Click on the map to select your store location.",
     "confirmLocation": "Confirm Location",
     "errors": {
       "invalidCredentials": "Invalid phone or password",
-      "generic": "An error occurred. Please try again."
+      "generic": "An error occurred. Please try again.",
+      "passwordsMismatch": "Passwords do not match",
+      "weakPassword": "Password is too weak",
+      "selectServiceType": "Please select a service type"
     },
     "role": {
       "client": "Client",
@@ -240,7 +265,23 @@
     "storeName": "Store Name",
     "location": "Service Area (City, Region)",
     "storeImages": "Store images",
-    "certificate": "Certificate (image or PDF)"
+    "certificate": "Certificate (image or PDF)",
+    "selectFile": "Select a file",
+    "selectMultipleFiles": "Select multiple files",
+    "filesSelected": "files selected",
+    "serviceTypes": {
+      "ServiceType": "service type",
+      "onSiteRepair": "On-Site Repair",
+      "towingService": "Towing Service",
+      "batteryBoost": "Battery Boost",
+      "emergencySupport": "Emergency Support",
+      "fuelDelivery": "Fuel Delivery",
+      "safetyCheck": "Safety Check",
+      "accidentAssistance": "Accident Assistance",
+      "quickResponse": "Quick Response"
+    },
+    "serviceType": "Service Type",
+    "selectServiceType": "Select service type"
   },
   "map": {
     "title": "Service Map",
@@ -276,10 +317,16 @@
     "locationAccessRequired": "Location Access Required",
     "enableLocation": "Enable Location",
     "gettingYourLocation": "Getting your location...",
-    "nearestServices": "Nearest Services"
+    "nearestServices": "Nearest Services",
+    "all": "All Services",
+    "onSiteRepair": "On-Site Repair",
+    "towingService": "Towing Service",
+    "emergencySupport": "Emergency Support",
+    "safetyCheck": "Safety Check",
+    "accidentAssistance": "Accident Assistance",
+    "quickResponse": "Quick Response"
   },
   "dashboard": {
-    "title": "Member Dashboard",
     "status": "Your Status",
     "viewMap": "View Map",
     "manageInfo": "Manage Your Store information",
@@ -298,8 +345,22 @@
     "clientsDesc": "Total number of unique clients served.",
     "requests": "Service Requests",
     "inactive": "Inactive",
-    "totalServices": "Total Services Completed",
-    "subscriptionEnd": "Subscription Ends",
+    "storeImages": "Store Images",
+    "storeAndMemberInfo": "Store and Member Information",
+    "storeInfo": "Store Information",
+    "memberInfo": "Member Information",
+    "loading": "Loading your dashboard...",
+    "title": "Member Dashboard",
+    "totalServices": "Total Services",
+    "subscriptionEnd": "Subscription End Date",
+    "averageRating": "Average Rating",
+    "loadingDashboard": "Loading your dashboard...",
+    "statsTitle": "Analytics Overview",
+    "statsDesc": "Your performance metrics and statistics",
+    "analyticsTitle": "Analytics Overview",
+    "analyticsDesc": "Your performance metrics and statistics",
+    "completedServices": "Completed Services",
+    "subscription": "Subscription",
     "placeholder": "Other Statistic",
     "newRequest": "New Service Request!",
     "newRequestMsg": "You have a new service request from a nearby client.",
@@ -334,19 +395,79 @@
     "storeImages": "Store Images",
     "noImages": "No images uploaded yet.",
     "missingInfo": "Please fill out all required fields.",
-    "saved": "Profile updated successfully!"
+    "saved": "Profile updated successfully!",
+    "priceRange": "Price Range",
+    "isActive": "Active Status",
+    "description": "Store Description",
+    "type": "Service Type",
+    "update": "Update"
   },
   "actions": {
     "save": "Save Changes",
     "cancel": "Cancel",
     "editProfile": "Edit Profile",
-    "upload": "Upload"
+    "upload": "Upload",
+    "tryAgain": "Try Again",
+    "goHome": "Go Home",
+    "contactSupport": "Contact Support",
+    "toggleStatus": "Toggle Status",
+    "viewMap": "View Map",
+    "edit": "Edit",
+    "update": "Update"
   },
   "common": {
     "user": "User",
     "settings": "Settings",
     "back": "Back",
     "backToHome": "Back to Home",
-    "loading": "Loading..."
-  }
+    "loading": "Loading...",
+    "loadingDashboard": "Loading your dashboard..."
+  },
+  "report": {
+    "sectionTitle": "Report an Issue",
+    "sectionSubtitle": "Help us improve the streets by submitting a report with image and description.",
+    "title": "Report a street problem",
+    "subtitle": "Upload an image and short description to report an issue.",
+    "description": "Description",
+    "descriptionPlaceholder": "Where is the problem? What is wrong? ",
+    "addImage": "Add image",
+    "clickToUpload": "Click to upload image",
+    "supported": "PNG, JPG, WEBP — up to 10MB",
+    "removeImage": "Remove image",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "submitted": "Report submitted successfully.",
+    "errors": {
+      "format": "Only JPG, PNG, WEBP allowed.",
+      "size": "Image exceeds 10MB.",
+      "fillAll": "Please provide image and description."
+    }
+  },
+  "pleaseWait": "Please wait",
+  "checkingSession": "Checking your session",
+  "loginRequired": "Login required",
+  "loginBeforeOrdering": "Please log in before ordering",
+  "sessionExpired": "Session expired",
+  "loginAgain": "Please log in again",
+  "success": "Success",
+  "requestCreated": "Request created successfully",
+  "failed": "Failed",
+  "requestFailed": "Could not create request. Please try again",
+  "error": "Error",
+  "requestError": "An error occurred while creating your request",
+  "unknownStore": "Unknown Store",
+  "service": "Service",
+  "reviews": "Reviews",
+  "available": "Available",
+  "busy": "Busy",
+  "provider": "Provider",
+  "phone": "Phone",
+  "priceRange": "Price Range",
+  "distance": "Distance",
+  "by": "by",
+  "anonymous": "Anonymous",
+  "ordering": "Ordering...",
+  "orderNow": "Order Now",
+  "getDirections": "Get Directions",
+  "callNow": "Call Now"
 }

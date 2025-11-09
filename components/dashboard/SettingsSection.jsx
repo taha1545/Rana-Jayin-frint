@@ -1,228 +1,281 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Camera, Edit, Save, X, Settings } from 'lucide-react';
+import { Camera, Edit, Save, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function SettingsSection({
-    profile,
-    editing,
-    setEditing,
-    handleSaveProfile,
-    handleImageUpload,
-    setProfile,
+    memberData,
+    storeData,
+    setMemberData,
+    setStoreData,
     t,
+    updateMember,
+    updateStore,
+    addStoreImage,
+    deleteStoreImage,
 }) {
-    const [tempProfile, setTempProfile] = useState(profile);
-    // 
-    const handleSave = () => {
-        if (!tempProfile.ownerName || !tempProfile.storeName || !tempProfile.phone) {
-            return;
-        }
-        setProfile(tempProfile);
-        handleSaveProfile();
+    const [editingMember, setEditingMember] = useState(false);
+    const [editingStore, setEditingStore] = useState(false);
+    const [tempMember, setTempMember] = useState(memberData);
+    const [tempStore, setTempStore] = useState(storeData);
+
+    const handleSaveMember = async () => {
+        const res = await updateMember(tempMember);
+        if (res.success) {
+            setMemberData(tempMember);
+            setEditingMember(false);
+        } else alert(res.message || t('errors.updateFailed'));
     };
-    // 
-    const handleCancel = () => {
-        setTempProfile(profile);
-        setEditing(false);
+
+    const handleSaveStore = async () => {
+        const { id, images, ...storePayload } = tempStore;
+        const res = await updateStore(id, storePayload);
+        if (res.success) {
+            setStoreData(tempStore);
+            setEditingStore(false);
+        } else alert(res.message || t('errors.updateFailed'));
     };
-    // 
-    const handleImageSelect = (e) => {
+
+    const handleImageSelect = async (e) => {
         const files = Array.from(e.target.files || []);
-        const newImages = files.map((file) => URL.createObjectURL(file));
-        setTempProfile((prev) => ({
-            ...prev,
-            images: [...(prev.images || []), ...newImages],
-        }));
-        handleImageUpload(e);
+        if (!files.length) return;
+
+        for (const file of files) {
+            if (!file) continue;
+
+            try {
+                const res = await addStoreImage(tempStore.id, file);
+                if (res.success) {
+                    setTempStore((prev) => ({
+                        ...prev,
+                        images: [...(prev.images || []), res.data],
+                    }));
+                } else {
+                    alert(res.message || t('errors.uploadFailed'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert(err.message || t('errors.uploadFailed'));
+            }
+        }
+    };
+
+
+
+
+
+    const handleDeleteImage = async (imageId) => {
+        const res = await deleteStoreImage(imageId);
+        if (res.success) {
+            setTempStore((prev) => ({
+                ...prev,
+                images: prev.images.filter((img) => img.id !== imageId),
+            }));
+        } else alert(res.message || t('errors.deleteFailed'));
     };
 
     return (
-        <section className="mt-10">
-            <Card className="border border-border shadow-sm hover:shadow-md transition-all">
+        <section className="mt-10 px-4 sm:px-6 lg:px-8 ">
+            <Card className="w-full  border border-border shadow-sm hover:shadow-md transition-all">
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-lg font-semibold">
-                        <Settings className="w-5 h-5 text-primary" />
-                        {t('dashboard.settings', { defaultValue: 'Account Settings' })}
-                    </CardTitle>
+                    <CardTitle>{t('dashboard.storeAndMemberInfo')}</CardTitle>
                 </CardHeader>
+                <CardContent className="space-y-8">
 
-                <CardContent className="space-y-6">
-                    <AnimatePresence mode="wait">
-                        {editing ? (
-                            <motion.div
-                                key="edit-mode"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ duration: 0.25 }}
-                                className="space-y-6"
-                            >
-                                {/* Editable fields */}
-                                <div className="grid gap-6 sm:grid-cols-2">
-                                    <div className="flex flex-col space-y-2">
-                                        <Label htmlFor="name" className="text-sm font-medium">
-                                            {t('form.name', { defaultValue: 'Name' })}
-                                        </Label>
-                                        <Input
-                                            id="name"
-                                            value={tempProfile.ownerName}
-                                            onChange={(e) =>
-                                                setTempProfile({ ...tempProfile, ownerName: e.target.value })
-                                            }
-                                            placeholder={t('form.namePlaceholder', { defaultValue: 'Enter your name' })}
-                                            className="h-10 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/30 transition-all"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="flex flex-col space-y-2">
-                                        <Label htmlFor="store" className="text-sm font-medium">
-                                            {t('form.storeName', { defaultValue: 'Store Name' })}
-                                        </Label>
-                                        <Input
-                                            id="store"
-                                            value={tempProfile.storeName}
-                                            onChange={(e) =>
-                                                setTempProfile({ ...tempProfile, storeName: e.target.value })
-                                            }
-                                            placeholder={t('form.storePlaceholder', { defaultValue: 'Enter store name' })}
-                                            className="h-10 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/30 transition-all"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="flex flex-col space-y-2">
-                                        <Label htmlFor="phone" className="text-sm font-medium">
-                                            {t('form.phone', { defaultValue: 'Phone' })}
-                                        </Label>
-                                        <Input
-                                            id="phone"
-                                            value={tempProfile.phone}
-                                            onChange={(e) =>
-                                                setTempProfile({ ...tempProfile, phone: e.target.value })
-                                            }
-                                            placeholder="+213 555 123 456"
-                                            className="h-10 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/30 transition-all"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="flex flex-col space-y-2">
-                                        <Label htmlFor="password" className="text-sm font-medium">
-                                            {t('form.password', { defaultValue: 'Password' })}
-                                        </Label>
-                                        <Input
-                                            id="password"
-                                            type="password"
-                                            placeholder="••••••••"
-                                            className="h-10 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/30 transition-all"
-                                        />
-                                    </div>
-                                </div>
-                                {/* Image upload */}
-                                <div>
-                                    <Label>{t('form.storeImages', { defaultValue: 'Store Images' })}</Label>
-                                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 mt-3">
-                                        {tempProfile.images && tempProfile.images.length > 0 ? (
-                                            tempProfile.images.map((img, idx) => (
-                                                <motion.div
-                                                    key={idx}
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: 1 }}
-                                                    className="relative"
-                                                >
-                                                    <img
-                                                        src={img}
-                                                        alt={`store-${idx}`}
-                                                        className="w-full h-24 sm:h-28 object-cover rounded-lg border"
-                                                    />
-                                                </motion.div>
-                                            ))
-                                        ) : (
-                                            <p className="col-span-full text-sm text-muted-foreground">
-                                                {t('form.noImages', { defaultValue: 'No images uploaded yet.' })}
-                                            </p>
-                                        )}
-                                        <label className="w-full h-24 sm:h-28 flex flex-col items-center justify-center rounded-lg border border-dashed cursor-pointer hover:bg-muted/40 transition">
-                                            <Camera className="w-6 h-6 text-muted-foreground" />
-                                            <span className="text-xs text-muted-foreground mt-1">
-                                                {t('actions.upload', { defaultValue: 'Upload' })}
-                                            </span>
-                                            <input type="file" multiple className="hidden" onChange={handleImageSelect} />
-                                        </label>
-                                    </div>
-                                </div>
-
-                                {/* Action buttons */}
-                                <div className="flex justify-end gap-3 pt-4">
-                                    <Button onClick={handleSave} className="flex items-center gap-1">
-                                        <Save className="w-4 h-4" />
-                                        {t('actions.save', { defaultValue: 'Save Changes' })}
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        onClick={handleCancel}
-                                        className="flex items-center gap-1"
-                                    >
-                                        <X className="w-4 h-4" />
-                                        {t('actions.cancel', { defaultValue: 'Cancel' })}
-                                    </Button>
-                                </div>
-                            </motion.div>
-                        ) : (
-                            <motion.div
-                                key="view-mode"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ duration: 0.25 }}
-                                className="space-y-4"
-                            >
-                                <p className="text-sm text-muted-foreground">
-                                    {t('dashboard.manageInfo', {
-                                        defaultValue: 'Manage your store and personal information.',
-                                    })}
-                                </p>
-
-                                <div className="grid gap-2 text-sm space-y-3 ">
-                                    <p>
-                                        <strong>{t('form.name', { defaultValue: 'Name' })}:</strong> {profile.ownerName}
-                                    </p>
-                                    <p>
-                                        <strong>{t('form.storeName', { defaultValue: 'Store' })}:</strong> {profile.storeName}
-                                    </p>
-                                    <p>
-                                        <strong>{t('form.phone', { defaultValue: 'Phone' })}:</strong> {profile.phone}
-                                    </p>
-                                    <p>
-                                        <strong>{t('form.email', { defaultValue: 'Email' })}:</strong> {profile.email}
-                                    </p>
-                                </div>
-
-                                {/* Images */}
-                                {profile.images?.length > 0 && (
-                                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 mt-3">
-                                        {profile.images.map((img, idx) => (
-                                            <img
-                                                key={idx}
-                                                src={img}
-                                                alt={`store-${idx}`}
-                                                className="w-full h-24 sm:h-28 object-cover rounded-lg border"
+                    {/* Member Info Section */}
+                    <div className="space-y-4 p-4 border-b border-border">
+                        <h3 className="font-semibold">{t('dashboard.memberInfo')}</h3>
+                        <AnimatePresence mode="wait">
+                            {editingMember ? (
+                                <motion.div
+                                    key="edit-member"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="space-y-4"
+                                >
+                                    <div className="flex flex-col sm:flex-row sm:space-x-4 sm:space-y-0 space-y-3">
+                                        <div className="flex-1">
+                                            <Label>{t('form.name')}</Label>
+                                            <Input
+                                                value={tempMember.name}
+                                                onChange={(e) =>
+                                                    setTempMember({ ...tempMember, name: e.target.value })
+                                                }
                                             />
-                                        ))}
+                                        </div>
+                                        <div className="flex-1">
+                                            <Label>{t('form.phone')}</Label>
+                                            <Input
+                                                value={tempMember.phone}
+                                                onChange={(e) =>
+                                                    setTempMember({ ...tempMember, phone: e.target.value })
+                                                }
+                                            />
+                                        </div>
                                     </div>
-                                )}
+                                    <div className="flex justify-end">
+                                        <Button onClick={handleSaveMember} className="flex items-center gap-1">
+                                            <Save className="w-4 h-4" /> {t('actions.update')}
+                                        </Button>
+                                    </div>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    key="view-member"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="space-y-2"
+                                >
+                                    <p>
+                                        <strong>{t('form.name')}:</strong> {memberData.name}
+                                    </p>
+                                    <p>
+                                        <strong>{t('form.phone')}:</strong> {memberData.phone}
+                                    </p>
+                                    <Button
+                                        onClick={() => setEditingMember(true)}
+                                        className="mt-2 flex items-center gap-1"
+                                    >
+                                        <Edit className="w-4 h-4" /> {t('actions.edit')}
+                                    </Button>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
 
-                                <Button className="mt-12 flex items-center gap-1" onClick={() => setEditing(true)}>
-                                    <Edit className="w-4 h-4" />
-                                    {t('actions.editProfile', { defaultValue: 'Edit Profile' })}
-                                </Button>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                    {/* Store Info Section */}
+                    <div className="space-y-4 p-4 border-b border-border">
+                        <h3 className="font-semibold">{t('dashboard.storeInfo')}</h3>
+                        <AnimatePresence mode="wait">
+                            {editingStore ? (
+                                <motion.div
+                                    key="edit-store"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="space-y-4"
+                                >
+                                    <div className="flex flex-col sm:flex-row sm:space-x-4 sm:space-y-0 space-y-3">
+                                        <div className="flex-1">
+                                            <Label>{t('form.storeName')}</Label>
+                                            <Input
+                                                value={tempStore.storeName}
+                                                onChange={(e) =>
+                                                    setTempStore({ ...tempStore, storeName: e.target.value })
+                                                }
+                                            />
+                                        </div>
+                                        <div className="flex-1">
+                                            <Label>{t('form.type')}</Label>
+                                            <Input
+                                                value={tempStore.type}
+                                                onChange={(e) =>
+                                                    setTempStore({ ...tempStore, type: e.target.value })
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col sm:flex-row sm:space-x-4 sm:space-y-0 space-y-3">
+                                        <div className="flex-1">
+                                            <Label>{t('form.priceRange')}</Label>
+                                            <Input
+                                                value={tempStore.priceRange}
+                                                onChange={(e) =>
+                                                    setTempStore({ ...tempStore, priceRange: e.target.value })
+                                                }
+                                            />
+                                        </div>
+                                        <div className="flex-1">
+                                            <Label>{t('form.isActive')}</Label>
+                                            <Input value={tempStore.isActive ? 'Yes' : 'No'} readOnly />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <Label>{t('form.description')}</Label>
+                                        <Input
+                                            value={tempStore.description || ''}
+                                            onChange={(e) =>
+                                                setTempStore({ ...tempStore, description: e.target.value })
+                                            }
+                                        />
+                                    </div>
+                                    <div className="flex justify-end">
+                                        <Button onClick={handleSaveStore} className="flex items-center gap-1">
+                                            <Save className="w-4 h-4" /> {t('actions.update')}
+                                        </Button>
+                                    </div>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    key="view-store"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="space-y-2"
+                                >
+                                    <p>
+                                        <strong>{t('form.storeName')}:</strong> {storeData.storeName}
+                                    </p>
+                                    <p>
+                                        <strong>{t('form.type')}:</strong> {storeData.type}
+                                    </p>
+                                    <p>
+                                        <strong>{t('form.priceRange')}:</strong> {storeData.priceRange}
+                                    </p>
+                                    <p>
+                                        <strong>{t('form.isActive')}:</strong> {storeData.isActive ? 'Yes' : 'No'}
+                                    </p>
+                                    <p>
+                                        <strong>{t('form.description')}:</strong> {storeData.description || 'N/A'}
+                                    </p>
+                                    <Button
+                                        onClick={() => setEditingStore(true)}
+                                        className="mt-2 flex items-center gap-1"
+                                    >
+                                        <Edit className="w-4 h-4" /> {t('actions.edit')}
+                                    </Button>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+
+                    {/* Store Images Section */}
+                    <div className="space-y-4 p-4">
+                        <h3 className="font-semibold">{t('dashboard.storeImages')}</h3>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                            {storeData.images?.map((img) => (
+                                <div key={img.id} className="relative">
+                                    <img
+                                        src={`${(process.env.NEXT_PUBLIC_API_URL || process.env.API_URL).replace(/\/api\/v1\/?$/, '').replace(/\/$/, '')}/${img.imageUrl}`}
+                                        alt={`store-${img.id}`}
+                                        className="w-full h-24 sm:h-28 object-cover rounded-lg border"
+                                    />
+
+
+                                    <Button
+                                        variant="destructive"
+                                        size="sm"
+                                        className="absolute top-1 right-1 w-6 h-6 p-0 flex items-center justify-center rounded-full"
+                                        onClick={() => handleDeleteImage(img.id)}
+                                    >
+                                        X
+                                    </Button>
+                                </div>
+                            ))}
+                            <label className="flex items-center justify-center gap-2 px-3 py-2 border rounded-lg cursor-pointer hover:bg-muted/30">
+                                <Camera className="w-4 h-4" />
+                                <input type="file" multiple className="hidden" onChange={handleImageSelect} />
+                            </label>
+                        </div>
+                    </div>
+
                 </CardContent>
             </Card>
         </section>

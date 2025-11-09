@@ -74,7 +74,7 @@ export const getNearestServices = (services, userLocation, maxRadiusKm = 25, lim
         .slice(0, limit);
 };
 
-// New flexible helpers (do not change existing behavior above)
+// 
 export const attachDistance = (services, userLocation) => {
     if (!userLocation) return services;
     return services.map((service) => {

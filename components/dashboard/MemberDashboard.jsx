@@ -1,70 +1,155 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/hooks/useTranslation';
 import HeaderSection from './HeaderSection';
 import StatsSection from './StatsSection';
-import RequestsTable from './RequestsTable';
 import SettingsSection from './SettingsSection';
 import CurrentUserCard from './CurrentUserCard';
 import MapDialog from './MapDialog';
-import { Activity, Calendar, Settings, Star } from 'lucide-react';
-import EmergencyServices from '../Home/EmergencyServices';
+import MembreServices from '@/services/MembreServices';
+import UserServices from '@/services/UserServices';
+import { Activity, Calendar, Star, AlertTriangle } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Spinner } from '@/components/ui/spinner';
 
-export default function MemberDashboard() {
-  //
+export default function MemberDashboard({ token }) {
   const { t } = useTranslation();
+  const router = useRouter();
+
   const [isActive, setIsActive] = useState(true);
-  const [page, setPage] = useState(1);
-  const [showMap, setShowMap] = useState(false);
-  const [selectedClient, setSelectedClient] = useState(null);
-  const [editing, setEditing] = useState(false);
-  //
-  const [profile, setProfile] = useState({
-    name: 'Rana Jayin Garage',
-    ownerName: 'Taha Mansouri',
-    email: 'rana@example.com',
-    phone: '+213 555 123 456',
-    storeName: 'Rana Car Wash & Tow',
-    images: [],
-  });
-  //
-  const currentUser = {
-    name: 'Taha Mansouri',
-    phone: '+213 555 123 456',
-    location: [35.207, -0.641],
-    status: 'Active',
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [profile, setProfile] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [stats, setStats] = useState([]);
+
+  const loadDashboardData = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      if (!token) {
+        router.push('/auth/login');
+        return;
+      }
+
+      // 🔹 Current user info
+      const memberRes = await UserServices.getCurrentUser(token);
+      if (!memberRes?.success) throw new Error(t('errors.memberInfoFailed'));
+
+      // 🔹 Member's store info
+      const storeRes = await MembreServices.getMemberStore(memberRes.data.id, token);
+      if (!storeRes?.success) throw new Error(t('errors.storeInfoFailed'));
+      const storeData = storeRes.data;
+      setProfile(storeData);
+      setIsActive(storeData.isActive);
+
+      // 🔹 Last client request
+      const requestsRes = await MembreServices.getLastRequest(storeData.id, token);
+      const lastRequest = requestsRes?.data || null;
+
+      setCurrentUser({
+        client: lastRequest?.client || memberRes.data,
+        request: lastRequest?.request || {
+          id: null,
+          serviceType: 'N/A',
+          status: 'N/A',
+          latitude: 0,
+          longitude: 0,
+          createdAt: 'N/A'
+        },
+      });
+
+      // 🔹 Store analytics
+      const analyticsRes = await MembreServices.getAnalytics(storeData.id, token);
+      const analytics = analyticsRes?.data || {};
+      setStats([
+        { 
+          icon: <Activity className="w-5 h-5 text-primary" />, 
+          title: t('dashboard.totalServices'), 
+          value: analytics.totalServicesCompleted || 0
+        },
+        { 
+          icon: <Calendar className="w-5 h-5 text-primary" />, 
+          title: t('dashboard.subscriptionEnd'), 
+          value: analytics.subscriptionEnds || 'N/A'
+        },
+        { 
+          icon: <Star className="w-5 h-5 text-primary" />, 
+          title: t('dashboard.averageRating'), 
+          value: `${analytics.averageRating || 0} ★`
+        },
+      ]);
+
+    } catch (err) {
+      console.error(err);
+      setError(err.message || t('errors.dashboardLoadFailed'));
+    } finally {
+      setLoading(false);
+    }
   };
-  //
-  const mockRequests = [
-    { id: 1, client: 'Ahmed', phone: '+213 770 111 222', status: 'Completed', location: { lat: 36.76, lng: 3.07 } },
-    { id: 2, client: 'Sara', phone: '+213 770 333 444', status: 'Pending', location: { lat: 36.74, lng: 3.04 } },
-    { id: 3, client: 'Yacine', phone: '+213 770 555 666', status: 'In Progress', location: { lat: 36.77, lng: 3.06 } },
-  ];
-  //
-  const stats = [
-    { icon: <Activity className="w-5 h-5 text-primary" />, title: t('dashboard.totalServices', { defaultValue: 'Total Services Completed' }), value: '42' },
-    { icon: <Calendar className="w-5 h-5 text-primary" />, title: t('dashboard.subscriptionEnd', { defaultValue: 'Subscription Ends' }), value: '31/12/2025' },
-    { icon: <Star className="w-5 h-5 text-primary" />, title: t('dashboard.otherStat', { defaultValue: 'Average Rating' }), value: '4.8 ★' },
-  ];
-  //
-  const handleStatusToggle = (checked) => setIsActive(checked);
-  const handleSaveProfile = () => setEditing(false);
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files || []);
-    setProfile((prev) => ({ ...prev, images: [...prev.images, ...files.map((f) => URL.createObjectURL(f))] }));
+
+  useEffect(() => { loadDashboardData(); }, [token]);
+
+  const handleStatusToggle = async (checked) => {
+    setIsActive(checked);
+    try {
+      const res = await MembreServices.toggleActive(profile.id, checked, token);
+      if (!res?.success) throw new Error(t('errors.statusUpdateFailed'));
+    } catch (err) {
+      console.error(err);
+      setIsActive(!checked);
+      alert(t('errors.statusUpdateFailed'));
+    }
   };
-  const handleShowMap = (client) => { setSelectedClient(client); setShowMap(true); };
-  //
+
+      // 🔹 Loading state
+      if (loading) {
+        return (
+          <div className="flex flex-col items-center justify-center h-screen text-muted-foreground">
+            <Spinner className="mb-4" />
+            <p>{t('common.loading')}</p>
+          </div>
+        );
+      }  // 🔹 Error state
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-background">
+        <Card className="max-w-md p-6 text-center border border-red-500 shadow-md rounded-md">
+          <AlertTriangle className="w-10 h-10 text-red-500 mx-auto mb-4" />
+          <h2 className="text-lg font-semibold text-red-500 mb-2">{t('errors.somethingWentWrong')}</h2>
+          <p className="text-sm text-muted-foreground mb-4">{t('errors.tryAgainOrContact')}</p>
+          <div className="flex justify-center gap-2">
+            <button onClick={loadDashboardData} className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90">{t('actions.tryAgain')}</button>
+            <button onClick={() => router.push('/')} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">{t('actions.goHome')}</button>
+            <button onClick={() => router.push('/contact')} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">{t('actions.contactSupport')}</button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <main className="pt-12 lg:pt-24 pb-16 px-4 md:px-8 lg:px-16 bg-background text-foreground min-h-screen space-y-12">
-      <HeaderSection {...{ profile, isActive, handleStatusToggle, t }} /> 
-      <CurrentUserCard user={currentUser} t={t} />
+      <HeaderSection {...{ profile, isActive, handleStatusToggle, t }} />
+      {currentUser && <CurrentUserCard userData={currentUser} t={t} />}
       <StatsSection stats={stats} />
-      <RequestsTable {...{ mockRequests, t, page, setPage, handleShowMap }} />
-      <SettingsSection {...{ profile, editing, setEditing, handleSaveProfile, handleImageUpload, setProfile, t }} />
-      <MapDialog {...{ showMap, setShowMap, selectedClient }} />
-      <EmergencyServices/>
+      <SettingsSection
+        memberData={profile?.member}   
+        storeData={profile}            
+        setMemberData={(updated) => setProfile(prev => ({ ...prev, member: updated }))}
+        setStoreData={setProfile}
+        t={t}
+        updateMember={(data) => MembreServices.updateMember(data, token)}
+        updateStore={(id, data) => MembreServices.updateStore(id, data, token)}
+        addStoreImage={(id, file) => MembreServices.addStoreImage(id, file, token)}
+        deleteStoreImage={(imageId) => MembreServices.deleteStoreImage(imageId, token)}
+      />
+
+      <MapDialog {...{ showMap: false, setShowMap: () => { }, selectedClient: null }} />
     </main>
   );
 }
