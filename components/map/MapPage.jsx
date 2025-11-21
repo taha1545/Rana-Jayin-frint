@@ -111,7 +111,7 @@ export default function MapPage() {
 
       } catch (err) {
         console.error('❌ Error fetching nearby stores:', err);
-        setError(err?.message || 'Failed to load nearby services. Please try again.');
+        setError( 'Failed to load nearby services. Please try again.');
         setServices([]);
       } finally {
         setLoadingServices(false);
