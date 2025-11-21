@@ -14,7 +14,6 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { useSearchParams } from 'next/navigation';
 import StoreServices from '@/services/StoreServices';
 
-// 
 const MapComponent = dynamic(() => import('./MapComponent'), {
   ssr: false,
   loading: () => (
@@ -34,6 +33,8 @@ export default function MapPage() {
   const [services, setServices] = useState([]);
   const [loadingServices, setLoadingServices] = useState(false);
   const [error, setError] = useState(null);
+  const [hasFetched, setHasFetched] = useState(false); // ✅ prevents multiple loads
+
   const searchParams = useSearchParams();
 
   const {
@@ -50,12 +51,13 @@ export default function MapPage() {
     }
   }, [searchParams]);
 
-
-  // 
+  // -------------------------------------------------------------
+  // ✅ Fetch Stores ONLY ONE TIME after position is available
+  // -------------------------------------------------------------
   useEffect(() => {
-     if (!userPosition) return;        // wait until location is ready
+    if (!userPosition || hasFetched) return; // ❌ Skip if fetched before
+
     const fetchStores = async () => {
-      if (!userPosition) return;
       setLoadingServices(true);
       setError(null);
 
@@ -65,7 +67,6 @@ export default function MapPage() {
           userPosition.longitude
         );
 
-        // Map stores
         const mapped = res.data.map((item) => {
           const s = item.store?.store || {};
           const owner = s.owner || {};
@@ -106,23 +107,24 @@ export default function MapPage() {
           };
         });
 
-        // ✅ Deduplicate services by ID
         const uniqueServices = Array.from(new Map(mapped.map(s => [s.id, s])).values());
         setServices(uniqueServices);
-
       } catch (err) {
         console.error('❌ Error fetching nearby stores:', err);
-        setError( 'no nearby services found || لم يتم العثور على متجر');
+        setError('no nearby services found || لم يتم العثور على متجر');
         setServices([]);
       } finally {
         setLoadingServices(false);
+        setHasFetched(true); // 🔐 Never fetch again automatically
       }
     };
 
     fetchStores();
-  }, [userPosition]);
+  }, [userPosition, hasFetched]);
 
-  // 📍 Filtered and deduplicated services
+  // -------------------------------------------------------------
+  // FILTER SERVICES
+  // -------------------------------------------------------------
   const filteredServices = useMemo(() => {
     let list = [...services];
 
@@ -130,7 +132,6 @@ export default function MapPage() {
       list = list.filter((s) => s.type === filterType);
     }
 
-    // Deduplicate again after filtering to be safe
     list = Array.from(new Map(list.map(s => [s.id, s])).values());
 
     if (userPosition) {
@@ -141,7 +142,9 @@ export default function MapPage() {
     return list;
   }, [filterType, services, userPosition]);
 
-  // 🚗 Open Google Maps directions
+  // -------------------------------------------------------------
+  // ACTIONS
+  // -------------------------------------------------------------
   const handleDirections = (service) => {
     if (!service?.location) return;
     const [lat, lng] = service.location;
@@ -154,7 +157,6 @@ export default function MapPage() {
     );
   };
 
-  // ☎️ Call the store
   const handleCall = (phoneNumber) => {
     if (!phoneNumber) return;
     window.open(`tel:${phoneNumber}`, '_self');
@@ -162,7 +164,7 @@ export default function MapPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-row h-screen mb-12">
-      {/* 🗺️ Map section */}
+      {/* Map Section */}
       <div className="relative flex-1 min-h-[400px] sm:min-h-[600px]">
         <MapComponent
           services={filteredServices}
@@ -176,10 +178,10 @@ export default function MapPage() {
         />
       </div>
 
-      {/* 📋 Sidebar */}
+      {/* Sidebar */}
       <aside className="w-full sm:w-[380px] md:w-[420px] lg:w-[480px] xl:w-[520px] bg-background border-l border-border overflow-y-auto flex flex-col">
         <div className="p-4 lg:p-6 space-y-4 lg:space-y-6 flex-1 flex flex-col">
-          {/* Filters */}
+
           <div>
             <h3 className="text-xl font-bold mb-3">
               {t('map.title') || 'Find Services'}
@@ -187,7 +189,6 @@ export default function MapPage() {
             <MapFilters filterType={filterType} setFilterType={setFilterType} />
           </div>
 
-          {/* Location Status */}
           {(locationLoading || locationError || userPosition) && (
             <Card
               className={
@@ -215,16 +216,13 @@ export default function MapPage() {
                 ) : (
                   <>
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <p className="text-sm font-medium text-green-800">
-                      Location active
-                    </p>
+                    <p className="text-sm font-medium text-green-800">Location active</p>
                   </>
                 )}
               </CardContent>
             </Card>
           )}
 
-          {/* Service List */}
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold">
               {t('map.nearestServices') || 'Nearest Services'}
@@ -257,7 +255,7 @@ export default function MapPage() {
         </div>
       </aside>
 
-      {/* 🪧 Selected Service Overlay */}
+      {/* Selected Service Panel */}
       {selectedService && (
         <>
           <div
