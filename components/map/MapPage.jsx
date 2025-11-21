@@ -111,7 +111,7 @@ export default function MapPage() {
 
       } catch (err) {
         console.error('❌ Error fetching nearby stores:', err);
-        setError( 'Failed to load nearby services. Please try again.');
+        setError( 'no nearby services found || لم يتم العثور على متجر');
         setServices([]);
       } finally {
         setLoadingServices(false);
