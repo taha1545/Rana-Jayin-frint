@@ -54,8 +54,6 @@ export default function MapPage() {
   // 
   useEffect(() => {
      if (!userPosition) return;        // wait until location is ready
-  if (fetchedRef.current) return;   // prevent running again
-  fetchedRef.current = true;        // mark as already fetched
     const fetchStores = async () => {
       if (!userPosition) return;
       setLoadingServices(true);
