@@ -219,6 +219,7 @@
       }
     }
   },
+  
   "auth": {
     "termsText": "I have read and agree to the",
     "viewTerms": "Terms and Conditions",
@@ -265,7 +266,9 @@
     "storeName": "Store Name",
     "location": "Service Area (City, Region)",
     "storeImages": "Store images",
-    "certificate": "Certificate (image or PDF)",
+    "certificate": "national card",
+    "criminalRecord": "Criminal Record",
+    "storeRegistration": "Store Registration",
     "selectFile": "Select a file",
     "selectMultipleFiles": "Select multiple files",
     "filesSelected": "files selected",
@@ -281,8 +284,19 @@
       "quickResponse": "Quick Response"
     },
     "serviceType": "Service Type",
-    "selectServiceType": "Select service type"
+    "selectServiceType": "Select service type",
+    "carData": "Car Data",
+    "carDataPlaceholder": "Enter your car details",
+    "carModel": "Model",
+    "carPlate": "Plate Number",
+    "carColor": "Color",
+    "common": {
+      "back": "Back",
+      "loading": "Loading..."
+    }
   },
+
+  
   "map": {
     "title": "Service Map",
     "subtitle": "Find nearby services and service providers",

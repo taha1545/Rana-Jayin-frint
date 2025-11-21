@@ -42,14 +42,28 @@ export default function TermsPage() {
                 <p className="italic text-right" dir="rtl">نحن غير مسؤولين عن أي أضرار تنتج عن استخدامك لخدماتنا.</p>
             </section>
 
-            {/* Back button */}
-            <div className="text-center mt-8">
+            <div className="text-center mt-8 px-4">
                 <Link href="/auth/signup">
-                    <Button className="px-6 py-2 text-lg font-medium">
+                    <Button
+                        className="
+                w-full sm:w-auto 
+                max-w-full 
+                px-4 py-2 
+                sm:px-6 sm:py-3 
+                md:px-8 md:py-4 
+                text-sm sm:text-base md:text-lg 
+                font-medium 
+                break-words
+                whitespace-normal
+                h-12
+            "
+                    >
                         Back to Signup / Retour à l'inscription / العودة إلى التسجيل
                     </Button>
                 </Link>
             </div>
+
+
         </div>
     );
 }

@@ -7,6 +7,8 @@ import { Camera, Trash2, Send, CheckCircle, XCircle } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from '@/hooks/useTranslation';
+import { useGeolocation } from '@/hooks/useGeolocation';
+import ContactServices from '@/services/ContactServices';
 
 export default function Report() {
     const { t } = useTranslation();
@@ -17,8 +19,11 @@ export default function Report() {
     const [desc, setDesc] = useState('');
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState(null);
-    const MAX_SIZE = 10 * 1024 * 1024;
+
+    const MAX_SIZE = 10 * 1024 * 1024; // 10MB
     const ALLOWED = ['image/jpeg', 'image/png', 'image/webp'];
+
+    const { location: userPosition, error: locationError, loading: locationLoading } = useGeolocation();
 
     function openPicker() {
         fileRef.current?.click();
@@ -51,7 +56,7 @@ export default function Report() {
     }
 
     async function handleSubmit(e) {
-        e?.preventDefault?.();
+        e?.preventDefault();
         setStatus(null);
 
         if (!file || !desc.trim()) {
@@ -59,20 +64,29 @@ export default function Report() {
             return;
         }
 
+        if (!userPosition) {
+            setStatus({ type: 'error', text: locationError || 'Unable to get location. Please enable location services.' });
+            return;
+        }
+
         setLoading(true);
 
-        // Simulate a fake API request
-        setTimeout(() => {
-            const isSuccess = true; // Change to false to simulate error
-            if (isSuccess) {
-                setStatus({ type: 'success', text: t('report.submitted') || 'Report submitted successfully.' });
-                setDesc('');
-                removeImage();
-            } else {
-                setStatus({ type: 'error', text: t('errors.submitFailed') || 'Submission failed' });
-            }
+        try {
+            await ContactServices.sendReport({
+                description: desc,
+                image: file,
+                latitude: userPosition.latitude,
+                longitude: userPosition.longitude,
+            });
+
+            setStatus({ type: 'success', text: t('report.submitted') || 'Report submitted successfully.' });
+            setDesc('');
+            removeImage();
+        } catch (err) {
+            setStatus({ type: 'error', text: err.message || t('errors.submitFailed') || 'Submission failed' });
+        } finally {
             setLoading(false);
-        }, 1500);
+        }
     }
 
     return (
@@ -124,7 +138,7 @@ export default function Report() {
                                 <div className="flex flex-col sm:flex-row gap-3">
                                     <Button
                                         type="submit"
-                                        disabled={loading}
+                                        disabled={loading || locationLoading}
                                         className="flex-1 sm:flex-none w-full sm:w-auto"
                                     >
                                         {loading ? (
@@ -164,7 +178,7 @@ export default function Report() {
 
                     {/* Right: Image Card */}
                     <div
-                        className="h-full max-h-[700px] lg:max-h-[400px] bg-card border border-dashed border-border rounded-2xl overflow-hidden relative flex items-center justify-center cursor-pointer shadow-lg"
+                        className="h-full min-h-[300px] lg:max-h-[400px] bg-card border border-dashed border-border rounded-2xl overflow-hidden relative flex items-center justify-center cursor-pointer shadow-lg"
                         onClick={openPicker}
                         role="button"
                         tabIndex={0}

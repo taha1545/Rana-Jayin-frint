@@ -251,6 +251,7 @@ export default function SettingsSection({
                         <h3 className="font-semibold">{t('dashboard.storeImages')}</h3>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                             {storeData.images?.map((img) => (
+                               
                                 <div key={img.id} className="relative">
                                     <img
                                         src={`${(process.env.NEXT_PUBLIC_API_URL || process.env.API_URL).replace(/\/api\/v1\/?$/, '').replace(/\/$/, '')}/${img.imageUrl}`}

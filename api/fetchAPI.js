@@ -13,7 +13,6 @@ export async function fetchAPI({ url, method = 'get', data, params, token } = {}
   } catch (error) {
     // 
     if (error.response) {
-      console.log(error.message)
       throw new Error(error.response.data?.message || 'API Error');
     }
     throw new Error(error.message || 'Network Error');

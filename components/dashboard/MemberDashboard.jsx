@@ -46,40 +46,43 @@ export default function MemberDashboard({ token }) {
       const storeData = storeRes.data;
       setProfile(storeData);
       setIsActive(storeData.isActive);
+      //
+      let lastRequest = null;
+      try {
+        const requestsRes = await MembreServices.getLastRequest(storeData.id, token);
+        if (requestsRes?.success) {
+          lastRequest = requestsRes.data;
+        }
+      } catch {
+        // No request found → leave lastRequest = null
+      }
 
-      // 🔹 Last client request
-      const requestsRes = await MembreServices.getLastRequest(storeData.id, token);
-      const lastRequest = requestsRes?.data || null;
-
-      setCurrentUser({
-        client: lastRequest?.client || memberRes.data,
-        request: lastRequest?.request || {
-          id: null,
-          serviceType: 'N/A',
-          status: 'N/A',
-          latitude: 0,
-          longitude: 0,
-          createdAt: 'N/A'
-        },
-      });
+      setCurrentUser(
+        lastRequest
+          ? {
+            client: lastRequest.client,
+            request: lastRequest.request,
+          }
+          : null // ➤ Nothing to show
+      );
 
       // 🔹 Store analytics
       const analyticsRes = await MembreServices.getAnalytics(storeData.id, token);
       const analytics = analyticsRes?.data || {};
       setStats([
-        { 
-          icon: <Activity className="w-5 h-5 text-primary" />, 
-          title: t('dashboard.totalServices'), 
+        {
+          icon: <Activity className="w-5 h-5 text-primary" />,
+          title: t('dashboard.totalServices'),
           value: analytics.totalServicesCompleted || 0
         },
-        { 
-          icon: <Calendar className="w-5 h-5 text-primary" />, 
-          title: t('dashboard.subscriptionEnd'), 
+        {
+          icon: <Calendar className="w-5 h-5 text-primary" />,
+          title: t('dashboard.subscriptionEnd'),
           value: analytics.subscriptionEnds || 'N/A'
         },
-        { 
-          icon: <Star className="w-5 h-5 text-primary" />, 
-          title: t('dashboard.averageRating'), 
+        {
+          icon: <Star className="w-5 h-5 text-primary" />,
+          title: t('dashboard.averageRating'),
           value: `${analytics.averageRating || 0} ★`
         },
       ]);
@@ -106,15 +109,15 @@ export default function MemberDashboard({ token }) {
     }
   };
 
-      // 🔹 Loading state
-      if (loading) {
-        return (
-          <div className="flex flex-col items-center justify-center h-screen text-muted-foreground">
-            <Spinner className="mb-4" />
-            <p>{t('common.loading')}</p>
-          </div>
-        );
-      }  // 🔹 Error state
+  // 🔹 Loading state
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen text-muted-foreground">
+        <Spinner className="mb-4" />
+        <p>{t('common.loading')}</p>
+      </div>
+    );
+  }  // 🔹 Error state
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-background">
@@ -138,8 +141,8 @@ export default function MemberDashboard({ token }) {
       {currentUser && <CurrentUserCard userData={currentUser} t={t} />}
       <StatsSection stats={stats} />
       <SettingsSection
-        memberData={profile?.member}   
-        storeData={profile}            
+        memberData={profile?.member}
+        storeData={profile}
         setMemberData={(updated) => setProfile(prev => ({ ...prev, member: updated }))}
         setStoreData={setProfile}
         t={t}

@@ -220,13 +220,13 @@
     }
   },
   "auth": {
-    "termsText": "لقد قرأت ووافقت على",
+    "termsText": "لقد قرأت وأوافق على",
     "viewTerms": "الشروط والأحكام",
-    "agreeAndContinue": "موافق ومتابعة",
+    "agreeAndContinue": "أوافق وأتابع",
     "ServiceType": "نوع الخدمة",
     "login": "تسجيل الدخول",
     "signup": "إنشاء حساب",
-    "createAccount": "إنشاء حساب",
+    "createAccount": "إنشاء حساب جديد",
     "fullName": "الاسم الكامل",
     "phone": "رقم الهاتف",
     "email": "البريد الإلكتروني",
@@ -237,38 +237,40 @@
     "dontHaveAccount": "ليس لديك حساب؟",
     "signIn": "تسجيل الدخول",
     "logout": "تسجيل الخروج",
-    "signInSubtitle": "سجل الدخول إلى حسابك",
-    "createAccountSubtitle": "أنشئ حسابك للبدء",
-    "iAm": "أنا:",
-    "signingIn": "جاري تسجيل الدخول...",
+    "signInSubtitle": "تسجيل الدخول إلى حسابك",
+    "createAccountSubtitle": "قم بإنشاء حسابك للبدء",
+    "iAm": "أنا: ",
+    "signingIn": "جارٍ تسجيل الدخول...",
     "passwordStrength": {
       "weak": "ضعيف",
       "medium": "متوسط",
       "strong": "قوي"
     },
-    "mustAgreeTerms": "يجب أن توافق على الشروط والأحكام للمتابعة",
-    "selectLocation": "حدد موقع متجرك",
+    "mustAgreeTerms": "يجب الموافقة على الشروط والأحكام للمتابعة",
+    "selectLocation": "اختر موقع متجرك",
     "pickOnMap": "اختر على الخريطة",
     "mapClickInstruction": "انقر على الخريطة لتحديد موقع متجرك.",
     "confirmLocation": "تأكيد الموقع",
     "errors": {
-      "invalidCredentials": "هاتف أو كلمة مرور غير صحيحة",
+      "invalidCredentials": "رقم الهاتف أو كلمة المرور غير صحيحة",
       "generic": "حدث خطأ. يرجى المحاولة مرة أخرى.",
-      "passwordsMismatch": "كلمات المرور غير متطابقة",
+      "passwordsMismatch": "كلمتا المرور غير متطابقتين",
       "weakPassword": "كلمة المرور ضعيفة جدًا",
       "selectServiceType": "يرجى اختيار نوع الخدمة"
     },
     "role": {
       "client": "عميل",
-      "member": "مقدم خدمة"
+      "member": "مزود خدمة"
     },
     "storeName": "اسم المتجر",
     "location": "منطقة الخدمة (المدينة، المنطقة)",
     "storeImages": "صور المتجر",
-    "certificate": "شهادة (صورة أو PDF)",
+    "certificate": "البطاقة الوطنية",
+    "criminalRecord": "السجل الجنائي",
+    "storeRegistration": "تسجيل المتجر",
     "selectFile": "اختر ملف",
-    "selectMultipleFiles": "اختر ملفات متعددة",
-    "filesSelected": "ملف محدد",
+    "selectMultipleFiles": "اختر عدة ملفات",
+    "filesSelected": "ملفات مختارة",
     "serviceTypes": {
       "ServiceType": "نوع الخدمة",
       "onSiteRepair": "إصلاح في الموقع",
@@ -277,11 +279,20 @@
       "emergencySupport": "دعم الطوارئ",
       "fuelDelivery": "توصيل الوقود",
       "safetyCheck": "فحص السلامة",
-      "accidentAssistance": "مساعدة الحوادث",
+      "accidentAssistance": "المساعدة عند الحوادث",
       "quickResponse": "استجابة سريعة"
     },
     "serviceType": "نوع الخدمة",
-    "selectServiceType": "اختر نوع الخدمة"
+    "selectServiceType": "اختر نوع الخدمة",
+    "carData": "بيانات السيارة",
+    "carDataPlaceholder": "أدخل تفاصيل سيارتك",
+    "carModel": "الموديل",
+    "carPlate": "رقم اللوحة",
+    "carColor": "اللون",
+    "common": {
+      "back": "عودة",
+      "loading": "جارٍ التحميل..."
+    }
   },
   "map": {
     "title": "خريطة الخدمات",

@@ -9,19 +9,22 @@ import {
 } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import MapPickerModal from './MapPickerModal';
+import TermsAgreement from './TermsAgreement'; 
 
 export default function MemberSignupForm({ onSubmit, error }) {
     const { t } = useTranslation();
+
     const [data, setData] = useState({
         name: '',
-        storeName: '',
         phone: '',
         password: '',
         confirmPassword: '',
+        storeName: '',
+        serviceType: [],
+        car: { model: '', plateNumber: '', color: '' },
         certificate: null,
         storeImages: [],
-        location: '',
-        serviceType: '',
+        sensitiveDocs: { criminalRecord: null, storeRegistration: null }
     });
 
     const [showPassword, setShowPassword] = useState(false);
@@ -31,6 +34,7 @@ export default function MemberSignupForm({ onSubmit, error }) {
     const [isMapOpen, setIsMapOpen] = useState(false);
     const [selectedCoords, setSelectedCoords] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [agreed, setAgreed] = useState(false); 
 
     const services = [
         { icon: <Wrench className="w-6 h-6 text-primary" />, key: "onSiteRepair", label: t('services.onSiteRepair') },
@@ -45,14 +49,18 @@ export default function MemberSignupForm({ onSubmit, error }) {
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
-        setData(prev => ({
-            ...prev,
-            [name]: files
-                ? name === 'storeImages'
-                    ? Array.from(files)
-                    : files[0]
-                : value
-        }));
+
+        if (name === 'certificate' || name === 'storeImages' || name === 'criminalRecord' || name === 'storeRegistration') {
+            if (name === 'storeImages') setData(prev => ({ ...prev, storeImages: Array.from(files) }));
+            else if (name === 'certificate') setData(prev => ({ ...prev, certificate: files[0] || null }));
+            else setData(prev => ({ ...prev, sensitiveDocs: { ...prev.sensitiveDocs, [name]: files[0] || null } }));
+            return;
+        }
+
+        setData(prev => name in prev.car
+            ? { ...prev, car: { ...prev.car, [name]: value } }
+            : { ...prev, [name]: value }
+        );
 
         if (name === 'password') {
             let strength = 0;
@@ -65,60 +73,21 @@ export default function MemberSignupForm({ onSubmit, error }) {
         }
     };
 
+    const toggleService = (key) => {
+        setData(prev => {
+            const selected = prev.serviceType.includes(key)
+                ? prev.serviceType.filter(s => s !== key)
+                : [...prev.serviceType, key];
+            return { ...prev, serviceType: selected };
+        });
+    };
+
     const validateStep1 = () => {
         if (data.password !== data.confirmPassword) return t('auth.errors.passwordsMismatch');
         if (passwordStrength < 3) return t('auth.errors.weakPassword');
         if (!data.name) return t('auth.errors.nameRequired');
+        if (!data.phone) return t('auth.errors.phoneRequired');
         return null;
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (memberStep === 1) {
-            const stepError = validateStep1();
-            if (stepError) {
-                console.error('Validation Error:', stepError);
-                return alert(stepError);
-            }
-            setMemberStep(2);
-            return;
-        }
-
-        if (!data.storeName) {
-            const errMsg = t('auth.errors.storeNameRequired');
-            console.error('Validation Error:', errMsg);
-            return alert(errMsg);
-        }
-
-        if (!data.serviceType) {
-            const errMsg = t('auth.errors.selectServiceType');
-            console.error('Validation Error:', errMsg);
-            return alert(errMsg);
-        }
-
-        try {
-            setLoading(true);
-
-            const payload = {
-                name: data.name,
-                phone: data.phone,
-                password: data.password,
-                storeName: data.storeName,
-                type: data.serviceType,
-                latitude: selectedCoords ? selectedCoords.lat : null,
-                longitude: selectedCoords ? selectedCoords.lng : null,
-                certificate: data.certificate,
-                storeImages: data.storeImages,
-            };
-
-            const result = await onSubmit(payload);
-
-        } catch (err) {
-            console.error('Signup Error:', err);
-        } finally {
-            setLoading(false);
-        }
     };
 
     const getPasswordStrengthColor = () => {
@@ -127,31 +96,53 @@ export default function MemberSignupForm({ onSubmit, error }) {
         return 'bg-green-500';
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (memberStep === 1) {
+            const stepError = validateStep1();
+            if (stepError) return alert(stepError);
+            setMemberStep(2);
+            return;
+        }
+        if (memberStep === 2) {
+            if (!data.storeName) return alert(t('auth.errors.storeNameRequired'));
+            if (!data.serviceType.length) return alert(t('auth.errors.selectServiceType'));
+            setMemberStep(3);
+            return;
+        }
+        if (memberStep === 3) {
+            if (!agreed) return alert(t('auth.mustAgreeTerms')); 
+            try {
+                setLoading(true);
+                await onSubmit({
+                    ...data,
+                    latitude: selectedCoords?.lat,
+                    longitude: selectedCoords?.lng
+                });
+            } catch (err) {
+                console.error('Backend Error:', err.response?.data || err.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+
     const renderFileInput = (name, label, multiple = false, accept = '*/*') => (
         <div className="space-y-1">
             <label className="block text-sm font-medium text-muted-foreground">{label}</label>
-            <label
-                htmlFor={name}
-                className="flex items-center justify-center w-full h-12 border border-dashed border-muted rounded-lg cursor-pointer hover:border-secondary transition-colors"
-            >
+            <label htmlFor={name} className="flex items-center justify-center w-full h-12 border border-dashed border-muted rounded-lg cursor-pointer hover:border-secondary transition-colors">
                 <File className="mr-2 w-5 h-5 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">
-                    {multiple ? t('auth.selectMultipleFiles') : t('auth.selectFile')}
-                </span>
-                <input
-                    id={name}
-                    name={name}
-                    type="file"
-                    accept={accept}
-                    multiple={multiple}
-                    onChange={handleChange}
-                    className="hidden"
-                />
+                <span className="text-sm text-muted-foreground">{multiple ? t('auth.selectMultipleFiles') : t('auth.selectFile')}</span>
+                <input id={name} name={name} type="file" accept={accept} multiple={multiple} onChange={handleChange} className="hidden" />
             </label>
-            {data[name] && (
-                <div className="mt-1 text-xs text-muted-foreground">
-                    {multiple ? `${data[name].length} ${t('auth.filesSelected')}` : data[name].name}
+            {name === 'storeImages' && data.storeImages.length > 0 && (
+                <div className="mt-1 text-xs text-muted-foreground space-y-1">
+                    {data.storeImages.map((file, idx) => <div key={idx}>{file.name}</div>)}
                 </div>
+            )}
+            {['certificate', 'criminalRecord', 'storeRegistration'].includes(name) && data.sensitiveDocs[name] && (
+                <div className="mt-1 text-xs text-muted-foreground">{data.sensitiveDocs[name]?.name || data[name]?.name}</div>
             )}
         </div>
     );
@@ -159,189 +150,100 @@ export default function MemberSignupForm({ onSubmit, error }) {
     return (
         <>
             <form onSubmit={handleSubmit} className="space-y-5">
-                {error && (
-                    <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
-                        {error}
-                    </div>
-                )}
+                {error && <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">{error}</div>}
 
                 {/* STEP 1 */}
                 {memberStep === 1 && (
                     <>
-                        <Input
-                            icon={<Store />}
-                            name="name"
-                            placeholder={t('auth.fullName')}
-                            value={data.name}
-                            onChange={handleChange}
-                            required
-                        />
-                        <Input
-                            icon={<Phone />}
-                            name="phone"
-                            type="tel"
-                            placeholder={t('auth.phone')}
-                            value={data.phone}
-                            onChange={handleChange}
-                            required
-                        />
-
-                        {/* Password */}
+                        <Input icon={<Store />} name="name" placeholder={t('auth.fullName')} value={data.name} onChange={handleChange} required />
+                        <Input icon={<Phone />} name="phone" type="tel" placeholder={t('auth.phone')} value={data.phone} onChange={handleChange}  required />
                         <div className="relative">
-                            <Input
-                                icon={<Lock />}
-                                type={showPassword ? 'text' : 'password'}
-                                placeholder={t('auth.password')}
-                                name="password"
-                                value={data.password}
-                                onChange={handleChange}
-                                required
-                                className="pr-10"
-                            />
-                            <div
-                                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? <EyeOff /> : <Eye />}
-                            </div>
+                            <Input icon={<Lock />} type={showPassword ? 'text' : 'password'} placeholder={t('auth.password')} name="password" value={data.password} onChange={handleChange} required className="pr-10" />
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff /> : <Eye />}</div>
                         </div>
-
                         {data.password && (
                             <div className="flex items-center space-x-2">
                                 <div className="flex-1 bg-muted rounded-full h-2">
-                                    <div
-                                        className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthColor()}`}
-                                        style={{ width: `${(passwordStrength / 5) * 100}%` }}
-                                    ></div>
+                                    <div className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthColor()}`} style={{ width: `${(passwordStrength / 5) * 100}%` }}></div>
                                 </div>
-                                <span className="text-xs font-medium text-muted-foreground">
-                                    {passwordStrength <= 2
-                                        ? t('auth.passwordStrength.weak')
-                                        : passwordStrength <= 3
-                                            ? t('auth.passwordStrength.medium')
-                                            : t('auth.passwordStrength.strong')}
-                                </span>
+                                <span className="text-xs font-medium text-muted-foreground">{passwordStrength <= 2 ? t('auth.passwordStrength.weak') : passwordStrength <= 3 ? t('auth.passwordStrength.medium') : t('auth.passwordStrength.strong')}</span>
                             </div>
                         )}
-
-                        {/* Confirm Password */}
                         <div className="relative">
-                            <Input
-                                icon={<Lock />}
-                                type={showConfirmPassword ? 'text' : 'password'}
-                                placeholder={t('auth.confirmPassword')}
-                                name="confirmPassword"
-                                value={data.confirmPassword}
-                                onChange={handleChange}
-                                required
-                                className="pr-10"
-                            />
-                            <div
-                                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground"
-                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            >
-                                {showConfirmPassword ? <EyeOff /> : <Eye />}
-                            </div>
+                            <Input icon={<Lock />} type={showConfirmPassword ? 'text' : 'password'} placeholder={t('auth.confirmPassword')} name="confirmPassword" value={data.confirmPassword} onChange={handleChange} required className="pr-10" />
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>{showConfirmPassword ? <EyeOff /> : <Eye />}</div>
                         </div>
-
-                        <Button type="submit" disabled={loading} className="w-full h-11">
-                            {loading ? t('common.loading') : t('auth.next')}
-                        </Button>
+                        <Button type="submit" disabled={loading} className="w-full h-11">{loading ? t('common.loading') : t('auth.next')}</Button>
                     </>
                 )}
 
                 {/* STEP 2 */}
                 {memberStep === 2 && (
                     <div className="space-y-6">
-                        {/* Store Name */}
-                        <Input
-                            icon={<Store />}
-                            name="storeName"
-                            placeholder={t('auth.storeName')}
-                            value={data.storeName}
-                            onChange={handleChange}
-                            required
-                        />
+                        <Input icon={<Store />} name="storeName" placeholder={t('auth.storeName')} value={data.storeName} onChange={handleChange} required />
 
-                        {/* Service Type */}
                         <div className="space-y-1">
-                            <label className="block text-sm font-medium text-muted-foreground m-2">
-                                {t('auth.serviceType')}
-                            </label>
-                            <div className="relative">
-                                <select
-                                    name="serviceType"
-                                    value={data.serviceType}
-                                    onChange={(e) => setData(prev => ({ ...prev, serviceType: e.target.value }))}
-                                    className="w-full appearance-none rounded-lg border border-input bg-card px-3 py-2 text-sm text-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
-                                    required
-                                >
-                                    <option value="" className="text-muted-foreground">{t('auth.selectServiceType')}</option>
-                                    {services.map(service => (
-                                        <option key={service.key} value={service.key} className="text-foreground">
-                                            {service.label}
-                                        </option>
-                                    ))}
-                                </select>
-
-                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <svg className="h-4 w-4 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
+                            <label className="block text-sm font-medium text-muted-foreground">{t('auth.carData')}</label>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                <Input placeholder={t('auth.carModel')} name="model" value={data.car.model} onChange={handleChange} />
+                                <Input placeholder={t('auth.carPlate')} name="plateNumber" value={data.car.plateNumber} onChange={handleChange} />
+                                <Input placeholder={t('auth.carColor')} name="color" value={data.car.color} onChange={handleChange} />
                             </div>
                         </div>
 
-                        {/* Location Picker */}
-                        <div className="space-y-1">
-                            <label className="block text-sm font-medium text-muted-foreground">
-                                {t('auth.location')}
-                            </label>
-                            <div className="flex gap-2 items-center">
-                                <Input
-                                    icon={<MapPin />}
-                                    name="location"
-                                    type="text"
-                                    value={selectedCoords ? `${selectedCoords.lat.toFixed(5)}, ${selectedCoords.lng.toFixed(5)}` : ''}
-                                    readOnly
-                                    placeholder={t('auth.selectLocation')}
-                                    className="flex-1"
-                                    required
-                                />
-                                <Button type="button" size="sm" onClick={() => setIsMapOpen(true)}>
-                                    {t('auth.pickOnMap')}
-                                </Button>
+                        <div className="space-y-2">
+                            <label className="block text-sm font-medium text-muted-foreground m-2">{t('auth.serviceType')}</label>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                {services.map(service => (
+                                    <div key={service.key} onClick={() => toggleService(service.key)} className={`flex flex-col items-center justify-center p-4 border rounded-lg cursor-pointer transition-colors ${data.serviceType.includes(service.key) ? 'border-primary bg-primary/10' : 'border-muted'}`}>
+                                        {service.icon}
+                                        <span className="text-xs mt-1 text-center">{service.label}</span>
+                                    </div>
+                                ))}
                             </div>
                         </div>
 
-                        {/* File Inputs */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {renderFileInput('storeImages', t('auth.storeImages'), true, 'image/*')}
-                            {renderFileInput('certificate', t('auth.certificate'), false, 'image/*,application/pdf')}
-                        </div>
-
-                        {/* Navigation Buttons */}
                         <div className="flex justify-between pt-4">
-                            <Button type="button" variant="outline" onClick={() => setMemberStep(1)}>
-                                {t('common.back')}
-                            </Button>
-                            <Button type="submit" disabled={loading}>
-                                {loading ? t('common.loading') : t('auth.signup')}
-                            </Button>
+                            <Button type="button" variant="outline" onClick={() => setMemberStep(1)}>{t('common.back')}</Button>
+                            <Button type="submit" disabled={loading}>{t('auth.next')}</Button>
+                        </div>
+                    </div>
+                )}
+
+                {/* STEP 3 */}
+                {memberStep === 3 && (
+                    <div className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-4">
+                                {renderFileInput('certificate', t('auth.certificate'), false, 'image/*,application/pdf')}
+                                {renderFileInput('storeImages', t('auth.storeImages'), true, 'image/*')}
+                            </div>
+                            <div className="space-y-4">
+                                {renderFileInput('criminalRecord', t('auth.criminalRecord'), false, 'image/*,application/pdf')}
+                                {renderFileInput('storeRegistration', t('auth.storeRegistration'), false, 'image/*,application/pdf')}
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="block text-sm font-medium text-muted-foreground">{t('auth.location')}</label>
+                            <div className="flex gap-2 items-center">
+                                <Input icon={<MapPin />} type="text" value={selectedCoords ? `${selectedCoords.lat.toFixed(5)}, ${selectedCoords.lng.toFixed(5)}` : ''} readOnly placeholder={t('auth.selectLocation')} className="flex-1" />
+                                <Button type="button" size="sm" onClick={() => setIsMapOpen(true)}>{t('auth.pickOnMap')}</Button>
+                            </div>
+                        </div>
+
+                        {/* terms agrment */}
+                        <TermsAgreement onAgree={(value) => setAgreed(value)} />
+
+                        <div className="flex justify-between pt-4">
+                            <Button type="button" variant="outline" onClick={() => setMemberStep(2)}>{t('common.back')}</Button>
+                            <Button type="submit" disabled={loading}>{loading ? t('common.loading') : t('auth.signup')}</Button>
                         </div>
                     </div>
                 )}
             </form>
 
-            {isMapOpen && (
-                <MapPickerModal
-                    onClose={() => setIsMapOpen(false)}
-                    onSelect={(coords) => {
-                        setSelectedCoords(coords);
-                        setIsMapOpen(false);
-                    }}
-                />
-            )}
+            {isMapOpen && <MapPickerModal onClose={() => setIsMapOpen(false)} onSelect={(coords) => { setSelectedCoords(coords); setIsMapOpen(false); }} />}
         </>
     );
 }

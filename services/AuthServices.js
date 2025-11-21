@@ -13,7 +13,6 @@ const handleRequest = async (fn) => {
 };
 
 const AuthServices = {
-
     signupClient: (data) =>
         handleRequest(() =>
             fetchAPI({ url: '/signup-client', method: 'post', data })
@@ -21,22 +20,30 @@ const AuthServices = {
 
     signupMembre: (data) =>
         handleRequest(() => {
-            //
             const formData = new FormData();
-            const fields = [
-                'name', 'phone', 'password', 'storeName',
-                'type', 'description', 'latitude', 'longitude', 'priceRange'
-            ];
-            fields.forEach((key) => data[key] && formData.append(key, data[key]));
-            //
-            if (data.certificate) formData.append('certificate', data.certificate);
-            //
-            if (Array.isArray(data.storeImages)) {
-                data.storeImages.forEach((file) => formData.append('storeImages', file));
+            // Basic fields
+            const fields = ['name', 'phone', 'password', 'storeName', 'description', 'latitude', 'longitude', 'priceRange'];
+            fields.forEach(key => {
+                if (data[key] !== undefined && data[key] !== null) {
+                    formData.append(key, data[key]);
+                }
+            });
+            // Service type as array
+            if (Array.isArray(data.serviceType)) {
+                formData.append('type', JSON.stringify(data.serviceType));
             }
-            //
+            // Car data
+            if (data.car) formData.append('car', JSON.stringify(data.car));
+            // Files
+            if (data.certificate) formData.append('certificate', data.certificate);
+            if (Array.isArray(data.storeImages)) data.storeImages.forEach(f => formData.append('storeImages', f));
+            if (data.sensitiveDocs?.criminalRecord) formData.append('sensitiveDocs', data.sensitiveDocs.criminalRecord);
+            if (data.sensitiveDocs?.storeRegistration) formData.append('sensitiveDocs', data.sensitiveDocs.storeRegistration);
+
             return fetchAPI({ url: '/signup-membre', method: 'post', data: formData });
         }),
+
+
 
     login: (data) =>
         handleRequest(() =>

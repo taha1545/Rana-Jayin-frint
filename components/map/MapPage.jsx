@@ -11,9 +11,10 @@ import ServiceList from '@/components/map/ServiceList';
 import SelectedServiceCard from '@/components/map/SelectedServiceCard';
 import { AlertCircle, Navigation } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
+import { useSearchParams } from 'next/navigation';
 import StoreServices from '@/services/StoreServices';
 
-// 🗺️ Dynamic map import
+// 
 const MapComponent = dynamic(() => import('./MapComponent'), {
   ssr: false,
   loading: () => (
@@ -33,6 +34,7 @@ export default function MapPage() {
   const [services, setServices] = useState([]);
   const [loadingServices, setLoadingServices] = useState(false);
   const [error, setError] = useState(null);
+  const searchParams = useSearchParams();
 
   const {
     location: userPosition,
@@ -41,7 +43,15 @@ export default function MapPage() {
     refetch: refetchLocation,
   } = useGeolocation();
 
-  // 🧭 Fetch stores when user position changes
+  useEffect(() => {
+    const urlType = searchParams.get('type');
+    if (urlType) {
+      setFilterType(urlType);
+    }
+  }, [searchParams]);
+
+
+  // 
   useEffect(() => {
     const fetchStores = async () => {
       if (!userPosition) return;
@@ -54,19 +64,17 @@ export default function MapPage() {
           userPosition.longitude
         );
 
-        if (!res || !res.success || !Array.isArray(res.data)) {
-          throw new Error('Invalid response from server.');
-        }
-
+        // Map stores
         const mapped = res.data.map((item) => {
           const s = item.store?.store || {};
           const owner = s.owner || {};
-          const images = s.images || [];
+          const images = (s.images || []).filter(img => img.isAllowed === true);
 
           return {
-            id: s.id || Math.random(),
+            id: s.id,
             title: item.serviceType || 'Unknown Service',
-            type: s.type || 'unknown',
+            type: s.type,
+            car: s.car,
             status: s.isActive ? 'available' : 'busy',
             rating: item.store?.averageRating || 0,
             reviewCount: s.reviews?.length || 0,
@@ -88,7 +96,6 @@ export default function MapPage() {
               ? images.map((img) => `/${img.imageUrl}`)
               : [s.certificate || '/images/default-store.jpg'],
             distanceKm: parseFloat(item.distance) || 0,
-            // ✅ Flatten reviews with client info
             reviews: s.reviews?.map(r => ({
               id: r.id,
               rating: r.rating,
@@ -98,11 +105,14 @@ export default function MapPage() {
           };
         });
 
+        // ✅ Deduplicate services by ID
+        const uniqueServices = Array.from(new Map(mapped.map(s => [s.id, s])).values());
+        setServices(uniqueServices);
 
-        setServices(mapped);
       } catch (err) {
         console.error('❌ Error fetching nearby stores:', err);
-        setError('Failed to load nearby stores. Please try again.');
+        setError(err?.message || 'Failed to load nearby services. Please try again.');
+        setServices([]);
       } finally {
         setLoadingServices(false);
       }
@@ -111,13 +121,16 @@ export default function MapPage() {
     fetchStores();
   }, [userPosition]);
 
-  // 📍 Filtered services
+  // 📍 Filtered and deduplicated services
   const filteredServices = useMemo(() => {
     let list = [...services];
 
     if (filterType !== 'all') {
       list = list.filter((s) => s.type === filterType);
     }
+
+    // Deduplicate again after filtering to be safe
+    list = Array.from(new Map(list.map(s => [s.id, s])).values());
 
     if (userPosition) {
       list = attachDistance(list, userPosition);
@@ -161,7 +174,6 @@ export default function MapPage() {
           }
         />
       </div>
-
 
       {/* 📋 Sidebar */}
       <aside className="w-full sm:w-[380px] md:w-[420px] lg:w-[480px] xl:w-[520px] bg-background border-l border-border overflow-y-auto flex flex-col">
