@@ -1,6 +1,4 @@
-// 
 import { apiClient, getServerApi } from './index';
-
 
 export async function fetchAPI({ url, method = 'get', data, params, token } = {}) {
   try {
@@ -8,10 +6,17 @@ export async function fetchAPI({ url, method = 'get', data, params, token } = {}
     const axiosInstance = isServer
       ? getServerApi(token)
       : apiClient;
-    const response = await axiosInstance.request({ url, method, data, params });
+
+    const headers = {};
+    if (!isServer) {
+      // 
+      headers['Cache-Control'] = 'no-cache';
+      headers['Pragma'] = 'no-cache';
+    }
+
+    const response = await axiosInstance.request({ url, method, data, params, headers });
     return response.data;
   } catch (error) {
-    // 
     if (error.response) {
       throw new Error(error.response.data?.message || 'API Error');
     }
