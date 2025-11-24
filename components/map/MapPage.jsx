@@ -35,33 +35,18 @@ export default function MapPage() {
   const [error, setError] = useState(null);
 
   const searchParams = useSearchParams();
-
-  const {
-    location: userPosition,
-    error: locationError,
-    loading: locationLoading,
-    refetch: refetchLocation,
-  } = useGeolocation();
-
-  // 
+  const { location: userPosition, error: locationError, loading: locationLoading, refetch: refetchLocation } = useGeolocation();
   const hasFetchedRef = useRef(false);
 
-  // 
   useEffect(() => {
     const urlType = searchParams.get('type');
-    if (urlType) {
-      setFilterType(urlType);
-    }
+    if (urlType) setFilterType(urlType);
   }, [searchParams]);
 
-  // -------------------------------------------------------------
-  // ✅ One-time fetch after user position loads
-  // -------------------------------------------------------------
   useEffect(() => {
     if (!userPosition) return;
-
     if (hasFetchedRef.current) return;
-    hasFetchedRef.current = true;    
+    hasFetchedRef.current = true;
 
     const fetchStores = async () => {
       setLoadingServices(true);
@@ -73,52 +58,67 @@ export default function MapPage() {
           userPosition.longitude
         );
 
-        const mapped = res.data.map((item) => {
-          const s = item.store?.store || {};
+        const data = Array.isArray(res?.data) ? res.data : [];
+
+        const mapped = data.map((item) => {
+          const storeWrapper = item.store || {};
+          const s = storeWrapper.store || {};
           const owner = s.owner || {};
-          const images = (s.images || []).filter(img => img.isAllowed === true);
+          const images = Array.isArray(s.images)
+            ? s.images.filter((img) => img?.isAllowed === true)
+            : [];
 
           return {
-            id: s.id,
-            title: item.serviceType || 'Unknown Service',
-            type: s.type,
-            car: s.car,
+            id: s.id || null,
+            title: item?.serviceType || 'Unknown Service',
+            type: s.type || 'unknown',
+            car: s.car || 'unknown',
             status: s.isActive ? 'available' : 'busy',
-            rating: item.store?.averageRating || 0,
-            reviewCount: s.reviews?.length || 0,
-            location: [s.latitude || 0, s.longitude || 0],
+            rating: storeWrapper?.averageRating || 0,
+            reviewCount: Array.isArray(s.reviews) ? s.reviews.length : 0,
+            location: [
+              parseFloat(s.latitude || 0),
+              parseFloat(s.longitude || 0),
+            ],
             phone: owner.phone || 'N/A',
             storeName: s.name || 'Unnamed Store',
             member: {
-              id: owner.id,
-              name: owner.name,
-              phone: owner.phone,
-              role: owner.role,
+              id: owner.id || null,
+              name: owner.name || 'Unknown',
+              phone: owner.phone || 'N/A',
+              role: owner.role || 'N/A',
             },
             description: s.description || 'No description available.',
             priceRange: s.priceRange || 'N/A',
-            storeImage: images.length > 0
-              ? `/${images[0].imageUrl}`
-              : '/images/default-store.jpg',
-            images: images.length > 0
-              ? images.map((img) => `/${img.imageUrl}`)
-              : [s.certificate || '/images/default-store.jpg'],
-            distanceKm: parseFloat(item.distance) || 0,
-            reviews: s.reviews?.map(r => ({
-              id: r.id,
-              rating: r.rating,
-              comment: r.comment,
-              client: r.client ? { id: r.client.id, name: r.client.name } : null,
-            })) || [],
+            storeImage:
+              images.length > 0
+                ? `/${images[0].imageUrl}`
+                : '/images/default-store.jpg',
+            images:
+              images.length > 0
+                ? images.map((img) => `/${img.imageUrl}`)
+                : ['/images/default-store.jpg'],
+            distanceKm: parseFloat(item.distance || 0),
+            reviews: Array.isArray(s.reviews)
+              ? s.reviews.map((r) => ({
+                  id: r.id,
+                  rating: r.rating,
+                  comment: r.comment,
+                  client: r.client
+                    ? { id: r.client.id, name: r.client.name }
+                    : null,
+                }))
+              : [],
           };
         });
 
-        const uniqueServices = Array.from(new Map(mapped.map(s => [s.id, s])).values());
-        setServices(uniqueServices);
+        const uniqueServices = Array.from(
+          new Map(mapped.map((s) => [s.id, s])).values()
+        );
 
+        setServices(uniqueServices);
       } catch (err) {
-        console.error('❌ Error fetching nearby stores:', err);
-        setError('no nearby services found || لم يتم العثور على متجر');
+        setError('no nearby services found || لم يتم العثور على المتاجر المجاورة');
         setServices([]);
       } finally {
         setLoadingServices(false);
@@ -127,7 +127,7 @@ export default function MapPage() {
 
     fetchStores();
   }, [userPosition]);
-  // -------------------------------------------------------------
+
   const filteredServices = useMemo(() => {
     let list = [...services];
 
@@ -135,7 +135,7 @@ export default function MapPage() {
       list = list.filter((s) => s.type === filterType);
     }
 
-    list = Array.from(new Map(list.map(s => [s.id, s])).values());
+    list = Array.from(new Map(list.map((s) => [s.id, s])).values());
 
     if (userPosition) {
       list = attachDistance(list, userPosition);
@@ -145,8 +145,6 @@ export default function MapPage() {
     return list;
   }, [filterType, services, userPosition]);
 
-  // -------------------------------------------------------------
- 
   const handleDirections = (service) => {
     if (!service?.location) return;
     const [lat, lng] = service.location;
@@ -166,7 +164,6 @@ export default function MapPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-row h-screen mb-12">
-      {/* Map */}
       <div className="relative flex-1 min-h-[400px] sm:min-h-[600px]">
         <MapComponent
           services={filteredServices}
@@ -180,10 +177,8 @@ export default function MapPage() {
         />
       </div>
 
-      {/* Sidebar */}
       <aside className="w-full sm:w-[380px] md:w-[420px] lg:w-[480px] xl:w-[520px] bg-background border-l border-border overflow-y-auto flex flex-col">
         <div className="p-4 lg:p-6 space-y-4 lg:space-y-6 flex-1 flex flex-col">
-
           <div>
             <h3 className="text-xl font-bold mb-3">
               {t('map.title') || 'Find Services'}
@@ -218,7 +213,9 @@ export default function MapPage() {
                 ) : (
                   <>
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <p className="text-sm font-medium text-green-800">Location active</p>
+                    <p className="text-sm font-medium text-green-800">
+                      Location active
+                    </p>
                   </>
                 )}
               </CardContent>
@@ -257,7 +254,6 @@ export default function MapPage() {
         </div>
       </aside>
 
-      {/* Selected service */}
       {selectedService && (
         <>
           <div
