@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { attachDistance, sortByDistance } from '@/utils/mapHelpers';
@@ -33,7 +33,6 @@ export default function MapPage() {
   const [services, setServices] = useState([]);
   const [loadingServices, setLoadingServices] = useState(false);
   const [error, setError] = useState(null);
-  const [hasFetched, setHasFetched] = useState(false); // ✅ prevents multiple loads
 
   const searchParams = useSearchParams();
 
@@ -44,6 +43,10 @@ export default function MapPage() {
     refetch: refetchLocation,
   } = useGeolocation();
 
+  // 
+  const hasFetchedRef = useRef(false);
+
+  // 
   useEffect(() => {
     const urlType = searchParams.get('type');
     if (urlType) {
@@ -52,10 +55,13 @@ export default function MapPage() {
   }, [searchParams]);
 
   // -------------------------------------------------------------
-  // ✅ Fetch Stores ONLY ONE TIME after position is available
+  // ✅ One-time fetch after user position loads
   // -------------------------------------------------------------
   useEffect(() => {
-    if (!userPosition || hasFetched) return; // ❌ Skip if fetched before
+    if (!userPosition) return;
+
+    if (hasFetchedRef.current) return;
+    hasFetchedRef.current = true;    
 
     const fetchStores = async () => {
       setLoadingServices(true);
@@ -109,21 +115,18 @@ export default function MapPage() {
 
         const uniqueServices = Array.from(new Map(mapped.map(s => [s.id, s])).values());
         setServices(uniqueServices);
+
       } catch (err) {
         console.error('❌ Error fetching nearby stores:', err);
         setError('no nearby services found || لم يتم العثور على متجر');
         setServices([]);
       } finally {
         setLoadingServices(false);
-        setHasFetched(true); // 🔐 Never fetch again automatically
       }
     };
 
     fetchStores();
-  }, [userPosition, hasFetched]);
-
-  // -------------------------------------------------------------
-  // FILTER SERVICES
+  }, [userPosition]);
   // -------------------------------------------------------------
   const filteredServices = useMemo(() => {
     let list = [...services];
@@ -143,8 +146,7 @@ export default function MapPage() {
   }, [filterType, services, userPosition]);
 
   // -------------------------------------------------------------
-  // ACTIONS
-  // -------------------------------------------------------------
+ 
   const handleDirections = (service) => {
     if (!service?.location) return;
     const [lat, lng] = service.location;
@@ -164,7 +166,7 @@ export default function MapPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-row h-screen mb-12">
-      {/* Map Section */}
+      {/* Map */}
       <div className="relative flex-1 min-h-[400px] sm:min-h-[600px]">
         <MapComponent
           services={filteredServices}
@@ -255,7 +257,7 @@ export default function MapPage() {
         </div>
       </aside>
 
-      {/* Selected Service Panel */}
+      {/* Selected service */}
       {selectedService && (
         <>
           <div
