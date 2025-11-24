@@ -35,7 +35,12 @@ export default function MapPage() {
   const [error, setError] = useState(null);
 
   const searchParams = useSearchParams();
-  const { location: userPosition, error: locationError, loading: locationLoading, refetch: refetchLocation } = useGeolocation();
+  const {
+    location: userPosition,
+    error: locationError,
+    loading: locationLoading,
+    refetch: refetchLocation,
+  } = useGeolocation();
   const hasFetchedRef = useRef(false);
 
   useEffect(() => {
@@ -58,9 +63,13 @@ export default function MapPage() {
           userPosition.longitude
         );
 
+        console.log('Raw API response:', res);
+
         const data = Array.isArray(res?.data) ? res.data : [];
+        console.log('Data array:', data);
 
         const mapped = data.map((item) => {
+          console.log('Mapping item:', item);
           const storeWrapper = item.store || {};
           const s = storeWrapper.store || {};
           const owner = s.owner || {};
@@ -76,10 +85,7 @@ export default function MapPage() {
             status: s.isActive ? 'available' : 'busy',
             rating: storeWrapper?.averageRating || 0,
             reviewCount: Array.isArray(s.reviews) ? s.reviews.length : 0,
-            location: [
-              parseFloat(s.latitude || 0),
-              parseFloat(s.longitude || 0),
-            ],
+            location: [parseFloat(s.latitude || 0), parseFloat(s.longitude || 0)],
             phone: owner.phone || 'N/A',
             storeName: s.name || 'Unnamed Store',
             member: {
@@ -112,13 +118,19 @@ export default function MapPage() {
           };
         });
 
+        console.log('Mapped services:', mapped);
+
         const uniqueServices = Array.from(
           new Map(mapped.map((s) => [s.id, s])).values()
         );
+        console.log('Unique services:', uniqueServices);
 
         setServices(uniqueServices);
       } catch (err) {
-        setError('no nearby services found || لم يتم العثور على المتاجر المجاورة');
+        console.error('Error fetching nearby stores:', err);
+        setError(
+          'no nearby services found || لم يتم العثور على المتاجر المجاورة'
+        );
         setServices([]);
       } finally {
         setLoadingServices(false);
@@ -131,9 +143,7 @@ export default function MapPage() {
   const filteredServices = useMemo(() => {
     let list = [...services];
 
-    if (filterType !== 'all') {
-      list = list.filter((s) => s.type === filterType);
-    }
+    if (filterType !== 'all') list = list.filter((s) => s.type === filterType);
 
     list = Array.from(new Map(list.map((s) => [s.id, s])).values());
 
