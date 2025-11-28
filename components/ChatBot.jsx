@@ -10,33 +10,45 @@ export default function Chatbot() {
     const { t } = useTranslation();
     //
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState([
-        { from: 'bot', text: 'Hello! How can I help you today?' }
-    ]);
-    //
+    const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [sending, setSending] = useState(false);
     //
-    const handleSend = () => {
+    const handleSend = async () => {
         if (!input.trim()) return;
+        //
         const userMessage = { from: 'user', text: input.trim() };
         setMessages(prev => [...prev, userMessage]);
         setInput('');
         setSending(true);
-        // 
-        setTimeout(() => {
-            const botMessage = {
-                from: 'bot',
-                text: t('chatbot.response') || `I'm a simple bot. You said: ${userMessage.text}`
-            };
+        //
+        try {
+            const response = await fetch('https://chatbot-js-cndg.onrender.com/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userMessage.text }),
+            });
+            //
+            const data = await response.json();
+            //
+            const botMessageText = Array.isArray(data)
+                ? data.map(item => item.content).join(' ')
+                : data.content;
+            //
+            const botMessage = { from: 'bot', text: botMessageText };
             setMessages(prev => [...prev, botMessage]);
+            //
+        } catch (err) {
+            setMessages(prev => [...prev, { from: 'bot', text: "Sorry, something went wrong. || حدث خطا ما" }]);
+        } finally {
             setSending(false);
-        }, 1000);
+        }
     };
 
     return (
         <>
-            {/* Floating Chat Circle */}
             {!isOpen && (
                 <motion.div
                     initial={{ scale: 0 }}
@@ -48,8 +60,6 @@ export default function Chatbot() {
                     <MessageSquare className="w-6 h-6 animate-bounce" />
                 </motion.div>
             )}
-
-            {/* Chat Overlay */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -71,6 +81,11 @@ export default function Chatbot() {
 
                         {/* Messages */}
                         <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                            <div className="max-w-[80%] px-3 py-2 rounded-lg text-sm bg-card text-card-foreground self-start">
+                                {t('chatbot.greeting')}
+                            </div>
+
+                            {/* Dynamic conversation messages */}
                             {messages.map((msg, idx) => (
                                 <div
                                     key={idx}
@@ -82,6 +97,7 @@ export default function Chatbot() {
                                     {msg.text}
                                 </div>
                             ))}
+
                             {sending && (
                                 <div className="text-sm text-muted-foreground">
                                     {t('chatbot.typing') || 'Bot is typing...'}
