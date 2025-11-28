@@ -1,4 +1,12 @@
 {
+  "chatbot": {
+    "title": "Chatbot",
+    "greeting": "Bonjour ! Comment puis-je vous aider aujourd'hui ?",
+    "response": "Je suis un bot simple. Vous avez dit ",
+    "typing": "Le bot est en train d'écrire...",
+    "inputPlaceholder": "Tapez votre message...",
+    "send": "Envoyer"
+  },
   "review": {
     "rateStore": "Évaluez ce magasin :",
     "submit": "Soumettre l'avis",

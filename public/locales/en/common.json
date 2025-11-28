@@ -1,4 +1,12 @@
 {
+  "chatbot": {
+    "title": "Chatbot",
+    "greeting": "Hello! How can I help you today?",
+    "response": "I'm a simple bot. You said",
+    "typing": "Bot is typing...",
+    "inputPlaceholder": "Type your message...",
+    "send": "Send"
+  },
   "review": {
     "rateStore": "Rate this store:",
     "submit": "Submit Review",

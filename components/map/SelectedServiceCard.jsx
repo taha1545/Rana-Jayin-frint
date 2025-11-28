@@ -77,7 +77,7 @@ export default function SelectedServiceCard({
       const res = await RequestServices.createRequest(payload, token);
 
       if (res?.success) {
-        router.push(`/requests/${res.request.id}`);
+        router.push(`/request/${res.data.id}`);
       } else {
         alert("Failed to create request. Please try again.");
       }

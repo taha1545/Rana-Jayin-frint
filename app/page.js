@@ -10,6 +10,7 @@ import Services from "@/components/Services";
 import Discouver from "@/components/Home/Discouver";
 import Contact from "@/components/Home/Contact";
 import Report from "@/components/Home/Report";
+import Chatbot from "@/components/ChatBot";
 
 
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
       <Report />
       <FAQ />
       <Footer />
+      <Chatbot />
     </>
   );
 }
