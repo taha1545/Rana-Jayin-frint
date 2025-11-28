@@ -19,6 +19,29 @@ const RequestServices = {
             token,
         });
     },
+    getRequestById: async (id) => {
+        return await fetchAPI({
+            url: `/requests/${id}`,
+            method: 'get',
+        });
+    },
+
+    updateRequest: async (id, data) => {
+        return await fetchAPI({
+            url: `/requests/${id}`,
+            method: 'put',
+            data,
+        });
+    },
+
+    createReviewForStore: async (storeId, data, token) => {
+        return await fetchAPI({
+            url: `/reviews/store/${storeId}`,
+            method: 'post',
+            data,
+            token,
+        });
+    },
 };
 
 export default RequestServices;

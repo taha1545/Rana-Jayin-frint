@@ -30,7 +30,6 @@ export default function ServiceList({ services = [], selectedServiceId, onSelect
             <div className="flex space-x-3">
               <img
                 src={service.storeImage || '/images/default-store.jpg'}
-                alt={service.storeName}
                 className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
               />
               <div className="flex-1 min-w-0">

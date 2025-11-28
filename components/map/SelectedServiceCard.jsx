@@ -68,7 +68,7 @@ export default function SelectedServiceCard({
       const payload = {
         storeId: store.id,
         clientId: user.id,
-        serviceType: store.type,
+        serviceType: store.serviceType,
         latitude: store.location?.[0],
         longitude: store.location?.[1],
       };

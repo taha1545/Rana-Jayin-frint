@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Camera, Edit, Save, X } from 'lucide-react';
+import { Camera, Edit, Save } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function SettingsSection({
@@ -33,12 +33,24 @@ export default function SettingsSection({
     };
 
     const handleSaveStore = async () => {
-        const { id, images, ...storePayload } = tempStore;
-        const res = await updateStore(id, storePayload);
+        const { id, images, storeName, ...rest } = tempStore;
+
+        const payload = {
+            ...rest,
+            name: storeName,
+        };
+
+        const res = await updateStore(id, payload);
+
         if (res.success) {
-            setStoreData(tempStore);
+            setStoreData({
+                ...tempStore,
+                name: storeName,
+            });
             setEditingStore(false);
-        } else alert(res.message || t('errors.updateFailed'));
+        } else {
+            alert(res.message || t('errors.updateFailed'));
+        }
     };
 
     const handleImageSelect = async (e) => {
@@ -65,10 +77,6 @@ export default function SettingsSection({
         }
     };
 
-
-
-
-
     const handleDeleteImage = async (imageId) => {
         const res = await deleteStoreImage(imageId);
         if (res.success) {
@@ -80,16 +88,19 @@ export default function SettingsSection({
     };
 
     return (
-        <section className="mt-10 px-4 sm:px-6 lg:px-8 ">
-            <Card className="w-full  border border-border shadow-sm hover:shadow-md transition-all">
+        <section className="mt-10 px-4 sm:px-6 lg:px-8">
+            <Card className="w-full border border-border shadow-sm hover:shadow-md transition-all">
                 <CardHeader>
                     <CardTitle>{t('dashboard.storeAndMemberInfo')}</CardTitle>
                 </CardHeader>
+
+                {/* Main Content */}
                 <CardContent className="space-y-8">
 
-                    {/* Member Info Section */}
+                    {/* MEMBER INFO */}
                     <div className="space-y-4 p-4 border-b border-border">
                         <h3 className="font-semibold">{t('dashboard.memberInfo')}</h3>
+
                         <AnimatePresence mode="wait">
                             {editingMember ? (
                                 <motion.div
@@ -109,6 +120,7 @@ export default function SettingsSection({
                                                 }
                                             />
                                         </div>
+
                                         <div className="flex-1">
                                             <Label>{t('form.phone')}</Label>
                                             <Input
@@ -119,6 +131,7 @@ export default function SettingsSection({
                                             />
                                         </div>
                                     </div>
+
                                     <div className="flex justify-end">
                                         <Button onClick={handleSaveMember} className="flex items-center gap-1">
                                             <Save className="w-4 h-4" /> {t('actions.update')}
@@ -131,14 +144,11 @@ export default function SettingsSection({
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -10 }}
-                                    className="space-y-2"
+                                    className="space-y-3"
                                 >
-                                    <p>
-                                        <strong>{t('form.name')}:</strong> {memberData.name}
-                                    </p>
-                                    <p>
-                                        <strong>{t('form.phone')}:</strong> {memberData.phone}
-                                    </p>
+                                    <p><strong>{t('form.name')}:</strong> {memberData.name}</p>
+                                    <p><strong>{t('form.phone')}:</strong> {memberData.phone}</p>
+
                                     <Button
                                         onClick={() => setEditingMember(true)}
                                         className="mt-2 flex items-center gap-1"
@@ -150,9 +160,10 @@ export default function SettingsSection({
                         </AnimatePresence>
                     </div>
 
-                    {/* Store Info Section */}
+                    {/* STORE INFO */}
                     <div className="space-y-4 p-4 border-b border-border">
                         <h3 className="font-semibold">{t('dashboard.storeInfo')}</h3>
+
                         <AnimatePresence mode="wait">
                             {editingStore ? (
                                 <motion.div
@@ -172,16 +183,8 @@ export default function SettingsSection({
                                                 }
                                             />
                                         </div>
-                                        <div className="flex-1">
-                                            <Label>{t('form.type')}</Label>
-                                            <Input
-                                                value={tempStore.type}
-                                                onChange={(e) =>
-                                                    setTempStore({ ...tempStore, type: e.target.value })
-                                                }
-                                            />
-                                        </div>
                                     </div>
+
                                     <div className="flex flex-col sm:flex-row sm:space-x-4 sm:space-y-0 space-y-3">
                                         <div className="flex-1">
                                             <Label>{t('form.priceRange')}</Label>
@@ -192,11 +195,13 @@ export default function SettingsSection({
                                                 }
                                             />
                                         </div>
+
                                         <div className="flex-1">
                                             <Label>{t('form.isActive')}</Label>
                                             <Input value={tempStore.isActive ? 'Yes' : 'No'} readOnly />
                                         </div>
                                     </div>
+
                                     <div>
                                         <Label>{t('form.description')}</Label>
                                         <Input
@@ -206,6 +211,7 @@ export default function SettingsSection({
                                             }
                                         />
                                     </div>
+
                                     <div className="flex justify-end">
                                         <Button onClick={handleSaveStore} className="flex items-center gap-1">
                                             <Save className="w-4 h-4" /> {t('actions.update')}
@@ -218,23 +224,13 @@ export default function SettingsSection({
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -10 }}
-                                    className="space-y-2"
+                                    className="space-y-3"
                                 >
-                                    <p>
-                                        <strong>{t('form.storeName')}:</strong> {storeData.storeName}
-                                    </p>
-                                    <p>
-                                        <strong>{t('form.type')}:</strong> {storeData.type}
-                                    </p>
-                                    <p>
-                                        <strong>{t('form.priceRange')}:</strong> {storeData.priceRange}
-                                    </p>
-                                    <p>
-                                        <strong>{t('form.isActive')}:</strong> {storeData.isActive ? 'Yes' : 'No'}
-                                    </p>
-                                    <p>
-                                        <strong>{t('form.description')}:</strong> {storeData.description || 'N/A'}
-                                    </p>
+                                    <p><strong>{t('form.storeName')}:</strong> {storeData.storeName}</p>
+                                    <p><strong>{t('form.priceRange')}:</strong> {storeData.priceRange}</p>
+                                    <p><strong>{t('form.isActive')}:</strong> {storeData.isActive ? 'Yes' : 'No'}</p>
+                                    <p><strong>{t('form.description')}:</strong> {storeData.description || 'N/A'}</p>
+
                                     <Button
                                         onClick={() => setEditingStore(true)}
                                         className="mt-2 flex items-center gap-1"
@@ -246,19 +242,20 @@ export default function SettingsSection({
                         </AnimatePresence>
                     </div>
 
-                    {/* Store Images Section */}
+                    {/* STORE IMAGES */}
                     <div className="space-y-4 p-4">
                         <h3 className="font-semibold">{t('dashboard.storeImages')}</h3>
+
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                             {storeData.images?.map((img) => (
-                               
                                 <div key={img.id} className="relative">
                                     <img
-                                        src={`${(process.env.NEXT_PUBLIC_API_URL || process.env.API_URL).replace(/\/api\/v1\/?$/, '').replace(/\/$/, '')}/${img.imageUrl}`}
+                                        src={`${(process.env.NEXT_PUBLIC_API_URL || process.env.API_URL)
+                                            .replace(/\/api\/v1\/?$/, '')
+                                            .replace(/\/$/, '')}/${img.imageUrl}`}
                                         alt={`store-${img.id}`}
                                         className="w-full h-24 sm:h-28 object-cover rounded-lg border"
                                     />
-
 
                                     <Button
                                         variant="destructive"
@@ -270,6 +267,8 @@ export default function SettingsSection({
                                     </Button>
                                 </div>
                             ))}
+
+                            {/* Add Image */}
                             <label className="flex items-center justify-center gap-2 px-3 py-2 border rounded-lg cursor-pointer hover:bg-muted/30">
                                 <Camera className="w-4 h-4" />
                                 <input type="file" multiple className="hidden" onChange={handleImageSelect} />

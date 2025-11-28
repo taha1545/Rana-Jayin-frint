@@ -1,10 +1,28 @@
 {
+  "review": {
+    "rateStore": "Évaluez ce magasin :",
+    "submit": "Soumettre l'avis",
+    "submitting": "Envoi..."
+  },
+  "request": {
+    "title": "Demande n°{{id}}",
+    "serviceType": "Type de service",
+    "status": "Statut",
+    "createdAt": "Créé le",
+    "completedAt": "Terminé le",
+    "cancelRequest": "Annuler la demande",
+    "cancelling": "Annulation...",
+    "notFound": "Demande introuvable"
+  },
+  "loading": "Chargement...",
   "errors": {
     "global": {
       "title": "Quelque chose s'est mal passé !",
       "message": "Nous rencontrons des difficultés techniques. Veuillez réessayer plus tard.",
       "contactSupport": "Si le problème persiste, veuillez contacter le support."
     },
+    "fetchRequest": "Échec du chargement de la demande",
+    "cancelRequest": "Une erreur s'est produite lors de l'annulation de la demande",
     "memberInfoFailed": "Échec du chargement des informations du membre",
     "storeInfoFailed": "Échec du chargement des informations du magasin",
     "dashboardLoadFailed": "Échec du chargement des données du tableau de bord",
@@ -75,8 +93,14 @@
     "police": {
       "title": "Police",
       "description": "Contactez la police pour l'application de la loi et la sécurité."
+    },
+    "actions": {
+      "call": "Appeler l’urgence",
+      "message": "Envoyer un message",
+      "alert": "Envoyer une alerte"
     }
   },
+  "soon": "Bientôt",
   "discover": {
     "title": "Découvrez notre application",
     "heading": "Prêt à Commencer ?",
@@ -184,42 +208,62 @@
     "safetyCheck": "Vérification de Sécurité",
     "accidentAssistance": "Assistance Accident",
     "quickResponse": "Réponse Rapide",
+    "carWash": "Lavage de voiture",
+    "carRent": "Location de voiture",
+    "carPartsSell": "Vente de pièces détachées",
+    "all": "Tous les Services",
+    "mechanic": "Mécanicien",
     "list": {
       "onSiteRepair": {
         "title": "Réparation sur Place",
-        "description": "Réparations mécaniques et électriques rapides effectuées là où vous êtes, pour que vous puissiez reprendre la route rapidement."
+        "description": "Réparations mécaniques et électriques rapides directement sur place pour reprendre la route rapidement."
       },
       "towingService": {
         "title": "Service de Remorquage",
-        "description": "Remorquage fiable pour voitures, motos et camions - disponible à tout moment, n'importe où."
+        "description": "Remorquage fiable pour voitures, motos et camions, disponible à tout moment et partout."
       },
       "batteryBoost": {
         "title": "Charge de Batterie",
-        "description": "Batterie à plat ? Nous donnerons à votre véhicule la charge dont il a besoin pour redémarrer."
+        "description": "Batterie à plat ? Nous donnons à votre véhicule l'énergie nécessaire pour redémarrer vite."
       },
       "emergencySupport": {
         "title": "Support d'Urgence 24h/24",
-        "description": "Assistance 24h/24 de la part de professionnels vérifiés à un appel ou une pression près."
+        "description": "Assistance 24h/24 par des professionnels vérifiés, à un appel ou une pression près."
       },
       "fuelDelivery": {
         "title": "Livraison de Carburant",
-        "description": "En panne d'essence ? Nous livrerons du carburant à votre emplacement rapidement."
+        "description": "En panne d'essence ? Nous livrons du carburant rapidement à l'endroit où vous êtes."
       },
       "safetyCheck": {
         "title": "Vérification de Sécurité Routière",
-        "description": "Notre équipe s'assure que votre véhicule est sûr et prêt à reprendre la route avant de continuer votre voyage."
+        "description": "Notre équipe s'assure que votre véhicule est sûr et prêt à reprendre la route."
       },
       "accidentAssistance": {
         "title": "Assistance Accident",
-        "description": "Obtenez une aide immédiate et des conseils en cas d'accident ou de panne de véhicule."
+        "description": "Recevez une aide immédiate et des conseils en cas d'accident ou de panne de véhicule."
       },
       "quickResponse": {
         "title": "Réponse Rapide",
-        "description": "Nous donnons la priorité à la vitesse et à la précision - l'aide arrive dès que possible."
+        "description": "Nous priorisons la rapidité et la précision pour que l'aide arrive dès que possible."
+      },
+      "carWash": {
+        "title": "Lavage Auto",
+        "description": "Service de lavage automobile professionnel et pratique pour garder votre véhicule propre facilement."
+      },
+      "carRent": {
+        "title": "Location de Voiture",
+        "description": "Louez une voiture facilement et rapidement pour vos trajets courts ou longs."
+      },
+      "carPartsSell": {
+        "title": "Pièces Auto",
+        "description": "Achetez des pièces détachées de qualité pour tous types de véhicules facilement."
+      },
+      "mechanic": {
+        "title": "Mécanicien",
+        "description": "Mécaniciens certifiés pour tous types de réparations rapides et fiables, disponibles à tout moment pour votre véhicule."
       }
     }
   },
-  
   "auth": {
     "termsText": "J'ai lu et j'accepte les",
     "viewTerms": "Conditions Générales",
@@ -281,7 +325,11 @@
       "fuelDelivery": "Livraison de carburant",
       "safetyCheck": "Contrôle de sécurité",
       "accidentAssistance": "Assistance en cas d'accident",
-      "quickResponse": "Réponse rapide"
+      "quickResponse": "Réponse rapide",
+      "carWash": "Lavage de voiture",
+      "carRent": "Location de voiture",
+      "carPartsSell": "Vente de pièces automobiles",
+      "mechanic": "Mécanicien"
     },
     "serviceType": "Type de service",
     "selectServiceType": "Sélectionnez le type de service",

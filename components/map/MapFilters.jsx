@@ -6,14 +6,17 @@ import { useTranslation } from "@/hooks/useTranslation";
 const AllTypeServices = [
   { key: "all", label: "All Services" },
   { key: "onSiteRepair", label: "On-Site Repair" },
+  { key: "carWash", label: "Car Wash" },
+  { key: "carRent", label: "Car Rental" },
   { key: "towingService", label: "Towing Service" },
   { key: "batteryBoost", label: "Battery Boost" },
-  { key: "emergencySupport", label: "Emergency Support" },
   { key: "fuelDelivery", label: "Fuel Delivery" },
   { key: "safetyCheck", label: "Safety Check" },
   { key: "accidentAssistance", label: "Accident Assistance" },
-  { key: "quickResponse", label: "Quick Response" },
+  { key: "mechanic", label: "Mechanic Service" },
+  { key: "carPartsSell", label: "Car Parts Selling" },
 ];
+
 
 export default function MapFilters({ filterType, setFilterType }) {
   const { t } = useTranslation();
@@ -31,7 +34,7 @@ export default function MapFilters({ filterType, setFilterType }) {
       >
         {AllTypeServices.map((service) => (
           <option key={service.key} value={service.key}>
-            {t(`map.${service.key}`) || service.label}
+            {t(`services.${service.key}`) || service.label}
           </option>
         ))}
       </select>

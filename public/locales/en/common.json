@@ -1,10 +1,28 @@
 {
+  "review": {
+    "rateStore": "Rate this store:",
+    "submit": "Submit Review",
+    "submitting": "Submitting..."
+  },
+  "request": {
+    "title": "Request Details",
+    "serviceType": "Service Type",
+    "status": "Status",
+    "createdAt": "Created At",
+    "completedAt": "Completed At",
+    "cancelRequest": "Cancel Request",
+    "cancelling": "Cancelling...",
+    "notFound": "Request not found"
+  },
+  "loading": "Loading...",
   "errors": {
     "global": {
       "title": "Something went wrong!",
       "message": "We're experiencing technical difficulties. Please try again later.",
       "contactSupport": "If the problem persists, please contact support."
     },
+    "fetchRequest": "Failed to load request",
+    "cancelRequest": "An error occurred while cancelling the request",
     "memberInfoFailed": "Failed to load member information",
     "storeInfoFailed": "Failed to load store information",
     "dashboardLoadFailed": "Failed to load dashboard data",
@@ -75,8 +93,14 @@
     "police": {
       "title": "Police",
       "description": "Contact the police for law enforcement and security."
+    },
+    "actions": {
+      "call": "Call Emergency",
+      "message": "Send Message",
+      "alert": "Send Alert"
     }
   },
+  "soon": "Soon",
   "discover": {
     "title": "Discover our app",
     "heading": "Ready To Get Started?",
@@ -184,42 +208,62 @@
     "safetyCheck": "Safety Check",
     "accidentAssistance": "Accident Assistance",
     "quickResponse": "Quick Response",
+    "carWash": "Car Wash",
+    "carRent": "Car Rental",
+    "carPartsSell": "Car Parts Sale",
+    "mechanic": "Mechanic",
+    "all": "All Services",
     "list": {
       "onSiteRepair": {
         "title": "On-Site Repair",
-        "description": "Quick mechanical and electrical repairs done right where you are, so you can get back on the road fast."
+        "description": "Quick mechanical and electrical repairs done right at your location."
       },
       "towingService": {
         "title": "Towing Service",
-        "description": "Reliable towing for cars, bikes, and trucks — available anytime, anywhere."
+        "description": "Reliable towing for cars, bikes, and trucks anytime you need."
       },
       "batteryBoost": {
         "title": "Battery Boost",
-        "description": "Dead battery? We'll give your vehicle the boost it needs to get started again."
+        "description": "Dead battery? We boost your vehicle to get it started fast."
       },
       "emergencySupport": {
         "title": "24/7 Emergency Support",
-        "description": "Round-the-clock assistance from verified professionals just a call or tap away."
+        "description": "Round-the-clock assistance from professionals, just a call away."
       },
       "fuelDelivery": {
         "title": "Fuel Delivery",
-        "description": "Ran out of gas? We'll deliver fuel to your location quickly."
+        "description": "Out of fuel? We deliver gasoline or diesel to your location."
       },
       "safetyCheck": {
         "title": "Roadside Safety Check",
-        "description": "Our team ensures your vehicle is safe and road-ready before continuing your trip."
+        "description": "Ensure your vehicle is safe and ready before continuing travel."
       },
       "accidentAssistance": {
         "title": "Accident Assistance",
-        "description": "Get immediate help and guidance in case of an accident or vehicle breakdown."
+        "description": "Immediate help and guidance in case of an accident or breakdown."
       },
       "quickResponse": {
         "title": "Quick Response",
-        "description": "We prioritize speed and accuracy — help arrives as soon as possible."
+        "description": "We prioritize speed — help arrives as soon as possible."
+      },
+      "carWash": {
+        "title": "Car Wash",
+        "description": "Professional mobile car wash for a clean and shiny vehicle."
+      },
+      "carRent": {
+        "title": "Car Rental",
+        "description": "Rent cars easily for short or long durations quickly."
+      },
+      "carPartsSell": {
+        "title": "Car Parts Store",
+        "description": "Buy spare parts for all types of vehicles conveniently."
+      },
+      "mechanic": {
+        "title": "Mechanic",
+        "description": "Certified mechanics available to handle all your vehicle repairs."
       }
     }
   },
-  
   "auth": {
     "termsText": "I have read and agree to the",
     "viewTerms": "Terms and Conditions",
@@ -281,7 +325,11 @@
       "fuelDelivery": "Fuel Delivery",
       "safetyCheck": "Safety Check",
       "accidentAssistance": "Accident Assistance",
-      "quickResponse": "Quick Response"
+      "quickResponse": "Quick Response",
+      "carWash": "Car Wash",
+      "carRent": "Car Rental",
+      "carPartsSell": "Car Parts Sale",
+      "mechanic": "Mechanic"
     },
     "serviceType": "Service Type",
     "selectServiceType": "Select service type",
@@ -295,8 +343,6 @@
       "loading": "Loading..."
     }
   },
-
-  
   "map": {
     "title": "Service Map",
     "subtitle": "Find nearby services and service providers",

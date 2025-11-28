@@ -10,7 +10,6 @@ import {
     CardContent,
 } from "@/components/ui/card";
 import { useTranslation } from "@/hooks/useTranslation";
-
 import {
     Wrench,
     Truck,
@@ -20,6 +19,9 @@ import {
     ShieldCheck,
     Car,
     Zap,
+    Droplets,
+    Key,
+    Cog
 } from "lucide-react";
 
 export default function Services() {
@@ -27,18 +29,26 @@ export default function Services() {
     const router = useRouter();
 
     const services = [
-        { icon: <Wrench className="w-10 h-10 text-primary" />, key: "onSiteRepair" },
-        { icon: <Truck className="w-10 h-10 text-primary" />, key: "towingService" },
-        { icon: <Battery className="w-10 h-10 text-primary" />, key: "batteryBoost" },
-        { icon: <LifeBuoy className="w-10 h-10 text-primary" />, key: "emergencySupport" },
-        { icon: <Fuel className="w-10 h-10 text-primary" />, key: "fuelDelivery" },
-        { icon: <ShieldCheck className="w-10 h-10 text-primary" />, key: "safetyCheck" },
-        { icon: <Car className="w-10 h-10 text-primary" />, key: "accidentAssistance" },
-        { icon: <Zap className="w-10 h-10 text-primary" />, key: "quickResponse" },
+        { icon: <LifeBuoy className="w-10 h-10 text-red-500" />, key: "emergencySupport", emergency: true },
+        { icon: <Car className="w-10 h-10 text-purple-500" />, key: "accidentAssistance" },
+        { icon: <Cog className="w-10 h-10 text-gray-400" />, key: "mechanic" },
+        { icon: <Wrench className="w-10 h-10 text-blue-500" />, key: "onSiteRepair" },
+        { icon: <Truck className="w-10 h-10 text-yellow-500" />, key: "towingService" },
+        { icon: <Cog className="w-10 h-10 text-gray-500" />, key: "carPartsSell" },
+        { icon: <Battery className="w-10 h-10 text-green-500" />, key: "batteryBoost" },
+        { icon: <Fuel className="w-10 h-10 text-orange-500" />, key: "fuelDelivery" },
+        { icon: <Zap className="w-10 h-10 text-indigo-500" />, key: "quickResponse", emergency: true },
+        { icon: <ShieldCheck className="w-10 h-10 text-teal-500" />, key: "safetyCheck" },
+        { icon: <Droplets className="w-10 h-10 text-cyan-500" />, key: "carWash" },
+        { icon: <Key className="w-10 h-10 text-pink-500" />, key: "carRent" },
     ];
 
-    const handleClick = (key) => {
-        router.push(`/map?type=${key}`);
+    const handleClick = (service) => {
+        if (service.emergency) {
+            document.getElementById("emergency-services")?.scrollIntoView({ behavior: "smooth" });
+        } else {
+            router.push(`/map?type=${service.key}`);
+        }
     };
 
     return (
@@ -53,7 +63,7 @@ export default function Services() {
                     {t("services.description")}
                 </p>
 
-                {/* Grid */}
+                {/* All Services Grid */}
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {services.map((service, index) => (
                         <motion.div
@@ -63,7 +73,7 @@ export default function Services() {
                             transition={{ duration: 0.3, delay: index * 0.05 }}
                         >
                             <Card
-                                onClick={() => handleClick(service.key)}
+                                onClick={() => handleClick(service)}
                                 className="cursor-pointer hover:shadow-xl dark:hover:shadow-blue-800 
                                            transition-all duration-300 h-full flex flex-col 
                                            justify-between rounded-2xl border border-gray-200 

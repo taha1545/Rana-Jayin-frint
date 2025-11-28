@@ -39,15 +39,6 @@ const MembreServices = {
         });
     },
 
-    // Get store details by ID
-    getStoreById: async (storeId, token) => {
-        return await fetchAPI({
-            url: `/stores/${storeId}`,
-            method: 'get',
-            token,
-        });
-    },
-
     // Get the store for a specific member
     getMemberStore: async (membreId, token) => {
         return await fetchAPI({
@@ -58,11 +49,10 @@ const MembreServices = {
         });
     },
 
-
     addStoreImage: async (storeId, imageFile, token) => {
         const formData = new FormData();
-        formData.append('image', imageFile);  
-        formData.append('storeId', storeId);  
+        formData.append('image', imageFile);
+        formData.append('storeId', storeId);
 
         return await fetchAPI({
             url: `/store-images`,
@@ -73,9 +63,6 @@ const MembreServices = {
         });
     },
 
-
-
-    // Delete an image from the store
     deleteStoreImage: async (imageId, token) => {
         return await fetchAPI({
             url: `/store-images/${imageId}`,
@@ -84,7 +71,6 @@ const MembreServices = {
         });
     },
 
-    // Update member details
     updateMember: async (data, token) => {
         return await fetchAPI({
             url: `/users/me`,
@@ -94,13 +80,23 @@ const MembreServices = {
         });
     },
 
-    // Update a request
+    // Update full request (existing)
     updateRequest: async (requestId, data, token) => {
         return await fetchAPI({
             url: `/requests/${requestId}`,
             method: 'put',
             token,
             data,
+        });
+    },
+
+    // ✅ Update request status only
+    updateRequestStatus: async (requestId, status, token) => {
+        return await fetchAPI({
+            url: `/requests/${requestId}`,
+            method: 'put',
+            token,
+            data: { status },
         });
     },
 };

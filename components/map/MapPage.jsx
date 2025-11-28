@@ -62,25 +62,23 @@ export default function MapPage() {
           userPosition.latitude,
           userPosition.longitude
         );
-
-        console.log('Raw API response:', res);
-
+        //
         const data = Array.isArray(res?.data) ? res.data : [];
-        console.log('Data array:', data);
-
+        //
         const mapped = data.map((item) => {
-          console.log('Mapping item:', item);
           const storeWrapper = item.store || {};
+          const serviceType = item.serviceType;
           const s = storeWrapper.store || {};
           const owner = s.owner || {};
           const images = Array.isArray(s.images)
             ? s.images.filter((img) => img?.isAllowed === true)
             : [];
-
+          //
           return {
             id: s.id || null,
-            title: item?.serviceType || 'Unknown Service',
-            type: s.type || 'unknown',
+            serviceType: serviceType,
+            title: item?.serviceType || 'Unknown ',
+            type: s.type || [],
             car: s.car || 'unknown',
             status: s.isActive ? 'available' : 'busy',
             rating: storeWrapper?.averageRating || 0,
@@ -107,18 +105,16 @@ export default function MapPage() {
             distanceKm: parseFloat(item.distance || 0),
             reviews: Array.isArray(s.reviews)
               ? s.reviews.map((r) => ({
-                  id: r.id,
-                  rating: r.rating,
-                  comment: r.comment,
-                  client: r.client
-                    ? { id: r.client.id, name: r.client.name }
-                    : null,
-                }))
+                id: r.id,
+                rating: r.rating,
+                comment: r.comment,
+                client: r.client
+                  ? { id: r.client.id, name: r.client.name }
+                  : null,
+              }))
               : [],
           };
         });
-
-        console.log('Mapped services:', mapped);
 
         const uniqueServices = Array.from(
           new Map(mapped.map((s) => [s.id, s])).values()
@@ -143,8 +139,9 @@ export default function MapPage() {
   const filteredServices = useMemo(() => {
     let list = [...services];
 
-    if (filterType !== 'all') list = list.filter((s) => s.type === filterType);
-
+    if (filterType !== 'all') {
+      list = list.filter((s) => Array.isArray(s.type) && s.type.includes(filterType));
+    }
     list = Array.from(new Map(list.map((s) => [s.id, s])).values());
 
     if (userPosition) {
@@ -154,6 +151,7 @@ export default function MapPage() {
 
     return list;
   }, [filterType, services, userPosition]);
+
 
   const handleDirections = (service) => {
     if (!service?.location) return;

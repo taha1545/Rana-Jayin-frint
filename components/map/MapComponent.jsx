@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createServiceIcon } from './MapIcons';
 import { getStatusColor, formatDistance } from '@/utils/mapHelpers';
 
@@ -22,17 +22,27 @@ const MapComponent = ({
   const hasCenteredOnUserRef = useRef(false);
   const markerIndexRef = useRef(new Map());
   const pickMarkerRef = useRef(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   // 
   useEffect(() => {
     let mounted = true;
+    let mapInstance;
 
     const initializeMap = async () => {
       try {
+        // 
+        if (!mapRef.current || mapRef.current.offsetParent === null || 
+            mapRef.current.offsetWidth === 0 || mapRef.current.offsetHeight === 0) {
+          console.warn('Map container not ready, retrying...');
+          setTimeout(initializeMap, 100);
+          return;
+        }
+
         const L = (await import('leaflet')).default;
         await import('leaflet/dist/leaflet.css');
 
-        // Fix missing icon paths
+        // 
         delete L.Icon.Default.prototype._getIconUrl;
         L.Icon.Default.mergeOptions({
           iconRetinaUrl:
@@ -43,15 +53,16 @@ const MapComponent = ({
             'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
         });
 
-        if (!mounted) return;
+        if (!mounted || !mapRef.current) return;
 
-        // Clean existing instance
-        if (mapRef.current && mapRef.current._leaflet_id) {
-          delete mapRef.current._leaflet_id;
+        // Clean existing instance properly
+        if (mapInstanceRef.current) {
+          mapInstanceRef.current.remove();
+          mapInstanceRef.current = null;
         }
 
         // Initialize map
-        const map = L.map(mapRef.current, {
+        mapInstance = L.map(mapRef.current, {
           center: [36.7538, 3.0588],
           zoom: 7,
           zoomControl: false,
@@ -69,21 +80,33 @@ const MapComponent = ({
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors',
           maxZoom: 19,
-        }).addTo(map);
+        }).addTo(mapInstance);
 
-        L.control.zoom({ position: 'bottomright' }).addTo(map);
+        L.control.zoom({ position: 'bottomright' }).addTo(mapInstance);
 
-        mapInstanceRef.current = map;
+        mapInstanceRef.current = mapInstance;
         LRef.current = L;
 
-        markersGroupRef.current = L.layerGroup().addTo(map);
+        markersGroupRef.current = L.layerGroup().addTo(mapInstance);
 
-        map.on('click', () => map.closePopup());
-        map.on('movestart zoomstart', () => {
+        // Fix: Invalidate size after map is created
+        setTimeout(() => {
+          if (mapInstance && typeof mapInstance.invalidateSize === 'function') {
+            mapInstance.invalidateSize();
+          }
+        }, 100);
+
+        mapInstance.on('click', () => mapInstance.closePopup());
+        mapInstance.on('movestart zoomstart', () => {
           userInteractedRef.current = true;
         });
+
+        setMapLoaded(true);
+
       } catch (error) {
         console.error('Failed to initialize map:', error);
+        // Retry on error
+        setTimeout(initializeMap, 500);
       }
     };
 
@@ -92,7 +115,11 @@ const MapComponent = ({
     return () => {
       mounted = false;
       if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
+        try {
+          mapInstanceRef.current.remove();
+        } catch (e) {
+          console.warn('Error removing map:', e);
+        }
         mapInstanceRef.current = null;
       }
     };
@@ -100,7 +127,7 @@ const MapComponent = ({
 
   // Handle user position marker
   useEffect(() => {
-    if (!mapInstanceRef.current || !LRef.current || !userPosition) return;
+    if (!mapInstanceRef.current || !LRef.current || !userPosition || !mapLoaded) return;
     const L = LRef.current;
 
     if (userMarkerRef.current) userMarkerRef.current.remove();
@@ -155,46 +182,50 @@ const MapComponent = ({
       );
       hasCenteredOnUserRef.current = true;
     }
-  }, [userPosition]);
+  }, [userPosition, mapLoaded]);
 
   // Pick mode: click to select a location
   useEffect(() => {
-    if (!mapInstanceRef.current || !LRef.current) return;
+    if (!mapInstanceRef.current || !LRef.current || !mapLoaded) return;
     const map = mapInstanceRef.current;
+    const L = LRef.current;
+    
     const handler = (e) => {
       if (!pickMode) return;
       const { lat, lng } = e.latlng;
       if (pickMarkerRef.current) {
         pickMarkerRef.current.setLatLng([lat, lng]);
       } else {
-        pickMarkerRef.current = LRef.current.marker([lat, lng]).addTo(map);
+        pickMarkerRef.current = L.marker([lat, lng]).addTo(map);
       }
       onPickLocation({ lat, lng });
     };
+    
     map.on('click', handler);
     map.getContainer().style.cursor = pickMode ? 'crosshair' : '';
+    
     return () => {
       map.off('click', handler);
       map.getContainer().style.cursor = '';
     };
-  }, [pickMode, onPickLocation]);
+  }, [pickMode, onPickLocation, mapLoaded]);
 
-  // 
+  // Rest of your useEffect hooks remain the same but add mapLoaded check
   useEffect(() => {
-    if (!pickMode || !pickedLocation || !mapInstanceRef.current || !LRef.current) return;
+    if (!pickMode || !pickedLocation || !mapInstanceRef.current || !LRef.current || !mapLoaded) return;
     const map = mapInstanceRef.current;
+    const L = LRef.current;
     const lat = pickedLocation.lat ?? pickedLocation[0];
     const lng = pickedLocation.lng ?? pickedLocation[1];
     if (pickMarkerRef.current) {
       pickMarkerRef.current.setLatLng([lat, lng]);
     } else {
-      pickMarkerRef.current = LRef.current.marker([lat, lng]).addTo(map);
+      pickMarkerRef.current = L.marker([lat, lng]).addTo(map);
     }
-  }, [pickedLocation, pickMode]);
+  }, [pickedLocation, pickMode, mapLoaded]);
 
-  // 
   useEffect(() => {
-    if (!mapInstanceRef.current || !LRef.current) return;
+    if (!mapInstanceRef.current || !LRef.current || !mapLoaded) return;
 
     const L = LRef.current;
     const safeServices = Array.isArray(services) ? services : [];
@@ -262,7 +293,6 @@ const MapComponent = ({
       }
     });
 
-    // 
     const layers = markersGroupRef.current?.getLayers?.() || [];
     if ((layers.length > 0 || userMarkerRef.current) && !userInteractedRef.current) {
       try {
@@ -277,11 +307,10 @@ const MapComponent = ({
         console.warn('Could not fit map bounds:', error);
       }
     }
-  }, [services, onMarkerClick, userPosition]);
+  }, [services, onMarkerClick, userPosition, mapLoaded]);
 
-  //
   useEffect(() => {
-    if (!mapInstanceRef.current || !LRef.current || !focusTarget) return;
+    if (!mapInstanceRef.current || !LRef.current || !focusTarget || !mapLoaded) return;
     const { type, id, location } = focusTarget;
     let marker = null;
     if (type && id !== undefined && id !== null) {
@@ -302,10 +331,10 @@ const MapComponent = ({
     if (marker?.openPopup) {
       setTimeout(() => marker.openPopup(), 650);
     }
-  }, [focusTarget]);
+  }, [focusTarget, mapLoaded]);
 
   const fitToData = () => {
-    if (!mapInstanceRef.current || !LRef.current) return;
+    if (!mapInstanceRef.current || !LRef.current || !mapLoaded) return;
     const layers = markersGroupRef.current?.getLayers?.() || [];
     if (layers.length === 0 && !userMarkerRef.current) return;
     const L = LRef.current;
@@ -319,7 +348,7 @@ const MapComponent = ({
   };
 
   const goToUser = () => {
-    if (!mapInstanceRef.current || !userPosition) return;
+    if (!mapInstanceRef.current || !userPosition || !mapLoaded) return;
     userInteractedRef.current = true;
     mapInstanceRef.current.flyTo(
       [userPosition.latitude, userPosition.longitude],
@@ -331,51 +360,61 @@ const MapComponent = ({
   return (
     <div
       className="w-full h-full relative"
-      style={{ background: '#f8f9fa', borderRadius: '12px', overflow: 'hidden', zIndex: 0 }}
+      style={{ background: '#f8f9fa', borderRadius: '12px', overflow: 'hidden', zIndex: 0, minHeight: '400px' }}
     >
-      <div ref={mapRef} className="w-full h-full" />
-      <div
-        style={{
-          position: 'absolute',
-          top: 12,
-          left: 12,
-          display: 'flex',
-          gap: 8,
-          zIndex: 10,
-        }}
-      >
-        <button
-          onClick={fitToData}
+      {!mapLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 z-10">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading map...</p>
+          </div>
+        </div>
+      )}
+      <div ref={mapRef} className="w-full h-full" style={{ minHeight: '400px' }} />
+      {mapLoaded && (
+        <div
           style={{
-            background: '#111827',
-            color: 'white',
-            border: 'none',
-            borderRadius: 8,
-            padding: '8px 10px',
-            fontSize: 12,
-            cursor: 'pointer',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
+            position: 'absolute',
+            top: 12,
+            left: 12,
+            display: 'flex',
+            gap: 8,
+            zIndex: 10,
           }}
         >
-          Fit
-        </button>
-        <button
-          onClick={goToUser}
-          disabled={!userPosition}
-          style={{
-            background: userPosition ? '#2563EB' : '#9CA3AF',
-            color: 'white',
-            border: 'none',
-            borderRadius: 8,
-            padding: '8px 10px',
-            fontSize: 12,
-            cursor: userPosition ? 'pointer' : 'not-allowed',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
-          }}
-        >
-          Locate
-        </button>
-      </div>
+          <button
+            onClick={fitToData}
+            style={{
+              background: '#111827',
+              color: 'white',
+              border: 'none',
+              borderRadius: 8,
+              padding: '8px 10px',
+              fontSize: 12,
+              cursor: 'pointer',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
+            }}
+          >
+            Fit
+          </button>
+          <button
+            onClick={goToUser}
+            disabled={!userPosition}
+            style={{
+              background: userPosition ? '#2563EB' : '#9CA3AF',
+              color: 'white',
+              border: 'none',
+              borderRadius: 8,
+              padding: '8px 10px',
+              fontSize: 12,
+              cursor: userPosition ? 'pointer' : 'not-allowed',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
+            }}
+          >
+            Locate
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -5,15 +5,16 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
     Store, Phone, Lock, File, MapPin,
-    Eye, EyeOff, Wrench, Truck, Battery, LifeBuoy, Fuel, ShieldCheck, Car, Zap
+    Eye, EyeOff, Wrench, Truck, Battery, LifeBuoy, Fuel, ShieldCheck, Car, Zap, Droplets, Key
 } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import MapPickerModal from './MapPickerModal';
-import TermsAgreement from './TermsAgreement'; 
+import TermsAgreement from './TermsAgreement';
 
 export default function MemberSignupForm({ onSubmit, error }) {
+    //
     const { t } = useTranslation();
-
+    //
     const [data, setData] = useState({
         name: '',
         phone: '',
@@ -26,7 +27,7 @@ export default function MemberSignupForm({ onSubmit, error }) {
         storeImages: [],
         sensitiveDocs: { criminalRecord: null, storeRegistration: null }
     });
-
+    //
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [passwordStrength, setPasswordStrength] = useState(0);
@@ -34,9 +35,10 @@ export default function MemberSignupForm({ onSubmit, error }) {
     const [isMapOpen, setIsMapOpen] = useState(false);
     const [selectedCoords, setSelectedCoords] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [agreed, setAgreed] = useState(false); 
+    const [agreed, setAgreed] = useState(false);
 
     const services = [
+        // 
         { icon: <Wrench className="w-6 h-6 text-primary" />, key: "onSiteRepair", label: t('services.onSiteRepair') },
         { icon: <Truck className="w-6 h-6 text-primary" />, key: "towingService", label: t('services.towingService') },
         { icon: <Battery className="w-6 h-6 text-primary" />, key: "batteryBoost", label: t('services.batteryBoost') },
@@ -45,7 +47,12 @@ export default function MemberSignupForm({ onSubmit, error }) {
         { icon: <ShieldCheck className="w-6 h-6 text-primary" />, key: "safetyCheck", label: t('services.safetyCheck') },
         { icon: <Car className="w-6 h-6 text-primary" />, key: "accidentAssistance", label: t('services.accidentAssistance') },
         { icon: <Zap className="w-6 h-6 text-primary" />, key: "quickResponse", label: t('services.quickResponse') },
+        { icon: <Droplets className="w-6 h-6 text-primary" />, key: "carWash", label: t('services.carWash') },
+        { icon: <Key className="w-6 h-6 text-primary" />, key: "carRent", label: t('services.carRent') },
+        { icon: <Wrench className="w-6 h-6 text-primary" />, key: "carPartsSell", label: t('services.carPartsSell') },
+        { icon: <Truck className="w-6 h-6 text-primary" />, key: "mechanic", label: t('services.mechanic') },
     ];
+
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
@@ -112,7 +119,7 @@ export default function MemberSignupForm({ onSubmit, error }) {
             return;
         }
         if (memberStep === 3) {
-            if (!agreed) return alert(t('auth.mustAgreeTerms')); 
+            if (!agreed) return alert(t('auth.mustAgreeTerms'));
             try {
                 setLoading(true);
                 await onSubmit({
@@ -156,9 +163,9 @@ export default function MemberSignupForm({ onSubmit, error }) {
                 {memberStep === 1 && (
                     <>
                         <Input icon={<Store />} name="name" placeholder={t('auth.fullName')} value={data.name} onChange={handleChange} required />
-                        <Input icon={<Phone />} name="phone" type="tel" placeholder={t('auth.phone')} value={data.phone} onChange={handleChange}  required />
+                        <Input icon={<Phone />} name="phone" type="tel" placeholder={t('auth.phone')} value={data.phone} onChange={handleChange} required />
                         <div className="relative">
-                            <Input icon={<Lock />} type={showPassword ? 'text' : 'password'} placeholder={t('auth.password')} name="password" value={data.password} onChange={handleChange} required className="pr-10" />
+                            <Input icon={<Lock />} type={showPassword ? 'text' : 'password'} placeholder={t('auth.password')} name="password" value={data.password} onChange={handleChange} required className="pr-10 " />
                             <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff /> : <Eye />}</div>
                         </div>
                         {data.password && (

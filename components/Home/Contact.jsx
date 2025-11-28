@@ -36,13 +36,13 @@ export default function Contact() {
         try {
             const response = await ContactServices.sendMessage(formData);
             if (response?.success) {
-                setSuccess(t("contact.success") || "Message sent successfully!");
+                setSuccess("✅✅✅");
                 setFormData({ name: '', email: '', message: '' });
             } else {
-                setError(response?.message || t("contact.error") || "Something went wrong.");
+                setError("❌❌❌");
             }
         } catch (err) {
-            setError(err.message || t("contact.error") || "Something went wrong.");
+            setError("❌❌❌");
         } finally {
             setLoading(false);
         }
