@@ -18,7 +18,6 @@ export default function RequestPage() {
     const [error, setError] = useState("");
     const [cancelling, setCancelling] = useState(false);
 
-    // 
     const [rating, setRating] = useState(0);
     const [submittingReview, setSubmittingReview] = useState(false);
     const [reviewMessage, setReviewMessage] = useState("");
@@ -44,7 +43,7 @@ export default function RequestPage() {
         };
 
         fetchRequest();
-    }, [id]);
+    }, [id]); // ✅ DO NOT ADD `t`
 
     const handleCancel = async () => {
         if (!request) return;
@@ -102,7 +101,7 @@ export default function RequestPage() {
             <Card className="w-full max-w-lg border-2 border-primary shadow-xl flex flex-col">
                 <CardHeader className="relative">
                     <CardTitle className="text-xl font-bold text-secondary-foreground">
-                        {t("request.title", { id: request.id })}
+                        {t("request.title")}
                     </CardTitle>
                     <button
                         onClick={() => router.back()}
@@ -114,33 +113,48 @@ export default function RequestPage() {
 
                 <CardContent className="space-y-4">
                     <div className="flex justify-between items-center">
-                        <p className="font-medium text-muted-foreground">Service Type:</p>
-                        <p className="text-secondary-foreground">{request.serviceType}</p>
+                        <p className="font-medium text-muted-foreground">
+                            {t("request.serviceType")}
+                        </p>
+                        <p className="text-secondary-foreground">
+                            {request.serviceType}
+                        </p>
                     </div>
 
                     <div className="flex justify-between items-center">
-                        <p className="font-medium text-muted-foreground">Status:</p>
+                        <p className="font-medium text-muted-foreground">
+                            {t("request.status")}
+                        </p>
                         <p
-                            className={`px-3 py-1 rounded-full font-semibold ${request.status === "pending"
-                                ? "bg-yellow-100 text-yellow-700"
-                                : request.status === "completed"
+                            className={`px-3 py-1 rounded-full font-semibold ${
+                                request.status === "pending"
+                                    ? "bg-yellow-100 text-yellow-700"
+                                    : request.status === "completed"
                                     ? "bg-green-100 text-green-700"
                                     : "bg-red-100 text-red-700"
-                                }`}
+                            }`}
                         >
                             {request.status}
                         </p>
                     </div>
 
                     <div className="flex justify-between items-center">
-                        <p className="font-medium text-muted-foreground">Created At:</p>
-                        <p className="text-secondary-foreground">{request.createdAt}</p>
+                        <p className="font-medium text-muted-foreground">
+                            {t("request.createdAt")}
+                        </p>
+                        <p className="text-secondary-foreground">
+                            {request.createdAt}
+                        </p>
                     </div>
 
                     {request.completedAt && (
                         <div className="flex justify-between items-center">
-                            <p className="font-medium text-muted-foreground">Completed At:</p>
-                            <p className="text-secondary-foreground">{request.completedAt}</p>
+                            <p className="font-medium text-muted-foreground">
+                                {t("request.completedAt")}
+                            </p>
+                            <p className="text-secondary-foreground">
+                                {request.completedAt}
+                            </p>
                         </div>
                     )}
 
@@ -155,7 +169,6 @@ export default function RequestPage() {
                         </Button>
                     )}
 
-                    {/* Review Section */}
                     {!reviewSubmitted && (
                         <div className="mt-6 border-t border-muted-foreground/20 pt-4">
                             <p className="font-medium text-muted-foreground mb-2">
@@ -168,10 +181,11 @@ export default function RequestPage() {
                                         key={star}
                                         type="button"
                                         onClick={() => setRating(star)}
-                                        className={`text-2xl mr-1 transition-colors duration-150 ${rating >= star
-                                            ? "text-yellow-400 hover:text-yellow-500"
-                                            : "text-gray-300 hover:text-gray-400"
-                                            }`}
+                                        className={`text-2xl mr-1 transition-colors duration-150 ${
+                                            rating >= star
+                                                ? "text-yellow-400 hover:text-yellow-500"
+                                                : "text-gray-300 hover:text-gray-400"
+                                        }`}
                                     >
                                         ★
                                     </button>
@@ -195,9 +209,10 @@ export default function RequestPage() {
                             )}
                         </div>
                     )}
+
                     {reviewSubmitted && (
                         <p className="mt-4 text-sm text-green-600 font-medium">
-                            {t("review.rateStore") + "✅"}
+                            {t("review.successMessage")} ✅
                         </p>
                     )}
                 </CardContent>

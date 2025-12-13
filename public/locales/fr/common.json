@@ -1,4 +1,6 @@
 {
+  "cancelRequest": "Annuler la demande",
+  "cancelling": "Annulation...",
   "chatbot": {
     "title": "Chatbot",
     "greeting": "Bonjour ! Comment puis-je vous aider aujourd'hui ?",
@@ -13,7 +15,7 @@
     "submitting": "Envoi..."
   },
   "request": {
-    "title": "Demande n°{{id}}",
+    "title": "Détails de la demande",
     "serviceType": "Type de service",
     "status": "Statut",
     "createdAt": "Créé le",

@@ -10,9 +10,6 @@ export default function GlobalError({ error, reset }) {
   const router = useRouter();
   const { t } = useTranslation();
 
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
 
   return (
     <html>

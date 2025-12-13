@@ -1,4 +1,6 @@
 {
+  "cancelRequest": "Cancel Request",
+  "cancelling": "Cancelling...",
   "chatbot": {
     "title": "Chatbot",
     "greeting": "Hello! How can I help you today?",
@@ -10,7 +12,10 @@
   "review": {
     "rateStore": "Rate this store:",
     "submit": "Submit Review",
-    "submitting": "Submitting..."
+    "submitting": "Submitting...",
+    "successMessage": "Your review has been submitted successfully!",
+    "failedMessage": "Failed to submit your review.",
+    "errorMessage": "An error occurred while submitting the review."
   },
   "request": {
     "title": "Request Details",

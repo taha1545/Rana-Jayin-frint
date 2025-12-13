@@ -10,9 +10,7 @@ export default function Error({ error, reset }) {
   const router = useRouter();
   const { t } = useTranslation();
 
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
+
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">

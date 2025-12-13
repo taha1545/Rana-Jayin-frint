@@ -1,4 +1,24 @@
 {
+  "cancelRequest": "إلغاء الطلب",
+  "cancelling": "جارٍ الإلغاء...",
+  "review": {
+    "rateStore": "قيّم هذا المتجر:",
+    "submit": "إرسال التقييم",
+    "submitting": "جارٍ الإرسال...",
+    "successMessage": "تم إرسال تقييمك بنجاح!",
+    "failedMessage": "فشل إرسال التقييم.",
+    "errorMessage": "حدث خطأ أثناء إرسال التقييم."
+  },
+  "request": {
+    "title": "تفاصيل الطلب",
+    "serviceType": "نوع الخدمة",
+    "status": "الحالة",
+    "createdAt": "تاريخ الإنشاء",
+    "completedAt": "تاريخ الاكتمال",
+    "cancelRequest": "إلغاء الطلب",
+    "cancelling": "جارٍ الإلغاء...",
+    "notFound": "الطلب غير موجود"
+  },
   "chatbot": {
     "title": "الدردشة",
     "greeting": "مرحباً! كيف يمكنني مساعدتك اليوم؟",
@@ -6,21 +26,6 @@
     "typing": "الروبوت يكتب...",
     "inputPlaceholder": "اكتب رسالتك...",
     "send": "إرسال"
-  },
-  "review": {
-    "rateStore": "قيم هذا المتجر:",
-    "submit": "إرسال التقييم",
-    "submitting": "جاري الإرسال..."
-  },
-  "request": {
-    "title": "الطلب رقم {{id}}",
-    "serviceType": "نوع الخدمة",
-    "status": "الحالة",
-    "createdAt": "تاريخ الإنشاء",
-    "completedAt": "تاريخ الانتهاء",
-    "cancelRequest": "إلغاء الطلب",
-    "cancelling": "جاري الإلغاء...",
-    "notFound": "الطلب غير موجود"
   },
   "loading": "جارٍ التحميل...",
   "errors": {
